@@ -28,7 +28,7 @@ module top();
         end
 
         $display("Simulation Finished");
-        $finish
+        $finish;
     end
 
 endmodule

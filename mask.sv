@@ -2,7 +2,7 @@
 
 module Mask(
     input logic [31:0] A, B,
-    output logic signA, signB
+    output logic signA, signB,
     output logic [7:0] exponentA, exponentB,
     output logic [22:0] mantissaA, mantissaB
 );
