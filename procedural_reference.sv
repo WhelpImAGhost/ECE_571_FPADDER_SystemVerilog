@@ -3,14 +3,19 @@ module FPAdder (
     output logic [31:0] X
 );
     
-shortreal floatA, floatB, floatX;
+
+typedef union {
+	shortreal f;
+	logic [31:0] bits;
+} f_union;
+
+f_union unionA, unionB, unionX;
 
 always_comb 
 begin
-
-    floatA = A;                 // Convert A to float
-    floatB = B;                 // Convert B to float
-    floatX = flaotA + floatB;   // Add the two floats
-    X = floatX;                 // Implicit cast X to bits
+	unionA.bits = A;
+	unionB.bits = B;
+	unionX.f = unionA.f + unionB.f;
+	X = unionX.bits;
 end
 endmodule
