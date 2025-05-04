@@ -20,12 +20,13 @@ module top;
             A = $random;
             B = $random;
             #10;
-`ifdef DEBUG
-	    $display("A: %h\nB: %h", A, B);
-	    $display("Aex: %h (%d)\nBex: %h (%d)", exponentA, exponentA, exponentB, exponentB);
-	    $display("AM: %h\nBM: %h", mantissaA, mantissaB);
-`endif
+            `ifdef DEBUG
+	            $display("A: %h\nB: %h", A, B);
+	            $display("Aex: %h (%d)\nBex: %h (%d)", exponentA, exponentA, exponentB, exponentB);
+	            $display("AM: %h\nBM: %h", mantissaA, mantissaB);
+            `endif
             if (exponentA > exponentB)
+            begin
                 if(exponentOut !== A[30:23])
                 begin
                     Error++;
@@ -44,7 +45,9 @@ module top;
                     $display("Expected A Mantissa: %h, but Received: %h",
                     {1'b1,mantissaA}, alignedMantissaA);
                 end
+            end
             else if (exponentB > exponentA)
+            begin
                 if(exponentOut !== B[30:23])
                 begin
                     Error++;
@@ -63,7 +66,9 @@ module top;
                     $display("Expected B Mantissa: %h, but Received: %h",
                     {1'b1,mantissaB}, alignedMantissaB);
                 end
+            end
             else
+            begin
                 if(exponentOut !== A[30:23])
                 begin
                     Error++;
@@ -82,6 +87,7 @@ module top;
                     $display("Expected B Mantissa: %h, but Received: %h",
                     {1'b1,mantissaB}, alignedMantissaB);
                 end
+            end
         end
         $display("Simulation finished with %d %s\n", Error, (Error === 1 ? "Error" : "Errors"));
         $finish;
