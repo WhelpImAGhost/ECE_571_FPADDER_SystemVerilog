@@ -41,7 +41,7 @@ module top;
                 if(alignedMantissaA !== {1'b1,mantissaA})
                 begin
                     Error++;
-                    $display("Expected Mantissa A: %h, but Received: %h",
+                    $display("Expected A Mantissa: %d, but Received: %d",
                     {1'b1,mantissaA}, alignedMantissaA);
                 end
             else if (exponentB > exponentA)
@@ -54,13 +54,13 @@ module top;
                 if(alignedMantissaA !== ({1'b1,mantissaA} >> (exponentB - exponentA)))
                 begin
                     Error++;
-                    $display("Expected Aligned B Mantissa: %h, but Received: %h",
+                    $display("Expected Aligned A Mantissa: %d, but Received: %d",
                     ({1'b1,mantissaA} >> (exponentB - exponentA)), alignedMantissaA);
                 end
                 if(alignedMantissaB !== {1'b1,mantissaB})
                 begin
                     Error++;
-                    $display("Expected Mantissa A: %h, but Received: %h",
+                    $display("Expected B Mantissa: %d, but Received: %d",
                     {1'b1,mantissaB}, alignedMantissaB);
                 end
             else
@@ -73,13 +73,13 @@ module top;
                 if(alignedMantissaA !== {1'b1,mantissaA})
                 begin
                     Error++;
-                    $display("Expected Mantissa A: %h, but Received: %h",
+                    $display("Expected A Mantissa : %d, but Received: %d",
                     {1'b1,mantissaA}, alignedMantissaA);
                 end
                 if(alignedMantissaB !== {1'b1,mantissaB})
                 begin
                     Error++;
-                    $display("Expected Aligned B Mantissa: %h, but Received: %h",
+                    $display("Expected B Mantissa: %d, but Received: %d",
                     {1'b1,mantissaB}, alignedMantissaB);
                 end
         end
