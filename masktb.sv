@@ -22,11 +22,11 @@ module top;
                 A, B, A[31], signA, B[31], signB);
             //Exponent Error Check
             if ((exponentA !== A [30:23]) || (exponentB !== B [30:23]))
-                $display("Improper Extraction of Exponent for test A = %h B=%h\nExpected Exponent A = %h, Calculated Exponent A = %h\nExpected Exponent B = %h, Calculated Exponent B = %p",
+                $display("Improper Extraction of Exponent for test A = %h B=%h\nExpected Exponent A = %h, Calculated Exponent A = %h\nExpected Exponent B = %h, Calculated Exponent B = h",
                 A, B, A [30:23], exponentA, B [30:23], exponentB);
             //Mantissa Error Check
             if ((mantissaA !== A [22:0]) || (mantissaB !== B[22:0]))
-                $display("Improper Extraction of Mantissa for test A = %h B=%h\nExpected Mantissa A = %h, Calculated Mantissa A = %h\nExpected Mantissa B = %h, Calculated Mantissa B = %p",
+                $display("Improper Extraction of Mantissa for test A = %h B=%h\nExpected Mantissa A = %h, Calculated Mantissa A = %h\nExpected Mantissa B = %h, Calculated Mantissa B = %h",
                 A, B, A [22:0], mantissaA, B[22:0], mantissaB);
         end
 
