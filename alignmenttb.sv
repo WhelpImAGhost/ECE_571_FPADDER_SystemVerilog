@@ -20,62 +20,66 @@ module top;
             A = $random;
             B = $random;
             #10;
-
+`ifdef DEBUG
+	    $display("A: %h\nB: %h", A, B);
+	    $display("Aex: %h (%d)\nBex: %h (%d)", exponentA, exponentA, exponentB, exponentB);
+	    $display("AM: %h\nBM: %h", mantissaA, mantissaB);
+`endif
             if (exponentA > exponentB)
                 if(exponentOut !== A[30:23])
                 begin
                     Error++;
-                    $display("Expected Normalization Exponent: %d, but Received: %d",
+                    $display("Expected Normalization Exponent: %h, but Received: %h",
                     A[30:23], exponentOut);
                 end
                 if(alignedMantissaB !== ({1'b1,mantissaB} >> (exponentA - exponentB)))
                 begin
                     Error++;
-                    $display("Expected Aligned B Mantissa: %d, but Received: %d",
+                    $display("Expected Aligned B Mantissa: %h, but Received: %h",
                     ({1'b1,mantissaB} >> (exponentA - exponentB)), alignedMantissaB);
                 end
                 if(alignedMantissaA !== {1'b1,mantissaA})
                 begin
                     Error++;
-                    $display("Expected Mantissa A: %d, but Received: %d",
+                    $display("Expected Mantissa A: %h, but Received: %h",
                     {1'b1,mantissaA}, alignedMantissaA);
                 end
             else if (exponentB > exponentA)
                 if(exponentOut !== B[30:23])
                 begin
                     Error++;
-                    $display("Expected Normalization Exponent: %d, but Received: %d",
+                    $display("Expected Normalization Exponent: %h, but Received: %h",
                     B[30:23], exponentOut);
                 end
                 if(alignedMantissaA !== ({1'b1,mantissaA} >> (exponentB - exponentA)))
                 begin
                     Error++;
-                    $display("Expected Aligned B Mantissa: %d, but Received: %d",
+                    $display("Expected Aligned B Mantissa: %h, but Received: %h",
                     ({1'b1,mantissaA} >> (exponentB - exponentA)), alignedMantissaA);
                 end
                 if(alignedMantissaB !== {1'b1,mantissaB})
                 begin
                     Error++;
-                    $display("Expected Mantissa A: %d, but Received: %d",
+                    $display("Expected Mantissa A: %h, but Received: %h",
                     {1'b1,mantissaB}, alignedMantissaB);
                 end
             else
                 if(exponentOut !== A[30:23])
                 begin
                     Error++;
-                    $display("Expected Normalization Exponent: %d, but Received: %d",
+                    $display("Expected Normalization Exponent: %h, but Received: %h",
                     A[30:23], exponentOut);
                 end
                 if(alignedMantissaA !== {1'b1,mantissaA})
                 begin
                     Error++;
-                    $display("Expected Mantissa A: %d, but Received: %d",
+                    $display("Expected Mantissa A: %h, but Received: %h",
                     {1'b1,mantissaA}, alignedMantissaA);
                 end
                 if(alignedMantissaB !== {1'b1,mantissaB})
                 begin
                     Error++;
-                    $display("Expected Aligned B Mantissa: %d, but Received: %d",
+                    $display("Expected Aligned B Mantissa: %h, but Received: %h",
                     {1'b1,mantissaB}, alignedMantissaB);
                 end
         end
