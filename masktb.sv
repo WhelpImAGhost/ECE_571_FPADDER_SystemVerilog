@@ -17,17 +17,17 @@ module top;
             A = $random;
             B = $random;
             //Sign Error Check
-            if ((signA !== A >> 31) || (signB !== B >> 31))             
+            if ((signA !== A[31]) || (signB !== B[31]))             
                 $display("Improper Extraction of Sign Bit for test A = %h B=%h\nExpected Sign A = %h, Calculated Sign A = %h\nExpected Sign B = %h, Calculated Sign B = %h",
-                A, B, A >> 31, signA, B >> 31, signB);
+                A, B, A[31], signA, B[31], signB);
             //Exponent Error Check
-            if ((exponentA !== ((A >> 23) & 8'hFF)) || (exponentB !== ((B >> 23) & 8'hFF)))
+            if ((exponentA !== A [30:23]) || (exponentB !== B [30:23]))
                 $display("Improper Extraction of Exponent for test A = %h B=%h\nExpected Exponent A = %h, Calculated Exponent A = %h\nExpected Exponent B = %h, Calculated Exponent B = %p",
-                A, B, (A >> 23) & 8'hFF, exponentA, (B >> 23) & 8'hFF, exponentB);
+                A, B, A [30:23], exponentA, B [30:23], exponentB);
             //Mantissa Error Check
-            if ((mantissaA !== (A & 23'h7FFFFF)) || (mantissaB !== (B & 23'h7FFFFF)))
+            if ((mantissaA !== A [22:0]) || (mantissaB !== B[22:0]))
                 $display("Improper Extraction of Mantissa for test A = %h B=%h\nExpected Mantissa A = %h, Calculated Mantissa A = %h\nExpected Mantissa B = %h, Calculated Mantissa B = %p",
-                A, B, (A & 23'h7FFFFF), mantissaA, (B & 23'h7FFFFF), mantissaB);
+                A, B, A [22:0], mantissaA, B[22:0], mantissaB);
         end
 
         $display("Simulation Finished");
