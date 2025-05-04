@@ -20,7 +20,11 @@ module top;
             A = $random;
             B = $random;
             #10;
-
+`ifdef DEBUG
+	    $display("A: %h\nB: %h", A, B);
+	    $display("Aex: %h (%d)\nBex: %h (%d)", exponentA, exponentA, exponentB, exponentB);
+	    $display("AM: %h\nBM: %h", mantissaA, mantissaB);
+`endif
             if (exponentA > exponentB)
                 if(exponentOut !== A[30:23])
                 begin
