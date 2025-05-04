@@ -21,7 +21,7 @@ module top;
             B = $random;
             #10;
 
-            if (A > B)
+            if (exponentA > exponentB)
                 if(exponentOut !== A[30:23])
                 begin
                     Error++;
@@ -40,7 +40,7 @@ module top;
                     $display("Expected Mantissa A: %d, but Received: %d",
                     {1'b1,mantissaA}, alignedMantissaA);
                 end
-            else if (B > A)
+            else if (exponentB > exponentA)
                 if(exponentOut !== B[30:23])
                 begin
                     Error++;
