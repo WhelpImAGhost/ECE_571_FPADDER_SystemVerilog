@@ -11,7 +11,7 @@ module top;
     int Error;                                          //Error Accumulator
 
     Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
-    Alignment A(exponentA, exponentB, mantissaA, mantissaB, alignedMantissaA, alignedMantissaB, exponentOut);
+    Alignment A1(exponentA, exponentB, mantissaA, mantissaB, alignedMantissaA, alignedMantissaB, exponentOut);
 
     initial
     begin
@@ -53,7 +53,7 @@ module top;
                     $display("Expected Aligned B Mantissa: %d, but Received: %d",
                     ({1'b1,mantissaA} >> (exponentB - exponentA)), alignedMantissaA);
                 end
-                if(alignedMantissaA !== {1'b1,mantissaA})
+                if(alignedMantissaB !== {1'b1,mantissaB})
                 begin
                     Error++;
                     $display("Expected Mantissa A: %d, but Received: %d",

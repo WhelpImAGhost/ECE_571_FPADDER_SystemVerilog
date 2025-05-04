@@ -24,7 +24,7 @@ begin
     end
     else if (exponentB > exponentA)                                     //Case "B" > "A"
     begin
-        exponentDifferential = exponentB - exponentB;                   //Subtract Smaller Exponent From Larger
+        exponentDifferential = exponentB - exponentA;                   //Subtract Smaller Exponent From Larger
         alignedMantissaB = extendedMantissaB;                           //Set Aligned "B" = Extended "B"
         alignedMantissaA = extendedMantissaA >> exponentDifferential;   //Set Aligned "A" = (Extended "A" >> Difference in Exponents)
         exponentOut = exponentB;                                        //Pass Out Exponent B
