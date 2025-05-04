@@ -13,9 +13,9 @@ module top;
     begin
         repeat (1024)
         begin
-            #10;
             A = $random;
             B = $random;
+            #10;
             //Sign Error Check
             if ((signA !== A[31]) || (signB !== B[31]))             
                 $display("Improper Extraction of Sign Bit for test A = %h B=%h\nExpected Sign A = %h, Calculated Sign A = %h\nExpected Sign B = %h, Calculated Sign B = %h",
