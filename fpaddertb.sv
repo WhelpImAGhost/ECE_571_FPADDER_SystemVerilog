@@ -1,10 +1,14 @@
 module top;
 parameter Tests = 4096;
 
-logic [31:0] A, B, X;
+// logic [31:0] A, B, X;
 shortreal floatA, floatB, floatX;
 int error, tests;
 bit [31:0] rawA, rawB;
+
+fpbus bus();
+
+FPAdder f1(.bus(bus));
 
 // Create a union to easily switch between 
 // bit representation and shortreal representation
@@ -17,7 +21,13 @@ typedef union {
 f_union unionA, unionB, unionX;
 
 // Instantiate the module with the bitwise module
-FPAdder f0 (unionA.bits, unionB.bits, unionX.bits);
+//FPAdder f0 (unionA.bits, unionB.bits, unionX.bits);
+
+always_comb begin
+    bus.A = unionA.bits;
+    bus.B = unionB.bits;
+    unionX.bits = bus.Result;
+end
 
 initial
 begin
