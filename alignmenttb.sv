@@ -12,8 +12,8 @@ module top;
 
     fpbus bus (.*);
 
-    //Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
-    Mask M(.bus(bus.mask));
+    Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
+    //Mask M(.bus(bus.mask));
     //Alignment A1(exponentA, exponentB, mantissaA, mantissaB, alignedMantissaA, alignedMantissaB, exponentOut);
     Alignment A1(.bus(bus.align));
 

@@ -14,9 +14,14 @@ logic [23:0] extendedMantissaA, extendedMantissaB;                      //Extend
 
 always_comb
 begin
+`ifdef DEBUGALIGN
+	$display("mA: %h mB: %h\neA: %b eB: %b",
+	bus.mantissaA, bus.mantissaB,
+	bus.exponentA, bus.exponentB);
+`endif
     extendedMantissaA = {1'b1, bus.mantissaA};                              //Add Implicit One to "A" Before Shift
     extendedMantissaB = {1'b1, bus.mantissaB};                              //Add Implicit One to "B" Before Shift
-
+	
     if (bus.exponentA > bus.exponentB)                                          //Case "A" > "B"
     begin
         exponentDifferential = bus.exponentA - bus.exponentB;                   //Subtract Smaller Exponent From Larger
