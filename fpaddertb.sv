@@ -6,8 +6,10 @@ shortreal floatA, floatB, floatX;
 int error, tests;
 bit [31:0] rawA, rawB;
 
+// Initialize bus
 fpbus bus();
 
+// Initialize adder with bus
 FPAdder f1(.bus(bus));
 
 // Create a union to easily switch between 
@@ -20,9 +22,7 @@ typedef union {
 // Create unions for A, B, and X
 f_union unionA, unionB, unionX;
 
-// Instantiate the module with the bitwise module
-//FPAdder f0 (unionA.bits, unionB.bits, unionX.bits);
-
+// Assign inputs and outputs to bitwise unions
 always_comb begin
     bus.A = unionA.bits;
     bus.B = unionB.bits;

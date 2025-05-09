@@ -1,8 +1,3 @@
-// module FPAdder (
-//     input logic [31:0] A, B,
-//     output logic [31:0] X
-// );
-    
 module FPAdder (fpbus bus);
 
 // Create a union for simple switch from
