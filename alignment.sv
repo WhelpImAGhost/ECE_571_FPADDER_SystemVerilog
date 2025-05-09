@@ -7,7 +7,7 @@
 //     output logic [7:0] bus.exponentOut
 // );
 
-module Alignment (fpbus bus);
+module Alignment (fpbus.align bus);
 
 logic [7:0] exponentDifferential;                                       //Variable to Hold Computed Exponent Different for Shifting
 logic [23:0] extendedMantissaA, extendedMantissaB;                      //Extended Mantissa with Added Implicit Ones
