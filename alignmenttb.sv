@@ -10,8 +10,12 @@ module top;
 
     int Error;                                          //Error Accumulator
 
-    Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
-    Alignment A1(exponentA, exponentB, mantissaA, mantissaB, alignedMantissaA, alignedMantissaB, exponentOut);
+    fpbus bus (.*);
+
+    //Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
+    Mask M(.bus(bus.mask));
+    //Alignment A1(exponentA, exponentB, mantissaA, mantissaB, alignedMantissaA, alignedMantissaB, exponentOut);
+    Alignment A1(.bus(bus.align));
 
     initial
     begin

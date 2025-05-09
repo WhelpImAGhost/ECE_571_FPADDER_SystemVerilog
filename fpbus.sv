@@ -15,8 +15,6 @@ interface fpbus;
                    output alignedMantissaA, alignedMantissaB,
                    output exponentOut);
 
-    modport bench (input Result,
-                   output A, B);
 
 
 endinterface
