@@ -5,14 +5,23 @@ module ALU(fpbus.alu bus);
     always_comb 
     begin
         if (bus.signA == bus.signB)
+        begin
             {bus.carryOut,bus.alignedResult} = bus.alignedMantissaA + bus.alignedMantissaB;
+            bus.alignedSign = bus.signA;
+        end
         else 
         begin
             bus.carryOut = 0;
-            if (bus.signA > bus.signB)
+            if (bus.alignedMantissaA > bus.alignedMantissaB)
+            begin
                 bus.alignedResult = bus.alignedMantissaA - bus.alignedMantissaB;
+                bus.resultSign = bus.signA;
+            end
             else
+            begin
                 bus.alignedResult = bus.alignedMantissaB - bus.alignedMantissaA;
+                bus.resultSign = bus.signB;
+            end
         end
     end
 
