@@ -9,7 +9,7 @@ module ALU(fpbus.alu bus);
         else 
         begin
             bus.carryOut = 0;
-            if (bus.signA > bus.signB)
+            if (bus.signA < bus.signB)
                 bus.alignedResult = bus.alignedMantissaA - bus.alignedMantissaB;
             else
                 bus.alignedResult = bus.alignedMantissaB - bus.alignedMantissaA;
