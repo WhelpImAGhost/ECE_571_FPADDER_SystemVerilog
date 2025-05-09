@@ -4,9 +4,9 @@ int error;
 
 fpbus bus();
 
-Alignment align1(fpbus.align bus);
-Mask m1(fpbus.mask bus);
-ALU alu1 (fpbus.alu bus);
+//Alignment align1(.bus(bus.align));
+//Mask m1(.bus(bus.mask));
+ALU alu1 (.bus(bus.alu));
 
 initial
 begin
@@ -19,10 +19,10 @@ begin
     bus.alignedMantissaB = 23'h240000;
     #10;
 
-    if({bus.resultSign, bus.alignedResult} !== {1, bus.alignedMantissaA - bus.alignedMantissaB}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaA - bus.alignedMantissaB}) begin
         error++;
-        $display("Failed case 1: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 1, bus.alignedMantissaA - bus.alignedMantissaB);
+        $display("Failed case 1: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 1, bus.alignedMantissaA - bus.alignedMantissaB);
     end
 
     // Case 2: A is neg B is pos
@@ -33,10 +33,10 @@ begin
     bus.alignedMantissaB = 23'h440000;
     #10;
 
-    if({bus.resultSign, bus.alignedResult} !== {0, bus.alignedMantissaB - bus.alignedMantissaA}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB - bus.alignedMantissaA}) begin
         error++;
-        $display("Failed case 2: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 0, bus.alignedMantissaB - bus.alignedMantissaA);
+        $display("Failed case 2: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 0, bus.alignedMantissaB - bus.alignedMantissaA);
     end
 
     // Case 3: A is pos B is neg
@@ -48,10 +48,10 @@ begin
     #10;
 
 
-    if({bus.resultSign, bus.alignedResult} !== {0, bus.alignedMantissaA - bus.alignedMantissaB}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaA - bus.alignedMantissaB}) begin
         error++;
-        $display("Failed case 3: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 0, bus.alignedMantissaA - bus.alignedMantissaB);
+        $display("Failed case 3: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 0, bus.alignedMantissaA - bus.alignedMantissaB);
     end
 
     // Case 4: A is pos B is neg
@@ -63,10 +63,10 @@ begin
     #10;
 
     
-    if({bus.resultSign, bus.alignedResult} !== {1, bus.alignedMantissaB - bus.alignedMantissaA}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaB - bus.alignedMantissaA}) begin
         error++;
-        $display("Failed case 4: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 1, bus.alignedMantissaB - bus.alignedMantissaA);
+        $display("Failed case 4: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 1, bus.alignedMantissaB - bus.alignedMantissaA);
     end
 
     // Case 5: both are pos
@@ -77,10 +77,10 @@ begin
     bus.alignedMantissaB = 23'h002000;
     #10;
 
-    if({bus.resultSign, bus.alignedResult} !== {0, bus.alignedMantissaA - bus.alignedMantissaB}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaA + bus.alignedMantissaB}) begin
         error++;
-        $display("Failed case 5: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 0, bus.alignedMantissaA - bus.alignedMantissaB);
+        $display("Failed case 5: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 0, bus.alignedMantissaA + bus.alignedMantissaB);
     end
 
     // Case 6: both are pos
@@ -91,10 +91,10 @@ begin
     bus.alignedMantissaB = 23'h440000;
     #10;
 
-    if({bus.resultSign, bus.alignedResult} !== {0, bus.alignedMantissaB - bus.alignedMantissaA}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB + bus.alignedMantissaA}) begin
         error++;
-        $display("Failed case 6: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 0, bus.alignedMantissaB - bus.alignedMantissaA);
+        $display("Failed case 6: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 0, bus.alignedMantissaB + bus.alignedMantissaA);
     end
 
     // Case 7: both are neg
@@ -105,10 +105,10 @@ begin
     bus.alignedMantissaB = 23'h002000;
     #10;
 
-    if({bus.resultSign, bus.alignedResult} !== {1, bus.alignedMantissaA - bus.alignedMantissaB}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaA + bus.alignedMantissaB}) begin
         error++;
-        $display("Failed case 7: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 1, bus.alignedMantissaA - bus.alignedMantissaB);
+        $display("Failed case 7: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 1, bus.alignedMantissaA + bus.alignedMantissaB);
     end
 
     // Case 8: both are neg
@@ -119,10 +119,10 @@ begin
     bus.alignedMantissaB = 23'h440000;
     #10;
 
-    if({bus.resultSign, bus.alignedResult} !== {1, bus.alignedMantissaB - bus.alignedMantissaA}) begin
+    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaB + bus.alignedMantissaA}) begin
         error++;
-        $display("Failed case 8: got %b %h, expected %b %h", bus.resultSign, 
-        alignedResult, 1, bus.alignedMantissaB - bus.alignedMantissaA);
+        $display("Failed case 8: got %b %h, expected %b %h", bus.alignedSign, 
+        bus.alignedResult, 1, bus.alignedMantissaB + bus.alignedMantissaA);
     end
 
 

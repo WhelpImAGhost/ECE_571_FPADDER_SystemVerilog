@@ -15,12 +15,12 @@ module ALU(fpbus.alu bus);
             if (bus.alignedMantissaA > bus.alignedMantissaB)
             begin
                 bus.alignedResult = bus.alignedMantissaA - bus.alignedMantissaB;
-                bus.resultSign = bus.signA;
+                bus.alignedSign = bus.signA;
             end
             else
             begin
                 bus.alignedResult = bus.alignedMantissaB - bus.alignedMantissaA;
-                bus.resultSign = bus.signB;
+                bus.alignedSign = bus.signB;
             end
         end
     end

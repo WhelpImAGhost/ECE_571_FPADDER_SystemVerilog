@@ -22,7 +22,7 @@ interface fpbus;
                  input alignedMantissaA, alignedMantissaB,
                  output alignedResult, alignedSign, carryOut);
 
-    modport normal (input carryOut, alignedResult,
+    modport normal (input carryOut, alignedResult
                     
 
     );
