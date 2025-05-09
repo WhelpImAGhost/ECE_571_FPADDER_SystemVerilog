@@ -4,6 +4,7 @@ interface fpbus;
     logic [7:0] exponentA, exponentB, exponentOut;
     logic [22:0] mantissaA, mantissaB;
     logic [23:0] alignedMantissaA, alignedMantissaB;
+    logic [23:0] denormalizedResult;
 
     modport mask (input A, B,
                   output signA, signB,
@@ -15,6 +16,8 @@ interface fpbus;
                    output alignedMantissaA, alignedMantissaB,
                    output exponentOut);
 
-
+    modport alu (input signA, signB,
+                 input alignedMantissaA, alignedMantissaB,
+                 output denormalizedResult);
 
 endinterface
