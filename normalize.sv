@@ -1,29 +1,34 @@
 //Module to Renormalize the Result
 
-module Normalize();
-    logic [23:0] normInput;
-    logic [4:0] shiftAmt;
+module Normalize(fpbus.normal bus);
+    logic [23:0] shiftedMantissa;
+    logic [4:0] shiftAmount;
+
+    // Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
+    function automatic [4:0] countZeros(input logic [23:0] mantissa);
+        int i;                                          
+        shiftAmount = 0;                                      
+
+        for (i = 23; i >= 0; i--)
+            if (mantissa[i])
+                return 23 - i;                  
+
+    endfunction
 
     always_comb begin
-        if (carryOut) begin
-            // Overflow occurred — shift right and bump exponent
-            normInput = alignedResult >> 1;
-            normalizedExponent = exponentIn + 1;
-            normalizedMantissa = normInput[22:0];
-        end else if (alignedResult == 0) begin
-            normalizedMantissa = 0;
-            normalizedExponent = 0;
-        end else begin
-            shiftAmt = 0;
-            for (int i = 23; i >= 0; i--) begin
-                if (alignedResult[i] == 1) begin
-                    shiftAmt = 23 - i;
-                    break;
-                end
-            end
-            normInput = alignedResult << shiftAmt;
-            normalizedExponent = exponentIn - shiftAmt;
-            normalizedMantissa = normInput[22:0];
+        if (bus.alignedResult == 0)
+        begin
+            bus.normalizedMantissa = 0;
+            bus.normalizedExponent = 0;
+            bus.normalizedSign = 0;
+        end 
+        else
+        begin
+            shiftAmount = countZeros(bus.alignedResult);
+            shiftedMantissa = bus.alignedResult << shiftAmount;
+            bus.normalizedMantissa = shiftedMantissa [22:0];
+            bus.normalizedExponent = bus.exponentOut - shiftAmount;
+            bus.normalizedSign = bus.alignedSign;
         end
     end
 
