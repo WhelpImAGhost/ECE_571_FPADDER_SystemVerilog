@@ -31,7 +31,7 @@ begin
 
     unionA.f = -1.245;
 	unionB.f = 2.753;
-    #10;
+    #100;
 
     `ifdef DEBUGTB
     $display("A: %h, B: %h", unionA.bits, unionB.bits);
