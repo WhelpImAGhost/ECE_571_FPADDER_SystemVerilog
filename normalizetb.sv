@@ -18,6 +18,13 @@ module top;
     // Create unions for A, B, and X
     f_union unionA, unionB, unionX;
 
+    always_comb 
+    begin
+        bus.A = unionA.bits;
+        bus.B = unionB.bits;
+        unionX.f = unionA.f + unionB.f; 
+    end
+
     initial
     begin 
 
@@ -27,21 +34,12 @@ module top;
 
         #10
 
-        bus.A = unionA.bits;
-        bus.B = unionB.bits;
-
-        #10;
-
-        unionX.f = unionA.f + unionB.f;
-
         `ifdef DEBUGTB
             $display("f- A: %0f, B: %0f", unionA.f, unionB.f);
             $display("bits- A: %h, B: %h", unionA.bits, unionB.bits);
             $display("bus- A: %h, B: %h", bus.A, bus.B);
             $display("f- X: %0f", unionX.f);
         `endif
-
-        #10;
 
         if (bus.normalizedExponent !== unionX.bits[30:23])
         begin
