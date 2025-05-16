@@ -21,20 +21,20 @@ typedef union {
 // Create unions for A, B, and X
 f_union unionA, unionB, unionX;
 
-// Assign inputs and outputs to bitwise unions
-    assign bus.A = unionA.bits;
-    assign bus.B = unionB.bits;
-    assign unionX.f = unionA.f + unionB.f;
-
 initial
 begin 
 
+    // Assign inputs and outputs to bitwise unions
     unionA.f = -1.245;
 	unionB.f = 2.753;
     #10;
+    unionX.f = unionA.f + unionB.f;
+    bus.A = unionA.bits;
+    bus.B = unionB.bits;
+    #10;
 
     `ifdef DEBUGTB
-    $display("A: %h, B: %h", unionA.bits, unionB.bits);
+        $display("A: %h, B: %h", unionA.bits, unionB.bits);
     `endif
 
     if (bus.normalizedExponent !== unionX.bits[30:23])
