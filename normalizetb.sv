@@ -22,11 +22,9 @@ typedef union {
 f_union unionA, unionB, unionX;
 
 // Assign inputs and outputs to bitwise unions
-always_comb begin
-    bus.A = unionA.bits;
-    bus.B = unionB.bits;
-    unionX.f = unionA.f + unionB.f;
-end
+    assign bus.A = unionA.bits;
+    assign bus.B = unionB.bits;
+    assign unionX.f = unionA.f + unionB.f;
 
 initial
 begin 
@@ -35,7 +33,7 @@ begin
 	unionB.f = 2.753;
     #10;
 
-    `ifdef DEBUG
+    `ifdef DEBUGTB
     $display("A: %h, B: %h", unionA.bits, unionB.bits);
     `endif
 

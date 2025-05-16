@@ -23,7 +23,7 @@ module ALU(fpbus.alu bus);
                 bus.alignedSign = bus.signB;
             end
         end
-    `ifdef DEBUG
+    `ifdef DEBUGALU
         $display("Sign: %b, \"Carry Out\", Result: %h, %h", bus.alignedSign, bus.carryOut, bus.alignedResult);
     `endif
 
