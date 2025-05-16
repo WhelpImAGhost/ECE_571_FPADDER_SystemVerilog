@@ -6,8 +6,10 @@ module top();
     Aligment align(bus.align);
     ALU alu(bus.alu);
 
-    int i; 
-    int Error;
+    int i, Error;
+    logic expectedSign;
+    logic [24:0] expectedSum;
+    logic [7:0] expectedExponent;
 
     initial begin
         for (i = 0; i < 10000; i++) 
@@ -18,7 +20,6 @@ module top();
             #1; //Allow Propagation
 
             //Determine Expected exponent
-            logic [7:0] expectedExponent;
             if (bus.exponentA > bus.exponentB)
                 expectedExponent = bus.exponentA;
             else if (bus.exponentB > bus.exponentA)
@@ -34,7 +35,6 @@ module top();
             end
 
             //Determine Expected Mantissa Addition Based on Exponent Alignment
-            logic [24:0] expectedSum;
             if (bus.signA == bus.signB)
                     expectedSum = bus.alignedMantissaA + bus.alignedMantissaA;
             else
@@ -51,7 +51,6 @@ module top();
             end
 
             //Check Sign
-            logic expectedSign;
             if (bus.exponentA > bus.exponentB)
                 expectedSign = bus.signA;
             else if (bus.exponentB > bus.exponentA)
