@@ -53,12 +53,11 @@ begin
         $display("Expected Normalized Sign: %h, but Received: %h",
         unionX.bits[31], bus.normalizedSign);
     end
-    if (error == 0)
-        $display("FP Adder passed static case. Test Passed");
-    else
-        $display("FP Adder failed static case. Test Failed");
 
+    if (error == 0) $display("FP Adder passed static case. Test Passed");
+    else            $display("FP Adder failed static case. Test Failed");
+    $display("Total Errors: %d", error);
 
-
+    $finish;
 end
 endmodule
