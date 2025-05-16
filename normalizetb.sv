@@ -28,6 +28,8 @@ module top;
         bus.A = unionA.bits;
         bus.B = unionB.bits;
 
+        #10;
+
         unionX.f = unionA.f + unionB.f;
 
         `ifdef DEBUGTB
