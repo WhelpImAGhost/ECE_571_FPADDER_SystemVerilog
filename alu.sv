@@ -6,7 +6,7 @@ module ALU(fpbus.alu bus);
     begin
         if (bus.signA == bus.signB)
         begin
-            {bus.carryOut,bus.alignedResult} = bus.alignedMantissaA + bus.alignedMantissaB;
+            {bus.carryOut, bus.alignedResult} = bus.alignedMantissaA + bus.alignedMantissaB;
             bus.alignedSign = bus.signA;
         end
         else 
@@ -14,12 +14,12 @@ module ALU(fpbus.alu bus);
             bus.carryOut = 0;
             if (bus.alignedMantissaA > bus.alignedMantissaB)
             begin
-                bus.alignedResult = bus.alignedMantissaA - bus.alignedMantissaB;
+                {bus.carryOut, bus.alignedResult} = bus.alignedMantissaA - bus.alignedMantissaB;
                 bus.alignedSign = bus.signA;
             end
             else
             begin
-                bus.alignedResult = bus.alignedMantissaB - bus.alignedMantissaA;
+                {bus.carryOut, bus.alignedResult} = bus.alignedMantissaB - bus.alignedMantissaA;
                 bus.alignedSign = bus.signB;
             end
         end
