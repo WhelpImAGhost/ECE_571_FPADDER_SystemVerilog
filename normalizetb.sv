@@ -2,7 +2,7 @@ module top;
 
     int error, tests;
 
-    fpbus bus(.*);
+    fpbus bus();
     Mask mask(bus.mask);
     Alignment align(bus.align);
     ALU alu(bus.alu);
@@ -25,6 +25,8 @@ module top;
         unionA.f = -1.245;
         unionB.f = 2.753;
 
+        #10
+
         bus.A = unionA.bits;
         bus.B = unionB.bits;
 
@@ -38,6 +40,8 @@ module top;
             $display("bus- A: %h, B: %h", bus.A, bus.B);
             $display("f- X: %0f", unionX.f);
         `endif
+
+    #10;
 
         if (bus.normalizedExponent !== unionX.bits[30:23])
         begin
