@@ -35,6 +35,7 @@ module top;
             $display("f- A: %0f, B: %0f", unionA.f, unionB.f);
             $display("bits- A: %h, B: %h", unionA.bits, unionB.bits);
             $display("bus- A: %h, B: %h", bus.A, bus.B);
+            $display("f- X: %h", unionX.f);
         `endif
 
         if (bus.normalizedExponent !== unionX.bits[30:23])
@@ -57,8 +58,7 @@ module top;
         end
 
         if (error == 0) $display("FP Adder passed static case. Test Passed");
-        else            $display("FP Adder failed static case. Test Failed");
-        $display("Total Errors: %d", error);
+        else            $display("FP Adder failed static case. Test Failed. Total Errors: %0d", error);
 
         $finish;
     end
