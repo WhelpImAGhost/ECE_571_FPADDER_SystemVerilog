@@ -28,7 +28,7 @@ always_comb begin
     unionX.f = unionA.f + unionB.f;
 end
 
-intial
+initial
 begin 
 
     unionA.f = -1.245;
@@ -58,7 +58,7 @@ begin
     else
         $display("FP Adder failed static case. Test Failed");
 
-
+	$finish;
 
 end
 endmodule
