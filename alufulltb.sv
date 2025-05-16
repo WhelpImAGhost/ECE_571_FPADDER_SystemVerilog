@@ -12,7 +12,7 @@ module top;
     logic [7:0] expectedExponent;
 
     initial begin
-        for (i = 0; i < 10000; i++) 
+        for (i = 0; i < 1000000; i++) 
         begin
             //Generate Random 32-bit Inputs
             bus.A = $urandom_range(0, 32'hFFFFFFFF);
@@ -30,7 +30,7 @@ module top;
             //Check Exponent Output
             if (bus.exponentOut !== expectedExponent) 
             begin
-                $display("Incorrect Exponent: Expected %h, Got %h", expectedExponent, bus.exponentOut);
+                $display("Case A = %h, B = %h | Incorrect Exponent: Expected %h, Got %h", bus.A, bus.B, expectedExponent, bus.exponentOut);
                 Error++;
             end
 
@@ -46,7 +46,7 @@ module top;
             //Check Eesult
             if ({bus.carryOut, bus.alignedResult} !== expectedSum) 
             begin
-                $display("Incorrect Result: Expected %h, Got %h", expectedSum, {bus.carryOut, bus.alignedResult});
+                $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", bus.A, bus.B, expectedSum, {bus.carryOut, bus.alignedResult});
                 Error++;
             end
 
@@ -60,7 +60,7 @@ module top;
 
             if (bus.alignedSign !== expectedSign) 
             begin
-                $display("Incorrect Sign: Expected %b, Got %b", expectedSign, bus.alignedSign);
+                $display("Case A = %h, B = %h | Incorrect Sign: Expected %b, Got %b", bus.A, bus.B, expectedSign, bus.alignedSign);
                 Error++;
             end
         end
