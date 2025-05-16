@@ -138,9 +138,9 @@ begin
         $display("Failed case 8: got %b %h, expected %b %h", bus.alignedSign, 
         bus.alignedResult, 1, bus.alignedMantissaB + bus.alignedMantissaA);
     end
-    else if (bus.carryOut !== 1) begin
+    else if (bus.carryOut !== 1'b1) begin
         error++;
-        $display("Failed case 9: got %b, expected %b", bus.carryOut, 1);
+        $display("Failed case 9: got %b, expected %0b", bus.carryOut, 1);
     end
 
     // Case 10: Both are pos, intend for carryout
@@ -155,9 +155,9 @@ begin
         $display("Failed case 10: got %b %h, expected %b %h", bus.alignedSign, 
         bus.alignedResult, 0, bus.alignedMantissaB + bus.alignedMantissaA);
     end
-    else if (bus.carryOut !== 1) begin
+    else if (bus.carryOut !== 1'b1) begin
         error++;
-        $display("Failed case 10: got %b, expected %b", bus.carryOut, 1);
+        $display("Failed case 10: got %b, expected %0b", bus.carryOut, 1);
     end
 
 
