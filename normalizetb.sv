@@ -30,11 +30,11 @@ module top;
         // Assign inputs and outputs to bitwise unions
         unionA.f = -1.245;
         unionB.f = 2.753;
-        #10;
 
         `ifdef DEBUGTB
             $display("f- A: %0f, B: %0f", unionA.f, unionB.f);
             $display("bits- A: %h, B: %h", unionA.bits, unionB.bits);
+            $display("bus- A: %h, B: %h", bus.A, bus.B);
         `endif
 
         if (bus.normalizedExponent !== unionX.bits[30:23])
