@@ -2,32 +2,33 @@
 
 module top;
 
-    bit [31:0] A, B;                        //Inputs A & B
-    bit signA, signB;                       //Output Sign Bits
-    bit [7:0] exponentA, exponentB;         //Output Exponents
-    bit [22:0] mantissaA, mantissaB;        //Output Mantissas
+    // bit [31:0] A, B;                        //Inputs A & B
+    // bit signA, signB;                       //Output Sign Bits
+    // bit [7:0] exponentA, exponentB;         //Output Exponents
+    // bit [22:0] mantissaA, mantissaB;        //Output Mantissas
 
-    Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
+    // Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
+    Mask M(.bus(bus.mask));
 
     initial
     begin
         repeat (1024)
         begin
-            A = $random;
-            B = $random;
+            bus.A = $random;
+            bus.B = $random;
             #10;
             //Sign Error Check
-            if ((signA !== A[31]) || (signB !== B[31]))             
+            if ((bus.signA !== bus.A[31]) || (bus.signB !== bus.B[31]))             
                 $display("Improper Extraction of Sign Bit for test A = %h B=%h\nExpected Sign A = %h, Calculated Sign A = %h\nExpected Sign B = %h, Calculated Sign B = %h",
-                A, B, A[31], signA, B[31], signB);
+                bus.A, bus.B, bus.A[31], bus.signA, bus.B[31], bus.signB);
             //Exponent Error Check
-            if ((exponentA !== A [30:23]) || (exponentB !== B [30:23]))
+            if ((bus.exponentA !== bus.A [30:23]) || (bus.exponentB !== bus.B [30:23]))
                 $display("Improper Extraction of Exponent for test A = %h B=%h\nExpected Exponent A = %h, Calculated Exponent A = %h\nExpected Exponent B = %h, Calculated Exponent B = %h",
-                A, B, A[30:23], exponentA, B[30:23], exponentB);
+                bus.A, bus.B, bus.A[30:23], bus.exponentA, bus.B[30:23], bus.exponentB);
             //Mantissa Error Check
-            if ((mantissaA !== A [22:0]) || (mantissaB !== B[22:0]))
+            if ((bus.mantissaA !== bus.A [22:0]) || (bus.mantissaB !== bus.B[22:0]))
                 $display("Improper Extraction of Mantissa for test A = %h B=%h\nExpected Mantissa A = %h, Calculated Mantissa A = %h\nExpected Mantissa B = %h, Calculated Mantissa B = %h",
-                A, B, A [22:0], mantissaA, B[22:0], mantissaB);
+                bus.A, bus.B, bus.A [22:0], bus.mantissaA, bus.B[22:0], bus.mantissaB);
         end
 
         $display("Simulation Finished");
