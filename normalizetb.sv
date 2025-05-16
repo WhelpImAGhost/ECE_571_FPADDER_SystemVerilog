@@ -10,7 +10,7 @@ module top;
 
     // Create a union to easily switch between 
     // bit representation and shortreal representation
-    typedef union packed {
+    typedef union {
             shortreal f;
             logic [31:0] bits;
     } f_union;
