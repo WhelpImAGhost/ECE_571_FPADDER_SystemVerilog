@@ -6,10 +6,10 @@ bit [31:0] rawA, rawB;
 
 
 fpbus bus();
-Mask M(.bus(bus.mask));
-Alignment A1(.bus(bus.align));
-ALU alu1 (.bus(bus.alu));
-Normalize N1(.bus(bus.normal));
+Mask mask(bus.mask);
+Alignment align(bus.align);
+ALU alu(bus.alu);
+Normalize N1(bus.normal);
 
 // Create a union to easily switch between 
 // bit representation and shortreal representation
