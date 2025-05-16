@@ -31,7 +31,8 @@ module top;
         #10;
 
         `ifdef DEBUGTB
-            $display("A: %h, B: %h", unionA.bits, unionB.bits);
+            $display("f- A: %0d, B: %0d", unionA.f, unionB.f);
+            $display("bits- A: %h, B: %h", unionA.bits, unionB.bits);
         `endif
 
         if (bus.normalizedExponent !== unionX.bits[30:23])
