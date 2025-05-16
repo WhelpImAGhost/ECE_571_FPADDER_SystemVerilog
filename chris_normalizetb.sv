@@ -13,9 +13,10 @@ module top;
 
     always_comb 
     begin
+        X     = A + B;
+
         bitsA = $shortrealtobits(A);
         bitsB = $shortrealtobits(B);
-        X     = A + B;
         bitsX = $shortrealtobits(X);
 
         bus.A = bitsA;
