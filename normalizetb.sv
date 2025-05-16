@@ -1,9 +1,6 @@
 module top;
 
-shortreal floatA, floatB, floatX;
 int error, tests;
-bit [31:0] rawA, rawB;
-
 
 fpbus bus();
 Mask mask(bus.mask);
