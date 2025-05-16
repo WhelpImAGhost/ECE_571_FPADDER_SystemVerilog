@@ -51,9 +51,9 @@ module top;
             end
 
             //Check Sign
-            if (bus.exponentA > bus.exponentB)
+            if (bus.alignedMantissaA > bus.alignedMantissaB)
                 expectedSign = bus.signA;
-            else if (bus.exponentB > bus.exponentA)
+            else if (bus.alignedMantissaB > bus.alignedMantissaA)
                 expectedSign = bus.signB;
             else
                 expectedSign = bus.signA;
@@ -66,5 +66,6 @@ module top;
         end
 
         $display("Simulation Completed With %0d %s.", Error, (Error == 1) ? "Error" : "Errors");
+        $finish;
     end
 endmodule
