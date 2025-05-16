@@ -18,19 +18,17 @@ module top;
     // Create unions for A, B, and X
     f_union unionA, unionB, unionX;
 
-    always_comb 
-    begin
-        bus.A = unionA.bits;
-        bus.B = unionB.bits;
-        unionX.f = unionA.f + unionB.f;
-    end
-
     initial
     begin 
 
         // Assign inputs and outputs to bitwise unions
         unionA.f = -1.245;
         unionB.f = 2.753;
+
+        bus.A = unionA.bits;
+        bus.B = unionB.bits;
+
+        unionX.f = unionA.f + unionB.f;
 
         `ifdef DEBUGTB
             $display("f- A: %0f, B: %0f", unionA.f, unionB.f);
