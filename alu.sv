@@ -24,7 +24,9 @@ module ALU(fpbus.alu bus);
             end
         end
     `ifdef DEBUG
-        $display("Sign: %b, {\"Carry Out\", Result}: {%b, %h}", bus.alignedSign, bus.carryOut, bus.alignedResult);
-    `endif 
-	end
+        $display("Sign: %b, \"Carry Out\", Result: %h, %h", bus.alignedSign, bus.carryOut, bus.alignedResult);
+    `endif
+
+    end
+
 endmodule
