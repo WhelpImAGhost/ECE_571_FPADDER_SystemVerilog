@@ -35,6 +35,10 @@ begin
 	unionB.f = 2.753;
     #10;
 
+    `ifdef DEBUG
+    $display("A: %h, B: %h", unionA.bits, unionB.bits);
+    `endif
+
     if (bus.normalizedExponent !== unionX.bits[30:23])
     begin
         error++;
