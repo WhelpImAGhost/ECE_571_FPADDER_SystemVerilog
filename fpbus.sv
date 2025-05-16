@@ -23,6 +23,6 @@ interface fpbus;
         output normalizedSign, normalizedExponent, normalizedMantissa);
 
     modport pack (input normalizedSign, normalizedExponent, normalizedMantissa,
-        output result);
+        output Result);
 
 endinterface

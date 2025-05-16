@@ -15,8 +15,8 @@ begin
     // A has larger mantissa
     bus.signA = 1;
     bus.signB = 0;
-    bus.alignedMantissaA = 23'h440000;
-    bus.alignedMantissaB = 23'h240000;
+    bus.alignedMantissaA = 24'h440000;
+    bus.alignedMantissaB = 24'h240000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaA - bus.alignedMantissaB}) begin
@@ -29,8 +29,8 @@ begin
     // B has larger mantissa
     bus.signA = 1;
     bus.signB = 0;
-    bus.alignedMantissaA = 23'h040000;
-    bus.alignedMantissaB = 23'h440000;
+    bus.alignedMantissaA = 24'h040000;
+    bus.alignedMantissaB = 24'h440000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB - bus.alignedMantissaA}) begin
@@ -43,8 +43,8 @@ begin
     // A has larger mantissa
     bus.signA = 0;
     bus.signB = 1;
-    bus.alignedMantissaA = 23'h440000;
-    bus.alignedMantissaB = 23'h240000;
+    bus.alignedMantissaA = 24'h440000;
+    bus.alignedMantissaB = 24'h240000;
     #10;
 
 
@@ -58,8 +58,8 @@ begin
     // B has larger mantissa
     bus.signA = 0;
     bus.signB = 1;
-    bus.alignedMantissaA = 23'h040000;
-    bus.alignedMantissaB = 23'h440000;
+    bus.alignedMantissaA = 24'h040000;
+    bus.alignedMantissaB = 24'h440000;
     #10;
 
     
@@ -73,8 +73,8 @@ begin
     // A has larger mantissa
     bus.signA = 0;
     bus.signB = 0;
-    bus.alignedMantissaA = 23'h440000;
-    bus.alignedMantissaB = 23'h002000;
+    bus.alignedMantissaA = 24'h440000;
+    bus.alignedMantissaB = 24'h002000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaA + bus.alignedMantissaB}) begin
@@ -87,8 +87,8 @@ begin
     // B has larger mantissa
     bus.signA = 0;
     bus.signB = 0;
-    bus.alignedMantissaA = 23'h002000;
-    bus.alignedMantissaB = 23'h440000;
+    bus.alignedMantissaA = 24'h002000;
+    bus.alignedMantissaB = 24'h440000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB + bus.alignedMantissaA}) begin
@@ -101,8 +101,8 @@ begin
     // A has larger mantissa
     bus.signA = 1;
     bus.signB = 1;
-    bus.alignedMantissaA = 23'h440000;
-    bus.alignedMantissaB = 23'h002000;
+    bus.alignedMantissaA = 24'h440000;
+    bus.alignedMantissaB = 24'h002000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaA + bus.alignedMantissaB}) begin
@@ -115,8 +115,8 @@ begin
     // B has larger mantissa
     bus.signA = 1;
     bus.signB = 1;
-    bus.alignedMantissaA = 23'h002000;
-    bus.alignedMantissaB = 23'h440000;
+    bus.alignedMantissaA = 24'h002000;
+    bus.alignedMantissaB = 24'h440000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaB + bus.alignedMantissaA}) begin
@@ -129,8 +129,8 @@ begin
     // Case 9: Both are neg, intend for carryout
     bus.signA = 1;
     bus.signB = 1;
-    bus.alignedMantissaA = 23'hF02000;
-    bus.alignedMantissaB = 23'h440000;
+    bus.alignedMantissaA = 24'hF02000;
+    bus.alignedMantissaB = 24'h440000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaB + bus.alignedMantissaA}) begin
@@ -146,8 +146,8 @@ begin
     // Case 10: Both are pos, intend for carryout
     bus.signA = 0;
     bus.signB = 0;
-    bus.alignedMantissaA = 23'hF02000;
-    bus.alignedMantissaB = 23'h440000;
+    bus.alignedMantissaA = 24'hF02000;
+    bus.alignedMantissaB = 24'h440000;
     #10;
 
     if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB + bus.alignedMantissaA}) begin
