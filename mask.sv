@@ -10,6 +10,11 @@ module Mask(fpbus.mask bus);
         bus.exponentB = bus.B [30:23];  //8-Bit Exponent Field for Addend "B"
         bus.mantissaA = bus.A [22:0];   //23-Bit Exponent Field for Addend "A"
         bus.mantissaB = bus.B [22:0];   //23-Bit Exponent Field for Addend "B"
+
+`ifdef DEBUGMASK
+	$display("Sign A: %0b Sign B: %0b\nEx A: %0b Ex B: %0b\nMan A: %0b Man B: %0b\n", bus.signA, bus.signB, bus.exponentA,
+       						bus.exponentB, bus.mantissaA, bus.mantissaB);
+`endif
     end
 
 endmodule
