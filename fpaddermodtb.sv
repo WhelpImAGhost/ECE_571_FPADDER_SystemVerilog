@@ -1,4 +1,3 @@
-
 module top;
 parameter Tests = 4096;
 
