@@ -7,6 +7,7 @@ module top;
     // bit [7:0] exponentA, exponentB;         //Output Exponents
     // bit [22:0] mantissaA, mantissaB;        //Output Mantissas
 
+fpbus bus();
     // Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
     Mask M(.bus(bus.mask));
 
