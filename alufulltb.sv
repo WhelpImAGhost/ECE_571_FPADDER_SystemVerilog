@@ -1,4 +1,4 @@
-module top();
+module top;
 
     //Module Instantiations
     fpbus bus(.*);
