@@ -41,7 +41,7 @@ module top;
             $display("f- X: %0f", unionX.f);
         `endif
 
-    #10;
+        #10;
 
         if (bus.normalizedExponent !== unionX.bits[30:23])
         begin
