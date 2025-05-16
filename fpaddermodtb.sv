@@ -14,7 +14,7 @@ fpbus bus();
 Mask M(.bus(bus.mask));
 Alignment A1(.bus(bus.align));
 ALU alu1 (.bus(bus.alu));
-Normalization N1(.bus(bus.normal));
+Normalize N1(.bus(bus.normal));
 Pack P1(.bus(bus.pack));
 
 // Create a union to easily switch between 
