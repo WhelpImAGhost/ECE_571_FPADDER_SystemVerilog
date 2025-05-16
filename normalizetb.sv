@@ -31,7 +31,7 @@ module top;
         #10;
 
         `ifdef DEBUGTB
-            $display("f- A: %0d, B: %0d", unionA.f, unionB.f);
+            $display("f- A: %0f, B: %0f", unionA.f, unionB.f);
             $display("bits- A: %h, B: %h", unionA.bits, unionB.bits);
         `endif
 
