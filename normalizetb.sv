@@ -21,7 +21,7 @@ module top;
     always_comb begin
         bus.A = unionA.bits;
         bus.B = unionB.bits;
-        unionX.bits = bus.Result;
+        unionX.f = unionA.f + unionB.f;
     end
 
     initial
