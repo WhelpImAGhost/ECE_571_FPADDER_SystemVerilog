@@ -3,7 +3,7 @@ module top;
     //Module Instantiations
     fpbus bus(.*);
     Mask mask(bus.mask);
-    Aligment align(bus.align);
+    Alignment align(bus.align);
     ALU alu(bus.alu);
 
     int i, Error;
@@ -39,9 +39,9 @@ module top;
                     expectedSum = bus.alignedMantissaA + bus.alignedMantissaA;
             else
             if (bus.alignedMantissaA > bus.alignedMantissaB)
-                expectedSum = bus.extendedMantissaA - bus.alignedMantissaB;
+                expectedSum = bus.alignedMantissaA - bus.alignedMantissaB;
             else if (bus.alignedMantissaB > bus.alignedMantissaA)
-                expectedSum = bus.extendedMantissaB - bus.alignedMantissaA;
+                expectedSum = bus.alignedMantissaB - bus.alignedMantissaA;
 
             //Check Eesult
             if ({bus.carryOut, bus.alignedResult} !== expectedSum) 
