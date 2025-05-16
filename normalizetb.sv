@@ -18,16 +18,18 @@ module top;
     // Create unions for A, B, and X
     f_union unionA, unionB, unionX;
 
+    always_comb begin
+        bus.A = unionA.bits;
+        bus.B = unionB.bits;
+        unionX.bits = bus.Result;
+    end
+
     initial
     begin 
 
         // Assign inputs and outputs to bitwise unions
         unionA.f = -1.245;
         unionB.f = 2.753;
-        #10;
-        unionX.f = unionA.f + unionB.f;
-        bus.A = unionA.bits;
-        bus.B = unionB.bits;
         #10;
 
         `ifdef DEBUGTB
