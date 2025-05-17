@@ -7,7 +7,18 @@ bit [31:0] rawA, rawB, iA, iB, iX, iEx;
 int error, tests;
 
 fpbus bus();
+
+`ifdef MOD
+    Mask mask(bus.mask);
+    Alignment align(bus.align);
+    ALU alu(bus.alu);
+    Normalize N1(bus.normal);
+    Pack p1 (bus.pack);
+`endif
+
+`ifndef MOD
 FPAdder f1(bus);
+`endif
 
 always_comb begin
 	iA = $shortrealtobits(fA);

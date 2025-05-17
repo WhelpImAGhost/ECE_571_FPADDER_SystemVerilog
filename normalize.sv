@@ -63,6 +63,12 @@ module Normalize(fpbus.normal bus);
 
             bus.normalizedSign = bus.alignedSign;
         end
+
+        `ifdef DEBUGNORM
+            $display("ShMta: %h     Mask: %h"shiftedMantissa, mask);
+            $display("ShAmt: %d", shiftAmount);
+            $display("Guard %b      Sticky %b       Round %b", guardBit, stickyBit, roundBit);
+        `endif
     end
 
 endmodule

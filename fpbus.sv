@@ -27,4 +27,11 @@ interface fpbus;
     modport pack (  input normalizedSign, normalizedExponent, normalizedMantissa,
                     output Result);
 
+    `ifdef DEBUGALL
+        `define DEBUGMASK
+        `define DEBUGALIGN
+        `define DEBUGALU
+        `define DEBUGNORM
+    `endif
+
 endinterface
