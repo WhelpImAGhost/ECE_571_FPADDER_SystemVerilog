@@ -16,8 +16,8 @@ int i;                                                                          
 
 always_comb
 begin
-    extendedMantissaA = {1'b1, bus.mantissaA, 2'b0};                                  //Add Implicit One to "A" Before Shift
-    extendedMantissaB = {1'b1, bus.mantissaB, 2'b0};                                  //Add Implicit One to "B" Before Shift
+    extendedMantissaA = {1'b1, bus.mantissaA, 2'b0};                            //Add Implicit One to "A" Before Shift
+    extendedMantissaB = {1'b1, bus.mantissaB, 2'b0};                            //Add Implicit One to "B" Before Shift
     bus.stickyBit = 0;                                                          //Initialize Sticky Bit to Zero
 	bus.guardBit = 0;                                                           //Initialize Guard Bit to Zero
     bus.roundBit = 0;                                                           //Initialize Round Bit to Zero
@@ -25,7 +25,7 @@ begin
     if (bus.exponentA > bus.exponentB)                                          //Case "A" > "B"
     begin
         exponentDifferential = bus.exponentA - bus.exponentB;                   //Subtract Smaller Exponent From Larger
-        bus.alignedMantissaA = extendedMantissaA;                               //Set Aligned "A" = Extended "A"
+        bus.alignedMantissaA = extendedMantissaA[25:2];                         //Set Aligned "A" = Extended "A"
         bus.exponentOut = bus.exponentA;                                        //Pass Out Exponent A
         {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = extendedMantissaB >> exponentDifferential;       
         if (exponentDifferential > 26)                                          
@@ -36,7 +36,7 @@ begin
     else if (bus.exponentB > bus.exponentA)                                     //Case "B" > "A"
     begin
         exponentDifferential = bus.exponentB - bus.exponentA;                   //Subtract Smaller Exponent From Larger
-        bus.alignedMantissaB = extendedMantissaB;                               //Set Aligned "B" = Extended "B"
+        bus.alignedMantissaB = extendedMantissaB[25:2];                         //Set Aligned "B" = Extended "B"
         bus.exponentOut = bus.exponentB;                                        //Pass Out Exponent B
         {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = extendedMantissaA >> exponentDifferential; 
         if (exponentDifferential > 26)                                          
