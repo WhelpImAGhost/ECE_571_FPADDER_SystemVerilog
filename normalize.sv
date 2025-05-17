@@ -68,9 +68,9 @@ module Normalize(fpbus.normal bus);
         end
 
         `ifdef DEBUGNORM
-            $display("ShMta: %h     Mask: %h"shiftedMantissa, mask);
+            $display("ShMta: %h     Mask: %h",shiftedMantissa, mask);
             $display("ShAmt: %d", shiftAmount);
-            $display("Guard %b      Sticky %b       Round %b", guardBit, stickyBit, roundBit);
+            $display("Guard %b      Sticky %b       Round %b", guardBit, sticky, roundBit);
         `endif
     end
 
