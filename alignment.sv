@@ -26,23 +26,23 @@ begin
     begin
         exponentDifferential = bus.exponentA - bus.exponentB;                   //Subtract Smaller Exponent From Larger
         bus.alignedMantissaA = extendedMantissaA;                               //Set Aligned "A" = Extended "A"
+        bus.exponentOut = bus.exponentA;                                        //Pass Out Exponent A
         {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = extendedMantissaB >> exponentDifferential;       
         if (exponentDifferential > 26)                                          
             bus.stickyBit = |extendedMantissaB;                                 //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
         else                                                                    
             bus.stickyBit = |(extendedMantissaB << (26 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
-        bus.exponentOut = bus.exponentA;                                        //Pass Out Exponent A
     end
     else if (bus.exponentB > bus.exponentA)                                     //Case "B" > "A"
     begin
         exponentDifferential = bus.exponentB - bus.exponentA;                   //Subtract Smaller Exponent From Larger
         bus.alignedMantissaB = extendedMantissaB;                               //Set Aligned "B" = Extended "B"
+        bus.exponentOut = bus.exponentB;                                        //Pass Out Exponent B
         {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = extendedMantissaA >> exponentDifferential; 
         if (exponentDifferential > 26)                                          
             bus.stickyBit = |extendedMantissaA;                                 //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
         else                                                                    
             bus.stickyBit = |(extendedMantissaA << (26 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
-        bus.exponentOut = bus.exponentB;                                        //Pass Out Exponent B
     end
     else                                                                         //Case "A" = "B"
     begin

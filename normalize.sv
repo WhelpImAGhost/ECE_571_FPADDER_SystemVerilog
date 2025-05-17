@@ -37,19 +37,15 @@ module Normalize(fpbus.normal bus);
                 else if (bus.normalizedMantissa[0])
                     bus.normalizedMantissa += 1;
             
-            //Check for Overflow
-            if (bus.normalizedMantissa == 0)
-                bus.normalizedExponent = bus.exponentOut - shiftAmount + 1;
-            else
-                bus.normalizedExponent = bus.exponentOut - shiftAmount;
 
+            bus.normalizedExponent = bus.exponentOut - shiftAmount;
             bus.normalizedSign = bus.alignedSign;
         end
 
         `ifdef DEBUGNORM
             $display("ShMta: %h     Mask: %h",shiftedMantissa, mask);
             $display("ShAmt: %d", shiftAmount);
-            $display("Guard %b      Sticky %b       Round %b", guardBit, sticky, roundBit);
+            $display("Guard %b      Sticky %b       Round %b", bus.guardBit, bus.stickyBit, bus.roundBit);
         `endif
     end
 
