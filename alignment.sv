@@ -20,6 +20,7 @@ begin
 	$display("mA: %h mB: %h\neA: %b eB: %b",
 	bus.mantissaA, bus.mantissaB,
 	bus.exponentA, bus.exponentB);
+    $display("aligned mA: %h aligned mB: %h\n", bus.alignedMantissaA, bus.alignedMantissaB);
 `endif
     extendedMantissaA = {1'b1, bus.mantissaA};                                  //Add Implicit One to "A" Before Shift
     extendedMantissaB = {1'b1, bus.mantissaB};                                  //Add Implicit One to "B" Before Shift
