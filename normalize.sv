@@ -42,8 +42,10 @@ module Normalize(fpbus.normal bus);
 
             //Sticky Bit Calculation
             if (shiftAmount > 2)
+            begin
                 mask = (1 << (shiftAmount - 2)) - 1;
                 sticky = bus.stickyBit | (| (bus.alignedResult & mask));
+            end
             else
                 sticky = bus.stickyBit;
 
