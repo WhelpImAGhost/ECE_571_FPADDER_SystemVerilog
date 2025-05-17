@@ -1,7 +1,7 @@
 //Module to Renormalize the Result
 
 module Normalize(fpbus.normal bus);
-    logic [23:0] shiftedMantissa, mask;
+    logic [23:0] shiftedMantissa;
     logic [4:0] shiftAmount;
     logic guardBit, roundBit, sticky;                                              
 
@@ -43,7 +43,7 @@ module Normalize(fpbus.normal bus);
         end
 
         `ifdef DEBUGNORM
-            $display("ShMta: %h     Mask: %h",shiftedMantissa, mask);
+            $display("ShMta: %h", shiftedMantissa);
             $display("ShAmt: %d", shiftAmount);
             $display("Guard %b      Sticky %b       Round %b", bus.guardBit, bus.stickyBit, bus.roundBit);
         `endif
