@@ -1,22 +1,14 @@
 module FPAdder (fpbus bus);
 
-// Create a union for simple switch from
-// bitwise to shortreal representation
-typedef union {
-	shortreal f;
-	logic [31:0] bits;
-} f_union;
+shortreal fA, fB, fX;
 
-// Create unions for A, B, and Result
-f_union unionA, unionB, unionX;
 
-// Add the two floats and return
-// the bitwise representation
 always_comb 
 begin
-	unionA.bits = bus.A;
-	unionB.bits = bus.B;
-	unionX.f = unionA.f + unionB.f;
-	bus.Result = unionX.bits;
+	fA = $bitstoshortreal(bus.A);
+	fB = $bitstoshortreal(bus.B);
+	fX = fA + fB;
+	bus.Result = $shortrealtobits(fX);
+
 end
 endmodule

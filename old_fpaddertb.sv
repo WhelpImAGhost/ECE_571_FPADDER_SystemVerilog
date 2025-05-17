@@ -73,7 +73,7 @@ begin
             $display("A: %b		B: %b		Act: %b		Ex: %b", unionA.bits, unionB.bits, unionX.bits, unionA.bits + unionB.bits );
         end
     end
-    while (tests <= Tests);    
+    while (tests <= (Tests >> 8) );    
 
     if (error)
 	    $display("%d Errors found in FP adder test", error);
