@@ -16,12 +16,6 @@ int i;                                                                          
 
 always_comb
 begin
-`ifdef DEBUGALIGN
-	$display("mA: %h mB: %h\neA: %b eB: %b",
-	bus.mantissaA, bus.mantissaB,
-	bus.exponentA, bus.exponentB);
-    $display("aligned mA: %h aligned mB: %h\n", bus.alignedMantissaA, bus.alignedMantissaB);
-`endif
     extendedMantissaA = {1'b1, bus.mantissaA};                                  //Add Implicit One to "A" Before Shift
     extendedMantissaB = {1'b1, bus.mantissaB};                                  //Add Implicit One to "B" Before Shift
     bus.stickyBit = 0;                                                          //Initialize Sticky Bit to Zero
@@ -54,6 +48,13 @@ begin
         bus.alignedMantissaB = extendedMantissaB;                               //Set Aligned "B" = Extended "B"
         bus.exponentOut = bus.exponentA;                                        //Pass Out Exponent A
     end
+
+    `ifdef DEBUGALIGN
+	$display("mA: %h mB: %h\neA: %b eB: %b",
+	bus.mantissaA, bus.mantissaB,
+	bus.exponentA, bus.exponentB);
+    $display("aligned mA: %h aligned mB: %h\n", bus.alignedMantissaA, bus.alignedMantissaB);
+    `endif
 end
 
 endmodule
