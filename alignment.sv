@@ -16,8 +16,8 @@ int i;                                                                          
 
 always_comb
 begin
-    extendedMantissaA = {1'b1, bus.mantissaA};                                  //Add Implicit One to "A" Before Shift
-    extendedMantissaB = {1'b1, bus.mantissaB};                                  //Add Implicit One to "B" Before Shift
+    extendedMantissaA = {1'b1, bus.mantissaA, 2'b0};                                  //Add Implicit One to "A" Before Shift
+    extendedMantissaB = {1'b1, bus.mantissaB, 2'b0};                                  //Add Implicit One to "B" Before Shift
     bus.stickyBit = 0;                                                          //Initialize Sticky Bit to Zero
 	bus.guardBit = 0;                                                           //Initialize Guard Bit to Zero
     bus.roundBit = 0;                                                           //Initialize Round Bit to Zero
