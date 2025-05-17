@@ -1,7 +1,7 @@
 //Module to Renormalize the Result
 
 module Normalize(fpbus.normal bus);
-    logic [23:0] shiftedMantissa;
+    logic [23:0] shiftedMantissa, mask;
     logic [4:0] shiftAmount;
     logic guardBit, roundBit, sticky;                                              
 
@@ -42,10 +42,10 @@ module Normalize(fpbus.normal bus);
 
             //Sticky Bit Calculation
             if (shiftAmount > 2)
-                logic [23:0] mask = (1 << (shiftAmount - 2)) - 1;
+                mask = (1 << (shiftAmount - 2)) - 1;
                 sticky = bus.stickyBit | (| (bus.alignedResult & mask));
             else
-                sticky = bus.stickyBit | 0;
+                sticky = bus.stickyBit;
 
             bus.normalizedMantissa = shiftedMantissa [22:0];
 
