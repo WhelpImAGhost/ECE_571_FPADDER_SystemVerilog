@@ -2,7 +2,7 @@ module top;
 parameter Tests = 2 << 20;
 
 shortreal fA, fB, fX;
-
+bit [31:0] rawA, rawB, iA, iB, iX, iEx;
 
 int error, tests;
 
@@ -10,10 +10,13 @@ fpbus bus();
 FPAdder f1(bus);
 
 always_comb begin
-
-    bus.A = $shortrealtobits(fA);
-    bus.B = $shortrealtobits(fB);
-    fX = $bitstoshortreal(bus.Result);
+	iA = $shortrealtobits(fA);
+	iB = $shortrealtobits(fB);
+	iX = bus.Result;
+	iEx = $shortrealtobits(fA + fB);
+    bus.A = iA;
+    bus.B = iB;
+    fX = $bitstoshortreal(iX);
 end
 
 initial
@@ -26,9 +29,10 @@ begin
     `ifdef DEBUGTB
         $display("Adding %e and %e resulted in %e, expected is %e ",
         fA, fB, fX, fA + fB);
+	$display("A: %b		B: %b		Act: %b		Ex: %b", iA, iB, iX, iEx );	
     `endif
 
-    if ( fX !== fA + fB)
+    if ( iX !== iEx)
     begin
         error++;
 	    $display("Adding %e and %e resulted in %e instead of %e ", 
@@ -54,7 +58,7 @@ begin
 
         `endif
         //  Check results and report errors
-        if ( fX !== fA + fB)
+        if ( iX !== iEx)
         begin
             error++;
             $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
@@ -77,27 +81,27 @@ begin
         #10
         `ifdef DEBUGTB
             $display("Adding %e and %e resulted in %e, expected is %e ", fA, fB, fX, fA + fB);
-            
 
         `endif
         //  Check results and report errors
-        if ( fX !== fA + fB)
+        if ( iX !== iEx)
         begin
             error++;
             $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
             
         end
     end
-    while (tests <= Tests) );  
+    while (tests <= Tests );  
 
+    $finish;
 end
 
 
 final begin
     if (error)
-	    $display("%d Errors found in FP adder test", error);
+	    $display("--- %d Errors found in FP adder test ---", error);
     else
-	    $display("No errors found in FP adder test");
+	    $display("--- No errors found in FP adder test ---");
 end
 
 
