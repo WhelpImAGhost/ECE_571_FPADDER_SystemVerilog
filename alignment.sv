@@ -19,13 +19,15 @@ begin
     extendedMantissaA = {1'b1, bus.mantissaA};                                  //Add Implicit One to "A" Before Shift
     extendedMantissaB = {1'b1, bus.mantissaB};                                  //Add Implicit One to "B" Before Shift
     bus.stickyBit = 0;                                                          //Initialize Sticky Bit to Zero
-	
+	bus.guardBit = 0;                                                           //Initialize Guard Bit to Zero
+    bus.roundBit = 0;                                                           //Initialize Round Bit to Zero
+
     if (bus.exponentA > bus.exponentB)                                          //Case "A" > "B"
     begin
         exponentDifferential = bus.exponentA - bus.exponentB;                   //Subtract Smaller Exponent From Larger
         bus.alignedMantissaA = extendedMantissaA;                               //Set Aligned "A" = Extended "A"
-        bus.alignedMantissaB = extendedMantissaB >> exponentDifferential;       //Set Aligned "B" = (Extended "B" >> Difference in Exponents)
-        if (exponentDifferential > 24)                                          
+        {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = extendedMantissaB >> exponentDifferential;       
+        if (exponentDifferential > 26)                                          
             bus.stickyBit = |extendedMantissaB;                                 //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
         else                                                                    
             bus.stickyBit = |(extendedMantissaB << (24 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
@@ -35,8 +37,8 @@ begin
     begin
         exponentDifferential = bus.exponentB - bus.exponentA;                   //Subtract Smaller Exponent From Larger
         bus.alignedMantissaB = extendedMantissaB;                               //Set Aligned "B" = Extended "B"
-        bus.alignedMantissaA = extendedMantissaA >> exponentDifferential;       //Set Aligned "A" = (Extended "A" >> Difference in Exponents)
-        if (exponentDifferential > 24)                                          
+        {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = extendedMantissaA >> exponentDifferential; 
+        if (exponentDifferential > 26)                                          
             bus.stickyBit = |extendedMantissaA;                                 //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
         else                                                                    
             bus.stickyBit = |(extendedMantissaA << (24 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One

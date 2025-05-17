@@ -52,10 +52,13 @@ module Normalize(fpbus.normal bus);
             bus.normalizedMantissa = shiftedMantissa [22:0];
 
             //Round-to-Nearest-Even
-            if (guardBit && (roundBit || sticky || bus.normalizedMantissa[0]))        
-                bus.normalizedMantissa += 1;
-
-                //Check for Overflow
+            if (bus.guardBit)
+                if (bus.roundBit || bus.stickyBit)
+                    bus.normalizedMantissa += 1; 
+                else if (bus.normalizedMantissa[0])
+                    bus.normalizedMantissa += 1;
+            
+            //Check for Overflow
             if (bus.normalizedMantissa == 0)
                 bus.normalizedExponent = bus.exponentOut - shiftAmount + 1;
             else
