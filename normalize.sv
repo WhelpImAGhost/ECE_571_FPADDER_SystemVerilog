@@ -30,7 +30,7 @@ module Normalize(fpbus.normal bus);
 
             //Guard Bit Calculation
             if (shiftAmount > 0)
-                guardBit = bus.alignedResult[23 - shiftAmount - 1]: 0;                                         
+                guardBit = bus.alignedResult[23 - shiftAmount - 1];                                         
             else
                 guardBit = 0;
 
@@ -42,14 +42,14 @@ module Normalize(fpbus.normal bus);
 
             //Sticky Bit Calculation
             if (shiftAmount > 2)
-                sticky = bus.stickyBit | (bus.alignedResult[23 - shiftAmount - 3:0]);   
+                sticky = bus.stickyBit | (|bus.alignedResult[23 - shiftAmount - 3:0]);   
             else
                 sticky = bus.stickyBit | 0;
 
             bus.normalizedMantissa = shiftedMantissa [22:0];
 
             //Round-to-Nearest-Even
-            if (guard && (roundBit || sticky || bus.normalizedMantissa[0]))        
+            if (guardBit && (roundBit || sticky || bus.normalizedMantissa[0]))        
                 bus.normalizedMantissa += 1;
 
                 //Check for Overflow
