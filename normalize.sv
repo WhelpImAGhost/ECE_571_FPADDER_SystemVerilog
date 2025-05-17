@@ -29,20 +29,21 @@ module Normalize(fpbus.normal bus);
             shiftedMantissa = bus.alignedResult << shiftAmount;         
 
             //Guard Bit Calculation
-            if (shiftAmount > 0)
+            if ((shiftAmount > 0) && (23 - shiftAmount - 1 >= 0))
                 guardBit = bus.alignedResult[23 - shiftAmount - 1];                                         
             else
                 guardBit = 0;
 
             //Round Bit Calculation
-            if (shiftAmount > 1)
+            if ((shiftAmount > 1) && (23 - shiftAmount - 2 >= 0))
                 roundBit = bus.alignedResult[23 - shiftAmount - 2];                     
             else
                 roundBit = 0;
 
             //Sticky Bit Calculation
             if (shiftAmount > 2)
-                sticky = bus.stickyBit | (|bus.alignedResult[23 - shiftAmount - 3:0]);   
+                logic [23:0] mask = (1 << (shiftAmount - 2)) - 1;
+                sticky = bus.stickyBit | (| (bus.alignedResult & mask));
             else
                 sticky = bus.stickyBit | 0;
 
