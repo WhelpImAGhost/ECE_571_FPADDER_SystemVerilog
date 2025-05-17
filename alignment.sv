@@ -30,7 +30,7 @@ begin
         if (exponentDifferential > 26)                                          
             bus.stickyBit = |extendedMantissaB;                                 //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
         else                                                                    
-            bus.stickyBit = |(extendedMantissaB << (24 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
+            bus.stickyBit = |(extendedMantissaB << (26 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
         bus.exponentOut = bus.exponentA;                                        //Pass Out Exponent A
     end
     else if (bus.exponentB > bus.exponentA)                                     //Case "B" > "A"
@@ -41,7 +41,7 @@ begin
         if (exponentDifferential > 26)                                          
             bus.stickyBit = |extendedMantissaA;                                 //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
         else                                                                    
-            bus.stickyBit = |(extendedMantissaA << (24 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
+            bus.stickyBit = |(extendedMantissaA << (26 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
         bus.exponentOut = bus.exponentB;                                        //Pass Out Exponent B
     end
     else                                                                         //Case "A" = "B"

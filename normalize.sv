@@ -28,27 +28,6 @@ module Normalize(fpbus.normal bus);
             shiftAmount = countZeros(bus.alignedResult);                    
             shiftedMantissa = bus.alignedResult << shiftAmount;         
 
-            //Guard Bit Calculation
-            if ((shiftAmount > 0) && (23 - shiftAmount - 1 >= 0))
-                guardBit = bus.alignedResult[23 - shiftAmount - 1];                                         
-            else
-                guardBit = 0;
-
-            //Round Bit Calculation
-            if ((shiftAmount > 1) && (23 - shiftAmount - 2 >= 0))
-                roundBit = bus.alignedResult[23 - shiftAmount - 2];                     
-            else
-                roundBit = 0;
-
-            //Sticky Bit Calculation
-            if (shiftAmount > 2)
-            begin
-                mask = (1 << (shiftAmount - 2)) - 1;
-                sticky = bus.stickyBit | (| (bus.alignedResult & mask));
-            end
-            else
-                sticky = bus.stickyBit;
-
             bus.normalizedMantissa = shiftedMantissa [22:0];
 
             //Round-to-Nearest-Even
