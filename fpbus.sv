@@ -1,6 +1,6 @@
 interface fpbus;
     logic [31:0] A, B, Result;
-    logic signA, signB, alignedSign, carryOut, normalizedSign, guardBit, roundBit, stickyBit;
+    logic signA, signB, alignedSign, carryOut, normalizedSign, stickyBit;
     logic [7:0] exponentA, exponentB, exponentOut, normalizedExponent;
     logic [22:0] mantissaA, mantissaB, normalizedMantissa;
     logic [23:0] alignedMantissaA, alignedMantissaB, alignedResult;
@@ -12,7 +12,7 @@ interface fpbus;
 
     modport align ( input exponentA, exponentB,
                     input mantissaA, mantissaB,
-                    output guardBit, roundBit, stickyBit,
+                    output stickyBit,
                     output alignedMantissaA, alignedMantissaB,
                     output exponentOut);
 
@@ -21,7 +21,7 @@ interface fpbus;
                     output alignedResult, alignedSign, carryOut);
 
     modport normal (input alignedResult, exponentOut, alignedSign,
-                    input guardBit, roundBit, stickyBit,
+                    input stickyBit,
                     output normalizedSign, normalizedExponent, normalizedMantissa);
 
     modport pack (  input normalizedSign, normalizedExponent, normalizedMantissa,
