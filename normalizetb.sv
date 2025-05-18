@@ -10,7 +10,7 @@ module top;
     Alignment align(bus.align);
     ALU alu(bus.alu);
     Normalize N1(bus.normal);
-
+Pack P1(bus.pack);
 always_comb begin
 	iA = $shortrealtobits(fA);
 	iB = $shortrealtobits(fB);
@@ -25,7 +25,7 @@ end
     begin 
 
         // Assign inputs and outputs to bitwise unions
-        fA = -1.245;
+        fA = -0.1245;
         fB = 2.753;
 
         #10
@@ -34,7 +34,10 @@ end
             $display("f- A: %0f, B: %0f", fA, fB);
             $display("bits- A: %h, B: %h", iA, iB);
             $display("bus- A: %h, B: %h", bus.A, bus.B);
-            $display("f- X: %0f", fX);
+            $display("f- X: %e", fX);
+	    $display("f eX: %e", $bitstoshortreal(iEx));
+	    $display("i  X: %b", iX);
+	    $display("i eX: %b", iEx);
         `endif
 
         if (bus.normalizedExponent !== iEx[30:23])

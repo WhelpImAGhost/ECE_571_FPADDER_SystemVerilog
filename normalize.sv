@@ -60,8 +60,8 @@ module Normalize(fpbus.normal bus);
         
         `ifdef FULLDEBUG
         $display("\nMODULE NORMALIZE---------------------------");
-        $display("shiftedMantissa: %0d, shiftAmount: %h", shiftedMantissa, bus.shiftAmount);
-        $display("normalizedExponent: %h,   normalizedSign: %b"bus.normalizedExponent, bus.normalizedSign);
+	$display("shiftedMantissa: %h (%b), shiftAmount: %h", shiftedMantissa,shiftedMantissa, shiftAmount);
+        $display("normalizedExponent: %h,   normalizedSign: %b", bus.normalizedExponent, bus.normalizedSign);
         $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
         `endif
 
