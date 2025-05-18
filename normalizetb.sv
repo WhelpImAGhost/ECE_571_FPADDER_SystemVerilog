@@ -50,19 +50,19 @@ end
         if (bus.normalizedExponent !== iEx[30:23])
         begin
             error++;
-            $display("Expected Normalized Exponent: %d, but Received: %d",
+            $display("Expected Normalized Exponent: %h, but Received: %h",
             iEx[30:23], bus.normalizedExponent);
         end
         if(bus.normalizedMantissa !== iEx[22:0])
         begin
             error++;
-            $display("Expected Normalized Mantissa: %d, but Received: %d",
+            $display("Expected Normalized Mantissa: %h, but Received: %h",
             iEx[22:0], bus.normalizedMantissa);
         end
         if(bus.normalizedSign !== iEx[31])
         begin
             error++;
-            $display("Expected Normalized Sign: %d, but Received: %d",
+            $display("Expected Normalized Sign: %h, but Received: %h",
             iEx[31], bus.normalizedSign);
         end
 
