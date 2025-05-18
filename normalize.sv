@@ -39,7 +39,6 @@ module Normalize(fpbus.normal bus);
                     $display("Round Up");
                     `endif
                 end
-
             end
             `ifdef DEBUGNORM
             else    $display("No rounding happened");
