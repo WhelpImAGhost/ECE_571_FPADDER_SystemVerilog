@@ -4,7 +4,6 @@ module Mask(fpbus.mask bus);
 
     always_comb
     begin
-
         bus.signA = bus.A [31];         //Sign Bit for Addend "A"
         bus.signB = bus.B [31];         //Sign Bit for Addend "B"
         bus.exponentA = bus.A [30:23];  //8-Bit Exponent Field for Addend "A"
