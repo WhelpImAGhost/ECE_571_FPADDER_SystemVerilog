@@ -10,7 +10,7 @@ module Alignment (fpbus.align bus);
     begin
 
         //Initialize Tracked Rounding Bits
-        {bus.guardBit, bus.roundBit, bus.stickyBit} = 3'b0;   
+        {bus.guardBit, bus.roundBit, bus.stickyBit} = '0;   
 
         // +/- Infinity or NaN 
         if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
@@ -50,7 +50,7 @@ module Alignment (fpbus.align bus);
             //A and B are both +/- Zero
             if (bus.exponentA == 0 && bus.exponentB == 0)                                       
             begin
-                bus.exponentOut, exponentDifferential = 0;                                                                                                                
+                {bus.exponentOut, exponentDifferential} = '0;                                                                                                                
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                       
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};  
                 $error("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Zero"));
