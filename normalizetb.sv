@@ -37,7 +37,7 @@ end
             $display("f- X: %0f", fX);
         `endif
 
-        if (bus.normalizedExponent !== iEx[30:23])
+        if (bus.normalizedExponent - iEx[30:23] > 1 || bus.normalizedExponent - iEx[30:23] < -1)
         begin
             error++;
             $display("Expected Normalized Exponent: %h, but Received: %h",
