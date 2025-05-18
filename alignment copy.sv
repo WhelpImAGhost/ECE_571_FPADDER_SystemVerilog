@@ -13,12 +13,12 @@ module Alignment (fpbus.align bus);
         {bus.guardBit, bus.roundBit, bus.stickyBit} = 3'b0;   
 
         // +/- Infinity or NaN 
-        if (bus.exponentA == 2'hFF || bus.exponentB == 2'hFF)
+        if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
         begin
             //A and B are both +/- Infinity or NaN
-            if (bus.exponentA == 2'hFF && bus.exponentB == 2'hFF)                                       
+            if (bus.exponentA == 8'hFF && bus.exponentB == 8'hFF)                                       
             begin
-                bus.exponentOut = 2'hFF;
+                bus.exponentOut = 8'hFF;
                 exponentDifferential = 0;                                                                                                                
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};
@@ -26,18 +26,18 @@ module Alignment (fpbus.align bus);
                 $error("Addend B is %s%s" (bus.signB ? "-", "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                  
             end
             //A is +/- Infinity or NaN
-            else if (bus.exponentA == 2'hFF)                                                       
+            else if (bus.exponentA == 8'hFF)                                                       
             begin
-                bus.exponentOut = 2'hFF;
+                bus.exponentOut = 8'hFF;
                 exponentDifferential = 0;                                                                                          
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
                 bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
                 $error("Addend A is %s%s" (bus.signA ? "-", "+"), (bus.mantissaA ? "NaN" : "Infinity"));                                                                     
             end
             //B is +/- Infinity or NaN
-            else if (bus.exponentB == 2'hFF)                                                      
+            else if (bus.exponentB == 8'hFF)                                                      
             begin
-                bus.exponentOut = 2'hFF;
+                bus.exponentOut = 8'hFF;
                 exponentDifferential = 0;                                                                                      
                 bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};                                                                                            
