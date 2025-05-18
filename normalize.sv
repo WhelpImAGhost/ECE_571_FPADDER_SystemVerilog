@@ -25,12 +25,13 @@ module Normalize(fpbus.normal bus);
         begin      
             //Normalization
             shiftAmount = countZeros(bus.alignedResult); //Count Leading Zeros
+            shiftedMantissa = bus.alignedResult << shiftAmount; 
 
             //Check for Overflow
             if ((bus.exponentOut + bus.carryOut) >= 255)
             begin
                 bus.normalizedExponent = 255;
-                bus.normalizedMantissa = (bus.alignedResult << shiftAmount) [22:0]; //If 0 Infinity, if Non-Zero NaN
+                bus.normalizedMantissa = shiftedMantissa[22:0]; //If 0 Infinity, if Non-Zero NaN
             end
             //Handle Carry-Out
             else if (carryOut == 1)
@@ -41,8 +42,7 @@ module Normalize(fpbus.normal bus);
             end 
             //Underflow or Valid Case
             else
-            begin                  
-                shiftedMantissa = bus.alignedResult << shiftAmount;  
+            begin                   
                 //Check for Underflow
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
