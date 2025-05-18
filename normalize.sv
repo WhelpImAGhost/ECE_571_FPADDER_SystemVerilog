@@ -19,7 +19,6 @@ module Normalize(fpbus.normal bus);
         begin
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
-            bus.normalizedSign = bus.alignedSign;
         end
         //Non-Zero Case
         else
@@ -51,29 +50,31 @@ module Normalize(fpbus.normal bus);
                     bus.normalizedMantissa = shiftedMantissa [22:0];                //If 0 Infinity, if Non-Zero NaN
                 end
                 //Valid Case
-                else    bus.normalizedExponent = bus.exponentOut - shiftAmount;
-            end    
-
-            //Round-to-Nearest (Even)
-            if (bus.guardBit) 
-            begin
-                if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
+                else
                 begin
-                    bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
+                    bus.normalizedExponent = bus.exponentOut - shiftAmount;  
+                    //Round-to-Nearest (Even)
+                    if (bus.guardBit) 
+                    begin
+                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
+                        begin
+                            bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
 
-                    `ifdef DEBUGNORM
-                    $display("Round Up");
-                    `endif
+                            `ifdef DEBUGNORM
+                            $display("Round Up");
+                            `endif
+                        end
+                        else    bus.normalizedMantissa = shiftedMantissa [22:0];
+                    end
+                    else
+                    begin
+                        bus.normalizedMantissa = shiftedMantissa [22:0];
+
+                        `ifdef DEBUGNORM
+                            $display("Round Down (No Change)");
+                        `endif
+                    end
                 end
-                else    bus.normalizedMantissa = shiftedMantissa [22:0];
-            end
-            else
-            begin
-                bus.normalizedMantissa = shiftedMantissa [22:0];
-
-                `ifdef DEBUGNORM
-                    $display("Round Down (No Change)");
-                `endif
             end
         end
 
