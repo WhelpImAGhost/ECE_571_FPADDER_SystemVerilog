@@ -46,6 +46,7 @@ module Alignment (fpbus.align bus);
 
         else                                                                        //Case "A" = "B"
         begin
+            exponentDifferential = 0;                                                //Set Exponent Differential to Zero
             bus.alignedMantissaA = extendedMantissaA[25:2];                         //Aligned "A" = Extended "A"
             bus.alignedMantissaB = extendedMantissaB[25:2];                         //Set Aligned "B" = Extended "B"
             bus.exponentOut = bus.exponentA;                                        //Pass Out Exponent A
