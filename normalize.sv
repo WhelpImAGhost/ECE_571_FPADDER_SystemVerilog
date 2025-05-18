@@ -31,12 +31,18 @@ module Normalize(fpbus.normal bus);
             bus.normalizedMantissa = shiftedMantissa [22:0];
 
             //Round-to-Nearest-Even
-            if (bus.guardBit)
+            if (bus.guardBit) begin
+                `ifdef DEBUGNORM
+                    $display("Round Up");
+                `endif
                 if (bus.roundBit || bus.stickyBit)
                     bus.normalizedMantissa += 1; 
                 else if (bus.normalizedMantissa[0])
                     bus.normalizedMantissa += 1;
-            
+            end
+            `ifdef DEBUGNORM
+            else    $display("No rounding happened");
+            `endif
 
             bus.normalizedExponent = bus.exponentOut - shiftAmount;
             bus.normalizedSign = bus.alignedSign;
