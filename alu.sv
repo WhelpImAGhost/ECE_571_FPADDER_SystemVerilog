@@ -10,7 +10,7 @@ module ALU(fpbus.alu bus);
         if (bus.signA == bus.signB)
         begin
             if      (bus.exponentA > bus.exponentB) {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
-            else if (bus.exponentB > bus.exponentA) {bus.carryOut, extendedResult} = {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit} + {bus.alignedMantissaA, 3'b0};
+            else if (bus.exponentB > bus.exponentA) {bus.carryOut, extendedResult} = {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit} + {bus.alignedMantissaB, 3'b0};
             else                                    {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, 3'b0};
             
             bus.alignedResult = extendedResult [26:3];
