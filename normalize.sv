@@ -34,7 +34,7 @@ module Normalize(fpbus.normal bus);
                 bus.normalizedMantissa = shiftedMantissa[22:0]; //If 0 Infinity, if Non-Zero NaN
             end
             //Handle Carry-Out
-            else if (carryOut == 1)
+            else if (bus.carryOut == 1)
             begin
                 shiftAmount = 0;
                 shiftedMantissa = {1'b0, bus.alignedResult[23:1]};
