@@ -47,10 +47,10 @@ module Normalize(fpbus.normal bus);
             begin                  
                 shiftedMantissa = bus.alignedResult << shiftAmount;  
                 //Check for Underflow
-                if ((bus.exponentOut - shiftAmount) <= 0)
+                if ($signed(bus.exponentOut - shiftAmount) <= 0)
                 begin
                     bus.normalizedExponent = 0;
-                    bus.normalizedMantissa = 0;
+                    //bus.normalizedMantissa = 0;
                 end
                 else    bus.normalizedExponent = bus.exponentOut - shiftAmount;
             end    
