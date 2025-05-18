@@ -25,8 +25,8 @@ end
     begin 
 
         // Assign inputs and outputs to bitwise unions
-        fA = -0.1245;
-        fB = 2.753;
+        fA = -1.140625;
+        fB = 1.14111328125;
 
         #10
 
@@ -45,6 +45,9 @@ end
             error++;
             $display("Expected Normalized Exponent: %h, but Received: %h",
             iEx[30:23], bus.normalizedExponent);
+`ifdef DEBUGTB2
+	    $stop;
+`endif
         end
         if (bus.normalizedMantissa !== iEx[22:0] &&
 		bus.normalizedMantissa !== iEx[22:0] + 1 &&
@@ -53,14 +56,19 @@ end
             error++;
             $display("Expected Normalized Mantissa: %h, but Received: %h",
             iEx[22:0], bus.normalizedMantissa);
+`ifdef DEBUGTB2
+        //    $stop;
+`endif
         end
         if(bus.normalizedSign !== iEx[31])
         begin
             error++;
             $display("Expected Normalized Sign: %h, but Received: %h",
             iEx[31], bus.normalizedSign);
+`ifdef DEBUGTB2
+            $stop;
+`endif
         end
-
         do begin
             rawA = $urandom; 
             rawB = $urandom;
@@ -73,6 +81,9 @@ end
                 error++;
                 $display("Expected Normalized Exponent: %h, but Received: %h",
                 iEx[30:23], bus.normalizedExponent);
+`ifdef DEBUGTB2
+            $stop;
+`endif
             end
             if (bus.normalizedMantissa !== iEx[22:0] &&
             bus.normalizedMantissa !== iEx[22:0] + 1 &&
@@ -81,12 +92,18 @@ end
                 error++;
                 $display("Expected Normalized Mantissa: %h, but Received: %h",
                 iEx[22:0], bus.normalizedMantissa);
+`ifdef DEBUGTB2
+            // $stop;
+`endif
             end
             if(bus.normalizedSign !== iEx[31])
             begin
                 error++;
                 $display("Expected Normalized Sign: %h, but Received: %h",
                 iEx[31], bus.normalizedSign);
+`ifdef DEBUGTB2
+            $stop;
+`endif
             end
             
         end
