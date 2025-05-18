@@ -27,7 +27,7 @@ module Alignment (fpbus.align bus);
             if (exponentDifferential > 26)                                          
                 bus.stickyBit = |extendedMantissaB;                                  //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
             else                                                                    
-                bus.stickyBit = |(extendedMantissaB << (26 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
+                bus.stickyBit = |(extendedMantissaB & ((1 << exponentDifferential) - 1));   //Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
         end
 
         else if (bus.exponentB > bus.exponentA)                                     //Case "B" > "A"
@@ -41,7 +41,7 @@ module Alignment (fpbus.align bus);
             if (exponentDifferential > 26)                                          
                 bus.stickyBit = extendedMantissaA;                                  //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
             else                                                                    
-                bus.stickyBit = |(extendedMantissaA << (26 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
+                bus.stickyBit = |(extendedMantissaA & ((1 << exponentDifferential) - 1));    //Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
         end
 
         else                                                                        //Case "A" = "B"

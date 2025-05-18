@@ -18,14 +18,24 @@ module Normalize(fpbus.normal bus);
         begin
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
-            bus.normalizedSign = 0;
         end 
 
         else
-        begin
+        begin      
 
-            shiftAmount = countZeros(bus.alignedResult);                    
-            shiftedMantissa = bus.alignedResult << shiftAmount;         
+            //Check for Overflow
+            if (bus.carryOut)
+            begin
+                shiftAmount = 0;
+                shiftedMantissa = {1'b0, bus.alignedResult[23:1]};
+                bus.normalizedExponent = bus.exponentOut + 1; 
+            end
+            else
+            begin
+                shiftAmount = countZeros(bus.alignedResult);                    
+                shiftedMantissa = bus.alignedResult << shiftAmount;   
+                bus.normalizedExponent = bus.exponentOut - shiftAmount;
+            end    
 
             //Round-to-Nearest-Even
             if (bus.guardBit) 
@@ -39,7 +49,6 @@ module Normalize(fpbus.normal bus);
                 end
                 else    bus.normalizedMantissa = shiftedMantissa [22:0];
             end
-
             else
             begin
                 bus.normalizedMantissa = shiftedMantissa [22:0];
@@ -48,7 +57,6 @@ module Normalize(fpbus.normal bus);
                 `endif
             end
 
-            bus.normalizedExponent = bus.exponentOut - shiftAmount;
             bus.normalizedSign = bus.alignedSign;
         end
 
