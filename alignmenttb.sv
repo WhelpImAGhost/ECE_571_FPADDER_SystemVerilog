@@ -104,7 +104,7 @@ module top;
                     if (bus.alignedMantissaA !== {1'b0, bus.mantissaA} >> bus.exponentB)
                     begin
                         Error++;
-                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissa} >> bus.exponentB, bus.alignedMantissaA);
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA} >> bus.exponentB, bus.alignedMantissaA);
                         `ifdef DEBUGTB
                             $stop;
                         `endif
