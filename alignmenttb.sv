@@ -202,7 +202,7 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaB !== ({1'b1, bus.mantissaB, 2'b0} >> (bus.exponentA - bus.exponentB))[25:2])
+                    if (bus.alignedMantissaB !== ({1'b1, bus.mantissaB} >> (bus.exponentA - bus.exponentB)))
                     begin
                         Error++;
                         $display("Expected alignedMantissaB: %h, but Received: %h", 
@@ -230,7 +230,7 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaA !== ({1'b1, bus.mantissaA, 2'b0} >> (bus.exponentB - bus.exponentA))[25:2])
+                    if (bus.alignedMantissaA !== ({1'b1, bus.mantissaA} >> (bus.exponentB - bus.exponentA)))
                     begin
                         Error++;
                         $display("Expected alignedMantissaA: %h, but Received: %h", 
