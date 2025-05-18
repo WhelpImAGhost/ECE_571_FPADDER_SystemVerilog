@@ -22,8 +22,8 @@ module Alignment (fpbus.align bus);
                 exponentDifferential = 0;                                                                                                                
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};
-                $error("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));
-                $error("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                  
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                  
             end
             //A is +/- Infinity or NaN
             else if (bus.exponentA == 8'hFF)                                                       
@@ -32,7 +32,7 @@ module Alignment (fpbus.align bus);
                 exponentDifferential = 0;                                                                                          
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
                 bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
-                $error("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));                                                                     
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));                                                                     
             end
             //B is +/- Infinity or NaN
             else if (bus.exponentB == 8'hFF)                                                      
@@ -41,7 +41,7 @@ module Alignment (fpbus.align bus);
                 exponentDifferential = 0;                                                                                      
                 bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};                                                                                            
-                $error("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                        
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                        
             end
         end
         // +/- Zero or NaN
@@ -53,8 +53,8 @@ module Alignment (fpbus.align bus);
                 {bus.exponentOut, exponentDifferential} = '0;                                                                                                                
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                       
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};  
-                $error("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Zero"));
-                $error("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                                           
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Zero"));
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                                           
             end
             //A is +/- Zero
             else if (bus.exponentA == 0)                                                       
@@ -63,7 +63,7 @@ module Alignment (fpbus.align bus);
                 exponentDifferential = bus.exponentB;                                                                                          
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
                 bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
-                $error("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Zero"));
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Zero"));
             end
             //B is +/- Zero
             else if (bus.exponentB == 0)                                                      
@@ -72,7 +72,7 @@ module Alignment (fpbus.align bus);
                 exponentDifferential = bus.exponentA;                                                                                      
                 bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};    
-                $error("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                        
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                        
             end
         end
         //Valid Floating Point Numbers                                
