@@ -44,35 +44,35 @@ module Alignment (fpbus.align bus);
                 $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                        
             end
         end
-        // +/- Zero or NaN
+        // +/- Zero or Subnormal
         else if (bus.exponentA == 0 || bus.exponentB == 0)
         begin
-            //A and B are both +/- Zero
+            //A and B are both +/- Zero or Subnormal
             if (bus.exponentA == 0 && bus.exponentB == 0)                                       
             begin
                 {bus.exponentOut, exponentDifferential} = '0;                                                                                                                
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                       
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};  
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Zero"));
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                                           
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                                           
             end
-            //A is +/- Zero
+            //A is +/- Zero or Subnormal
             else if (bus.exponentA == 0)                                                       
             begin
                 bus.exponentOut = bus.exponentB;
                 exponentDifferential = bus.exponentB;                                                                                          
                 bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
                 bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Zero"));
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
             end
-            //B is +/- Zero
+            //B is +/- Zero or Subnormal
             else if (bus.exponentB == 0)                                                      
             begin
                 bus.exponentOut = bus.exponentA;
                 exponentDifferential = bus.exponentA;                                                                                      
                 bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
                 bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};    
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                        
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                        
             end
         end
         //Valid Floating Point Numbers                                
