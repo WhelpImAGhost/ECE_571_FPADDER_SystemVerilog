@@ -7,23 +7,23 @@ module Normalize(fpbus.normal bus);
     // Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
         int i;                                          
-        shiftAmount = 0;                                      
-
         for (i = 23; i >= 0; i--)
-            if (mantissa[i])
-                return 23 - i;                  
-        return 24;                  //If All Bits are Zero, Return 24
+            if (mantissa[i])    return 23 - i;                  
     endfunction
 
-    always_comb begin
+    always_comb
+    begin
+
         if (bus.alignedResult == 0)             
         begin
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
             bus.normalizedSign = 0;
         end 
+
         else
         begin
+
             shiftAmount = countZeros(bus.alignedResult);                    
             shiftedMantissa = bus.alignedResult << shiftAmount;         
 
@@ -39,12 +39,13 @@ module Normalize(fpbus.normal bus);
                 end
                 else    bus.normalizedMantissa = shiftedMantissa [22:0];
             end
+
             else
             begin
                 bus.normalizedMantissa = shiftedMantissa [22:0];
-            `ifdef DEBUGNORM
-                $display("No rounding happened");
-            `endif
+                `ifdef DEBUGNORM
+                    $display("No rounding happened");
+                `endif
             end
 
             bus.normalizedExponent = bus.exponentOut - shiftAmount;
@@ -56,6 +57,6 @@ module Normalize(fpbus.normal bus);
             $display("ShAmt: %d", shiftAmount);
             $display("Guard %b      Sticky %b       Round %b", bus.guardBit, bus.stickyBit, bus.roundBit);
         `endif
+        
     end
-
 endmodule
