@@ -2,8 +2,7 @@
 
 module Normalize(fpbus.normal bus);
     logic [23:0] shiftedMantissa;
-    logic [4:0] shiftAmount;
-    logic sticky;                                              
+    logic [4:0] shiftAmount;                                           
 
     // Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
@@ -38,6 +37,7 @@ module Normalize(fpbus.normal bus);
                     $display("Round Up");
                     `endif
                 end
+                else    bus.normalizedMantissa = shiftedMantissa [22:0];
             end
             else
             begin
