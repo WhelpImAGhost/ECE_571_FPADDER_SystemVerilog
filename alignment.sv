@@ -20,8 +20,8 @@ module Alignment (fpbus.align bus);
             begin
                 bus.exponentOut = 8'hFF;
                 exponentDifferential = 0;                                                                                                                
-                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};
-                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};
+                bus.alignedMantissaA = {1'b0, bus.mantissaA};
+                bus.alignedMantissaB = {1'b0, bus.mantissaB};
                 $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));
                 $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                  
             end
@@ -30,8 +30,8 @@ module Alignment (fpbus.align bus);
             begin
                 bus.exponentOut = 8'hFF;
                 exponentDifferential = 0;                                                                                          
-                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
-                bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
+                bus.alignedMantissaA = {1'b0, bus.mantissaA};                                                           
+                bus.alignedMantissaB = {1'b1, bus.mantissaB};
                 $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));                                                                     
             end
             //B is +/- Infinity or NaN
@@ -39,8 +39,8 @@ module Alignment (fpbus.align bus);
             begin
                 bus.exponentOut = 8'hFF;
                 exponentDifferential = 0;                                                                                      
-                bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
-                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};                                                                                            
+                bus.alignedMantissaA = {1'b1, bus.mantissaA};                          
+                bus.alignedMantissaB = {1'b0, bus.mantissaB};                                                                                            
                 $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                        
             end
         end
@@ -51,8 +51,8 @@ module Alignment (fpbus.align bus);
             if (bus.exponentA == 0 && bus.exponentB == 0)                                       
             begin
                 {bus.exponentOut, exponentDifferential} = '0;                                                                                                                
-                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                       
-                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};  
+                bus.alignedMantissaA = {1'b0, bus.mantissaA};                                                       
+                bus.alignedMantissaB = {1'b0, bus.mantissaB};  
                 $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
                 $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                                           
             end
@@ -61,7 +61,7 @@ module Alignment (fpbus.align bus);
             begin
                 bus.exponentOut = bus.exponentB;
                 exponentDifferential = bus.exponentB;
-                bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};                                                                                          
+                bus.alignedMantissaB = {1'b1, bus.mantissaB};                                                                                          
                 {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaA, 2'b0} >> exponentDifferential;                                                         
                 if (exponentDifferential > 26)                                          
                     bus.stickyBit = |{1'b0, bus.mantissaA, 2'b0};                                      
@@ -74,7 +74,7 @@ module Alignment (fpbus.align bus);
             begin
                 bus.exponentOut = bus.exponentA;
                 exponentDifferential = bus.exponentA;                                                                                      
-                bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
+                bus.alignedMantissaA = {1'b1, bus.mantissaA};                          
                 {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaB, 2'b0} >> exponentDifferential;
                 if (exponentDifferential > 26)                                          
                     bus.stickyBit = |{1'b0, bus.mantissaB, 2'b0};                                      
