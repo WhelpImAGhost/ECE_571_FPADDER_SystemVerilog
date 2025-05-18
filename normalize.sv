@@ -58,5 +58,12 @@ module Normalize(fpbus.normal bus);
             $display("Guard %b      Sticky %b       Round %b", bus.guardBit, bus.stickyBit, bus.roundBit);
         `endif
         
+        `ifdef FULLDEBUG
+        $display("\nMODULE NORMALIZE---------------------------");
+        $display("shiftedMantissa: %0d, shiftAmount: %h", shiftedMantissa, bus.shiftAmount);
+        $display("normalizedExponent: %h,   normalizedSign: %b"bus.normalizedExponent, bus.normalizedSign);
+        $display("normalizedMantissa %h (%d)\n", bus.normalizedMantissa,bus.normalizedMantissa);
+        `endif
+
     end
 endmodule
