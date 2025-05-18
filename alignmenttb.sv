@@ -1,14 +1,14 @@
 //Module to Test FPAdder Alignment Function
 
 module top;
-    // bit [31:0] A, B;                                    //Inputs A & B
-    // bit bus.signA, bus.signB;                                   //Output Sign Bits
-    // bit [7:0] bus.exponentA, bus.exponentB;                     //Output Exponents
-    // bit [22:0] bus.mantissaA, bus.mantissaB;                    //Output Mantissas
-    // bit [7:0] bus.exponentOut;                              //Exponent Used for Normalization
-    // bit [23:0] bus.alignedMantissaA, bus.alignedMantissaB;      //Output Extended Mantissa
+    // bit [31:0] A, B;                                             //Inputs A & B
+    // bit bus.signA, bus.signB;                                    //Output Sign Bits
+    // bit [7:0] bus.exponentA, bus.exponentB;                      //Output Exponents
+    // bit [22:0] bus.mantissaA, bus.mantissaB;                     //Output Mantissas
+    // bit [7:0] bus.exponentOut;                                   //Exponent Used for Normalization
+    // bit [23:0] bus.alignedMantissaA, bus.alignedMantissaB;       //Output Extended Mantissa
 
-    int Error;                                          //Error Accumulator
+    int Error;                                                      //Error Accumulator
 
     fpbus bus (.*);
 
