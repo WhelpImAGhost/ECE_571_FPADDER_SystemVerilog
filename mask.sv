@@ -16,6 +16,13 @@ module Mask(fpbus.mask bus);
             $display("Sign A: %0b Sign B: %0b\nEx A: %0b Ex B: %0b\nMan A: %0b Man B: %0b\n", bus.signA, bus.signB, bus.exponentA,
                     bus.exponentB, bus.mantissaA, bus.mantissaB);
         `endif
+
+        `ifdef FULLDEBUG
+            $display("MODULE MASK---------------------------");
+            $display("Inputs- A: %h (%b) B: %h (%b) ", bus.A, bus.A, bus.B bus.B);
+            $display("Sign A: %0b Sign B: %0b\nEx A: %0b Ex B: %0b\n Mantissa A: %0b Mantissa B: %0b\n", bus.signA, bus.signB, bus.exponentA,
+                    bus.exponentB, bus.mantissaA, bus.mantissaB);
+        `endif
     end
 
 endmodule
