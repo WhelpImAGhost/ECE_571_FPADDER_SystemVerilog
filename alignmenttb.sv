@@ -107,7 +107,7 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA})
+                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA} >> bus.exponentB)
                     begin
                         Error++;
                         $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA} >> bus.exponentB, bus.alignedMantissaA);
@@ -115,7 +115,7 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB})
+                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB} >> bus.exponentA)
                     begin
                         Error++;
                         $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB} >> bus.exponentA, bus.alignedMantissaB);
