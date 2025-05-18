@@ -36,17 +36,17 @@ module top;
 
             //Determine Expected Mantissa Addition Based on Exponent Alignment
             if (bus.signA == bus.signB)
-                    expectedSum = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
+                    expectedSum = bus.alignedMantissaA + bus.alignedMantissaB;
             else
             if (bus.alignedMantissaA > bus.alignedMantissaB)
                 expectedSum = bus.alignedMantissaA - bus.alignedMantissaB;
             else if (bus.alignedMantissaB > bus.alignedMantissaA)
                 expectedSum = bus.alignedMantissaB - bus.alignedMantissaA;
 
-            //Check Result
+            //Check Eesult
             if ({bus.carryOut, bus.alignedResult} !== expectedSum) 
             begin
-                $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", bus.A, bus.B, expectedSum, {bus.carryOut, bus.alignedResult,bus.guardBit,bus.roundBit,bus.stickyBit});
+                $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", bus.A, bus.B, expectedSum, {bus.carryOut, bus.alignedResult});
                 Error++;
             end
 
