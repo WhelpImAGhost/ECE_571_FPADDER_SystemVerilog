@@ -10,8 +10,7 @@ module Alignment (fpbus.align bus);
     always_comb
     begin
 
-        //Initialize Rounding Tracking Bits & Carry Out
-        bus.carryOut = 0;                                                                 
+        //Initialize Rounding Tracking Bits & Carry Out                                                             
         bus.stickyBit = 0;                                                          
         bus.guardBit = 0;                                                           
         bus.roundBit = 0;    
