@@ -1,7 +1,7 @@
-// Module to Test FPAdder ALU Function
+//Module to Test FPAdder ALU Function
 module top;
 
-    // Module Instantiations
+    //Module Instantiations
     fpbus bus(.*);
     Mask mask(bus.mask);
     Alignment align(bus.align);
@@ -16,17 +16,16 @@ module top;
         Error = 0;
         for (i = 0; i < 1000000; i++) 
         begin
-            // Generate Random 32-bit Inputs
+            //Generate Random 32-bit Inputs
             bus.A = $urandom_range(0, 32'hFFFFFFFF);
             bus.B = $urandom_range(0, 32'hFFFFFFFF);
-            #1; // Allow Propagation
+            #10;
 
-            // Skip special cases (handled by Alignment\(\* Alignment module)
             if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF || bus.exponentA == 0 || bus.exponentB == 0) begin
                 continue; // Skip NaN, Inf, Zero, Subnormal
             end
 
-            // Determine Expected Exponent
+            //Determine Expected Exponent
             if (bus.exponentA > bus.exponentB)
                 expectedExponent = bus.exponentA;
             else if (bus.exponentB > bus.exponentA)
@@ -34,7 +33,7 @@ module top;
             else
                 expectedExponent = bus.exponentA;
 
-            // Check Exponent Output
+            //Check Exponent Output
             if (bus.exponentOut !== expectedExponent) 
             begin
                 $display("Case A = %h, B = %h | Incorrect Exponent: Expected %h, Got %h", 
@@ -42,10 +41,10 @@ module top;
                 Error++;
             end
 
-            // Determine Expected Result and Sign
+            //Determine Expected Result and Sign
             if (bus.signA == bus.signB)
             begin
-                // Addition
+                //Addition
                 if (bus.exponentA > bus.exponentB)
                     {expectedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
                 else if (bus.exponentB > bus.exponentA)
@@ -56,7 +55,7 @@ module top;
             end
             else
             begin
-                // Subtraction
+                //Subtraction
                 if (bus.alignedMantissaA > bus.alignedMantissaB)
                 begin
                     if (bus.exponentA > bus.exponentB)
@@ -79,7 +78,7 @@ module top;
                 end
             end
 
-            // Check Result
+            //Check Result
             if ({bus.carryOut, bus.alignedResult} !== expectedResult[26:3]) 
             begin
                 $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", 
@@ -87,7 +86,7 @@ module top;
                 Error++;
             end
 
-            // Check Sign
+            //Check Sign
             if (bus.alignedSign !== expectedSign) 
             begin
                 $display("Case A = %h, B = %h | Incorrect Sign: Expected %b, Got %b", 
