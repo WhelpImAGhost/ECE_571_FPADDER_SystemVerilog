@@ -14,12 +14,6 @@ module top;
             bus.A = $random;
             bus.B = $random;
             #10;
-            `ifdef DEBUGTB
-	            $display("\n\nA: %h	B: %h", bus.A, bus.B);
-		        $display("Af: %e	Bf: %e", $bitstoshortreal(bus.A), $bitstoshortreal(bus.B));
-	            $display("Aex: %h (%d)\nBex: %h (%d)", bus.exponentA, bus.exponentA, bus.exponentB, bus.exponentB);
-	            $display("AM: %h\nBM: %h", bus.mantissaA, bus.mantissaB);
-            `endif
             // Special Cases: Infinity or NaN
             if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
             begin
