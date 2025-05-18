@@ -13,9 +13,9 @@ module ALU(fpbus.alu bus);
             else if (bus.exponentB > bus.exponentA)
             {bus.carryOut, extendedResult} = {bus.alignedMantissaB, 3'b0} + {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit};
             else
-            extendedResult = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, 3'b0};
+            {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, 3'b0};
             
-            bus.alignedResult = extendedResult[26:3];
+            {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} = extendedResult;
             bus.alignedSign = bus.signA;
         end
         else 
@@ -30,7 +30,7 @@ module ALU(fpbus.alu bus);
                 else
                 {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} - {bus.alignedMantissaB, 3'b0};
                 
-                bus.alignedResult = extendedResult[26:3];
+                {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} = extendedResult;
                 bus.alignedSign = bus.signA;
             end
             else
@@ -42,7 +42,7 @@ module ALU(fpbus.alu bus);
                 else
                 {bus.carryOut, extendedResult} = {bus.alignedMantissaB, 3'b0} - {bus.alignedMantissaA, 3'b0};
                 
-                bus.alignedResult = extendedResult[26:3];
+                {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} = extendedResult;
                 bus.alignedSign = bus.signB;
             end
         end
