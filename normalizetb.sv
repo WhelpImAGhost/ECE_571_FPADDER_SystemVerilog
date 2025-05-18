@@ -1,5 +1,5 @@
 module top;
-
+parameter Tests = 2<<20;
     int error, tests;
     shortreal fA, fB, fX;
     bit [31:0] rawA, rawB, iA, iB, iX, iEx;
@@ -61,6 +61,37 @@ end
             iEx[31], bus.normalizedSign);
         end
 
+        do begin
+            do  rawA = $urandom; 
+            do  rawB = $urandom;
+            fA = $bitstoshortreal(rawA);
+            fB = $bitstoshortreal(rawB);
+            #10;
+
+            if (bus.normalizedExponent !== iEx[30:23])
+            begin
+                error++;
+                $display("Expected Normalized Exponent: %h, but Received: %h",
+                iEx[30:23], bus.normalizedExponent);
+            end
+            if (bus.normalizedMantissa !== iEx[22:0] &&
+            bus.normalizedMantissa !== iEx[22:0] + 1 &&
+            bus.normalizedMantissa !== iEx[22:0] - 1)
+            begin
+                error++;
+                $display("Expected Normalized Mantissa: %h, but Received: %h",
+                iEx[22:0], bus.normalizedMantissa);
+            end
+            if(bus.normalizedSign !== iEx[31])
+            begin
+                error++;
+                $display("Expected Normalized Sign: %h, but Received: %h",
+                iEx[31], bus.normalizedSign);
+            end
+            
+        end
+        while (tests <= Tests ); 
+        
         if (error == 0) $display("FP Adder passed static case. Test Passed");
         else            $display("FP Adder failed static case. Test Failed. Total Errors: %0d", error);
 
