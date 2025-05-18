@@ -15,7 +15,7 @@ module Normalize(fpbus.normal bus);
     always_comb
     begin 
         //Zero Case
-        if (bus.alignedResult == 0)             
+        if (bus.exponentOut == 0 && )             
         begin
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
@@ -24,14 +24,14 @@ module Normalize(fpbus.normal bus);
         else
         begin      
             //Normalization
-            shiftAmount = countZeros(bus.alignedResult); //Count Leading Zeros
+            shiftAmount = countZeros(bus.alignedResult);                //Count Leading Zeros
             shiftedMantissa = bus.alignedResult << shiftAmount; 
 
             //Check for Overflow
             if ((bus.exponentOut + bus.carryOut) >= 255)
             begin
                 bus.normalizedExponent = 255;
-                bus.normalizedMantissa = shiftedMantissa[22:0]; //If 0 Infinity, if Non-Zero NaN
+            bus.normalizedMantissa = shiftedMantissa[22:0];             //If 0 Infinity, if Non-Zero NaN
             end
             //Handle Carry-Out
             else if (bus.carryOut == 1)
@@ -47,7 +47,7 @@ module Normalize(fpbus.normal bus);
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
                     bus.normalizedExponent = 255;
-                    bus.normalizedMantissa = shiftedMantissa [22:0];                //If 0 Infinity, if Non-Zero NaN
+                    bus.normalizedMantissa = shiftedMantissa [22:0];    //If 0 Infinity, if Non-Zero NaN
                 end
                 //Valid Case
                 else
