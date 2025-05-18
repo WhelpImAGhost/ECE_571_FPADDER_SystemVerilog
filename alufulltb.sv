@@ -43,10 +43,10 @@ module top;
             else if (bus.alignedMantissaB > bus.alignedMantissaA)
                 expectedSum = bus.alignedMantissaB - bus.alignedMantissaA;
 
-            //Check Eesult
+            //Check Result
             if ({bus.carryOut, bus.alignedResult} !== expectedSum) 
             begin
-                $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", bus.A, bus.B, expectedSum, {bus.carryOut, bus.alignedResult});
+                $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", bus.A, bus.B, expectedSum, {bus.carryOut, bus.alignedResult,bus.guardBit,bus.roundBit,bus.stickyBit});
                 Error++;
             end
 
