@@ -36,7 +36,7 @@ module top;
 
             //Determine Expected Mantissa Addition Based on Exponent Alignment
             if (bus.signA == bus.signB)
-                    expectedSum = bus.alignedMantissaA + bus.alignedMantissaB;
+                    expectedSum = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
             else
             if (bus.alignedMantissaA > bus.alignedMantissaB)
                 expectedSum = bus.alignedMantissaA - bus.alignedMantissaB;
