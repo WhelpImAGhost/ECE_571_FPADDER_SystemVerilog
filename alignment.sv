@@ -25,7 +25,7 @@ module Alignment (fpbus.align bus);
             //Shift Aligned "B" to the Right by the Exponent Differential, Set Guard and Round Bits
             {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = extendedMantissaB >> exponentDifferential;       
             if (exponentDifferential > 26)                                          
-                bus.stickyBit = extendedMantissaB;                                  //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
+                bus.stickyBit = |extendedMantissaB;                                  //Set Sticky Bit to the Reduction OR of the Mantissa with Implicit One
             else                                                                    
                 bus.stickyBit = |(extendedMantissaB << (26 - exponentDifferential));//Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One
         end

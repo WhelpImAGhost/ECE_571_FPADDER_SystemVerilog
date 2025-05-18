@@ -4,7 +4,7 @@ module Normalize(fpbus.normal bus);
     logic [23:0] shiftedMantissa;
     logic [4:0] shiftAmount;                                           
 
-    // Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
+    //Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
         int i;                                          
         for (i = 23; i >= 0; i--)
