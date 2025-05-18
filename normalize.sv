@@ -30,7 +30,7 @@ module Normalize(fpbus.normal bus);
             //Round-to-Nearest-Even
             if (bus.guardBit) 
             begin
-                if (bus.roundBit || bus.stickyBit || bus.normalizedMantissa[0])
+                if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
                 begin
                     bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
                     `ifdef DEBUGNORM
