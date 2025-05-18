@@ -96,7 +96,7 @@ module top;
             //Special Cases: Zero or Subnormal
             else if (bus.exponentA == 0 || bus.exponentB == 0)
             begin
-                //Case
+                //Case 1: Both A and B are +/- Zero or Subnormal
                 if (bus.exponentA == 0 && bus.exponentB == 0)
                 begin
                     if (bus.exponentOut !== 8'h00)
