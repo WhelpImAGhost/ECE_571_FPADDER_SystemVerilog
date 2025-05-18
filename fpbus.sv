@@ -22,7 +22,7 @@ interface fpbus;
                     input stickyBit, guardBit, roundBit,
                     output alignedResult, alignedSign, carryOut);
 
-    modport normal (input alignedResult, exponentOut, alignedSign,
+    modport normal (input alignedResult, exponentOut, alignedSign, carryOut,
                     input stickyBit, guardBit, roundBit,
                     output normalizedSign, normalizedExponent, normalizedMantissa);
 
