@@ -157,10 +157,10 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaA !== {1'b1, bus.mantissaA})
+                    if (bus.alignedMantissaA !== {1'b1, bus.mantissaA, 2'b0})
                     begin
                         Error++;
-                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b1, bus.mantissaA}, bus.alignedMantissaA);
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b1, bus.mantissaA, 2'b0}, bus.alignedMantissaA);
                         `ifdef DEBUGTB
                             $stop;
                         `endif

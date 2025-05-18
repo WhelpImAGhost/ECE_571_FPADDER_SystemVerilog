@@ -118,7 +118,7 @@ module Alignment (fpbus.align bus);
                 {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = extendedMantissaA >> exponentDifferential; 
                 //Set Sticky Bit to the Reduction OR of the Shifted Out "A" Bits with Implicit One
                 if (exponentDifferential > 26)                                          
-                    bus.stickyBit = extendedMantissaA;                                      
+                    bus.stickyBit = |extendedMantissaA;                                      
                 else                                                                  
                     bus.stickyBit = |(extendedMantissaA & ((1 << exponentDifferential) - 1));    
             end
