@@ -19,7 +19,7 @@ module Normalize(fpbus.normal bus);
         begin
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
-            bus.normalizedSign = alignedSign;
+            bus.normalizedSign = bus.alignedSign;
         end
         //Non-Zero Case
         else
@@ -31,7 +31,7 @@ module Normalize(fpbus.normal bus);
             if (bus.carryOut)
             begin
                 //Check for Overflow
-                if ((bus.exponentOut + carryOut) >= 255)
+                if ((bus.exponentOut + bus.carryOut) >= 255)
                 begin
                     bus.normalizedExponent = 255; 
                     bus.normalizedMantissa = 0;
@@ -61,7 +61,7 @@ module Normalize(fpbus.normal bus);
                 if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
                 begin
                     bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
-                    
+
                     `ifdef DEBUGNORM
                     $display("Round Up");
                     `endif
