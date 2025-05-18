@@ -62,7 +62,7 @@ module Normalize(fpbus.normal bus);
         $display("\nMODULE NORMALIZE---------------------------");
         $display("shiftedMantissa: %0d, shiftAmount: %h", shiftedMantissa, bus.shiftAmount);
         $display("normalizedExponent: %h,   normalizedSign: %b"bus.normalizedExponent, bus.normalizedSign);
-        $display("normalizedMantissa %h (%d)\n", bus.normalizedMantissa,bus.normalizedMantissa);
+        $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
         `endif
 
     end
