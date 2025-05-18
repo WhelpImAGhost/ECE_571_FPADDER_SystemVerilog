@@ -46,7 +46,9 @@ end
             $display("Expected Normalized Exponent: %h, but Received: %h",
             iEx[30:23], bus.normalizedExponent);
         end
-        if (bus.normalizedMantissa - iEx[30:23] > 1 || bus.normalizedMantissa - iEx[30:23] < -1)
+        if (bus.normalizedMantissa !== iEx[22:0] &&
+		bus.normalizedMantissa !== iEx[22:0] + 1 &&
+		bus.normalizedMantissa !== iEx[22:0] - 1)
         begin
             error++;
             $display("Expected Normalized Mantissa: %h, but Received: %h",
