@@ -1,14 +1,7 @@
 //Test Bench to Ensure Proper Partitioning of 32-Bit FP Values
-
 module top;
 
-    // bit [31:0] A, B;                        //Inputs A & B
-    // bit signA, signB;                       //Output Sign Bits
-    // bit [7:0] exponentA, exponentB;         //Output Exponents
-    // bit [22:0] mantissaA, mantissaB;        //Output Mantissas
-
-fpbus bus();
-    // Mask M(A, B, signA, signB, exponentA, exponentB, mantissaA, mantissaB);
+    fpbus bus();
     Mask M(.bus(bus.mask));
 
     initial
@@ -34,6 +27,7 @@ fpbus bus();
 
         $display("Simulation Finished");
         $finish;
+        
     end
 
 endmodule
