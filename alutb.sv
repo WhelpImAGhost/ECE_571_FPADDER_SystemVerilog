@@ -1,167 +1,218 @@
 module top;
 
 int error;
-
 fpbus bus();
-
-//Alignment align1(.bus(bus.align));
-//Mask m1(.bus(bus.mask));
 ALU alu1 (.bus(bus.alu));
 
 initial
 begin
+    error = 0;
 
-    // Case 1: A is neg B is pos
-    // A has larger mantissa
+    // Case 1: A neg, B pos, A larger mantissa
     bus.signA = 1;
     bus.signB = 0;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h440000;
     bus.alignedMantissaB = 24'h240000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaA - bus.alignedMantissaB}) begin
+    if ({bus.alignedSign, bus.alignedResult} !== {1'b1, (24'h440000 - 24'h240000)}) begin
         error++;
         $display("Failed case 1: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 1, bus.alignedMantissaA - bus.alignedMantissaB);
+                 bus.alignedResult, 1, 24'h440000 - 24'h240000);
     end
 
-    // Case 2: A is neg B is pos
-    // B has larger mantissa
+    // Case 2: A neg, B pos, B larger mantissa
     bus.signA = 1;
     bus.signB = 0;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h040000;
     bus.alignedMantissaB = 24'h440000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB - bus.alignedMantissaA}) begin
+    if ({bus.alignedSign, bus.alignedResult} !== {1'b0, (24'h440000 - 24'h040000)}) begin
         error++;
         $display("Failed case 2: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 0, bus.alignedMantissaB - bus.alignedMantissaA);
+                 bus.alignedResult, 0, 24'h440000 - 24'h040000);
     end
 
-    // Case 3: A is pos B is neg
-    // A has larger mantissa
+    // Case 3: A pos, B neg, A larger mantissa
     bus.signA = 0;
     bus.signB = 1;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h440000;
     bus.alignedMantissaB = 24'h240000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaA - bus.alignedMantissaB}) begin
+    if ({bus.alignedSign, bus.alignedResult} !== {1'b0, (24'h440000 - 24'h240000)}) begin
         error++;
         $display("Failed case 3: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 0, bus.alignedMantissaA - bus.alignedMantissaB);
+                 bus.alignedResult, 0, 24'h440000 - 24'h240000);
     end
 
-    // Case 4: A is pos B is neg
-    // B has larger mantissa
+    // Case 4: A pos, B neg, B larger mantissa
     bus.signA = 0;
     bus.signB = 1;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h040000;
     bus.alignedMantissaB = 24'h440000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    
-    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaB - bus.alignedMantissaA}) begin
+    if ({bus.alignedSign, bus.alignedResult} !== {1'b1, (24'h440000 - 24'h040000)}) begin
         error++;
         $display("Failed case 4: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 1, bus.alignedMantissaB - bus.alignedMantissaA);
+                 bus.alignedResult, 1, 24'h440000 - 24'h040000);
     end
 
-    // Case 5: both are pos
-    // A has larger mantissa
+    // Case 5: Both pos, A larger mantissa
     bus.signA = 0;
     bus.signB = 0;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h440000;
     bus.alignedMantissaB = 24'h002000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaA + bus.alignedMantissaB}) begin
+    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b0, 1'b0, (24'h440000 + 24'h002000)}) begin
         error++;
-        $display("Failed case 5: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 0, bus.alignedMantissaA + bus.alignedMantissaB);
+        $display("Failed case 5: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
+                 bus.alignedResult, 0, 0, 24'h440000 + 24'h002000);
     end
 
-    // Case 6: both are pos
-    // B has larger mantissa
+    // Case 6: Both pos, B larger mantissa
     bus.signA = 0;
     bus.signB = 0;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h002000;
     bus.alignedMantissaB = 24'h440000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB + bus.alignedMantissaA}) begin
+    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b0, 1'b0, (24'h440000 + 24'h002000)}) begin
         error++;
-        $display("Failed case 6: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 0, bus.alignedMantissaB + bus.alignedMantissaA);
+        $display("Failed case 6: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
+                 bus.alignedResult, 0, 0, 24'h440000 + 24'h002000);
     end
 
-    // Case 7: both are neg
-    // A has larger mantissa
+    // Case 7: Both neg, A larger mantissa
     bus.signA = 1;
     bus.signB = 1;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h440000;
     bus.alignedMantissaB = 24'h002000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaA + bus.alignedMantissaB}) begin
+    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b0, 1'b1, (24'h440000 + 24'h002000)}) begin
         error++;
-        $display("Failed case 7: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 1, bus.alignedMantissaA + bus.alignedMantissaB);
+        $display("Failed case 7: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
+                 bus.alignedResult, 0, 1, 24'h440000 + 24'h002000);
     end
 
-    // Case 8: both are neg
-    // B has larger mantissa
+    // Case 8: Both neg, B larger mantissa
     bus.signA = 1;
     bus.signB = 1;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'h002000;
     bus.alignedMantissaB = 24'h440000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaB + bus.alignedMantissaA}) begin
+    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b0, 1'b1, (24'h440000 + 24'h002000)}) begin
         error++;
-        $display("Failed case 8: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 1, bus.alignedMantissaB + bus.alignedMantissaA);
+        $display("Failed case 8: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
+                 bus.alignedResult, 0, 1, 24'h440000 + 24'h002000);
     end
 
-
-    // Case 9: Both are neg, intend for carryout
+    // Case 9: Both neg, intend for carryout
     bus.signA = 1;
     bus.signB = 1;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'hF02000;
     bus.alignedMantissaB = 24'h440000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b1, bus.alignedMantissaB + bus.alignedMantissaA}) begin
+    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b1, 1'b1, (24'hF02000 + 24'h440000)[26:3]}) begin
         error++;
-        $display("Failed case 8: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 1, bus.alignedMantissaB + bus.alignedMantissaA);
-    end
-    else if (bus.carryOut !== 1'b1) begin
-        error++;
-        $display("Failed case 9: got %b, expected %0b", bus.carryOut, 1);
+        $display("Failed case 9: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
+                 bus.alignedResult, 1, 1, (24'hF02000 + 24'h440000)[26:3]);
     end
 
-    // Case 10: Both are pos, intend for carryout
+    // Case 10: Both pos, intend for carryout
     bus.signA = 0;
     bus.signB = 0;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h7F;
     bus.alignedMantissaA = 24'hF02000;
     bus.alignedMantissaB = 24'h440000;
+    bus.guardBit = 0;
+    bus.roundBit = 0;
+    bus.stickyBit = 0;
     #10;
-
-    if({bus.alignedSign, bus.alignedResult} !== {1'b0, bus.alignedMantissaB + bus.alignedMantissaA}) begin
+    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b1, 1'b0, (24'hF02000 + 24'h440000)[26:3]}) begin
         error++;
-        $display("Failed case 10: got %b %h, expected %b %h", bus.alignedSign, 
-        bus.alignedResult, 0, bus.alignedMantissaB + bus.alignedMantissaA);
-    end
-    else if (bus.carryOut !== 1'b1) begin
-        error++;
-        $display("Failed case 10: got %b, expected %0b", bus.carryOut, 1);
+        $display("Failed case 10: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
+                 bus.alignedResult, 1, 0, (24'hF02000 + 24'h440000)[26:3]);
     end
 
+    // Case 11: Rounding bits affect subtraction
+    bus.signA = 1;
+    bus.signB = 0;
+    bus.exponentA = 8'h80;
+    bus.exponentB = 8'h7F;
+    bus.alignedMantissaA = 24'h400000;
+    bus.alignedMantissaB = 24'h200000;
+    bus.guardBit = 1;
+    bus.roundBit = 1;
+    bus.stickyBit = 1;
+    #10;
+    if ({bus.alignedSign, bus.alignedResult} !== {1'b1, (27'h4000000 - 27'h2000007)[26:3]}) begin
+        error++;
+        $display("Failed case 11: got %b %h, expected %b %h", bus.alignedSign, 
+                 bus.alignedResult, 1, (27'h4000000 - 27'h2000007)[26:3]);
+    end
 
-    $display("Simulation finished with %d %s\n", error, (error === 1 ? "Error" : "Errors"));
+    // Case 12: Rounding bits affect addition
+    bus.signA = 0;
+    bus.signB = 0;
+    bus.exponentA = 8'h7F;
+    bus.exponentB = 8'h80;
+    bus.alignedMantissaA = 24'h400000;
+    bus.alignedMantissaB = 24'h200000;
+    bus.guardBit = 1;
+    bus.roundBit = 1;
+    bus.stickyBit = 1;
+    #10;
+    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b0, 1'b0, (27'h4000000 + 27'h2000007)[26:3]}) begin
+        error++;
+        $display("Failed case 12: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
+                 bus.alignedResult, 0, 0, (27'h4000000 + 27'h2000007)[26:3]);
+    end
+
+    $display("Simulation finished with %d %s\n", error, (error == 1 ? "Error" : "Errors"));
     $finish;
 end
 endmodule
