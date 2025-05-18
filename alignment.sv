@@ -46,9 +46,9 @@ begin
     end
     else                                                                         //Case "A" = "B"
     begin
-        bus.alignedMantissaA = extendedMantissaA;                               //Aligned "A" = Extended "A"
-        bus.alignedMantissaB = extendedMantissaB;                               //Set Aligned "B" = Extended "B"
-        bus.exponentOut = bus.exponentA;                                        //Pass Out Exponent A
+        bus.alignedMantissaA = extendedMantissaA[25:2];                          //Aligned "A" = Extended "A"
+        bus.alignedMantissaB = extendedMantissaB[25:2];                          //Set Aligned "B" = Extended "B"
+        bus.exponentOut = bus.exponentA;                                         //Pass Out Exponent A
     end
 
     `ifdef DEBUGALIGN
