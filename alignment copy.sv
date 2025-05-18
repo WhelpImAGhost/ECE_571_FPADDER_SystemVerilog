@@ -10,7 +10,7 @@ module Alignment (fpbus.align bus);
     begin
 
         //Initialize Tracked Rounding Bits
-        bus.guardBit, bus.roundBit, bus.stickyBit = 0;   
+        {bus.guardBit, bus.roundBit, bus.stickyBit} = 3'b0;   
 
         // +/- Infinity or NaN 
         if (bus.exponentA == 2'hFF || bus.exponentB == 2'hFF)
