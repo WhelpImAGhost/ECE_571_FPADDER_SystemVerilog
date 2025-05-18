@@ -15,7 +15,7 @@ module ALU(fpbus.alu bus);
             else
             {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, 3'b0};
             
-            {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} = extendedResult;
+            bus.alignedResult = extendedResult [26:2];
             bus.alignedSign = bus.signA;
         end
         else 
@@ -30,7 +30,7 @@ module ALU(fpbus.alu bus);
                 else
                 {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} - {bus.alignedMantissaB, 3'b0};
                 
-                {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} = extendedResult;
+                bus.alignedResult = extendedResult [26:2];
                 bus.alignedSign = bus.signA;
             end
             else
@@ -42,7 +42,7 @@ module ALU(fpbus.alu bus);
                 else
                 {bus.carryOut, extendedResult} = {bus.alignedMantissaB, 3'b0} - {bus.alignedMantissaA, 3'b0};
                 
-                {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} = extendedResult;
+                bus.alignedResult = extendedResult [26:2];
                 bus.alignedSign = bus.signB;
             end
         end
