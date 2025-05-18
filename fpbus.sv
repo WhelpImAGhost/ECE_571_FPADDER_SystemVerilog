@@ -13,6 +13,7 @@ interface fpbus;
 
     modport align ( input exponentA, exponentB,
                     input mantissaA, mantissaB,
+                    input signA, signB,
                     output stickyBit, guardBit, roundBit,
                     output alignedMantissaA, alignedMantissaB,
                     output exponentOut);

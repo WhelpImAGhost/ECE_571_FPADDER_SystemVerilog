@@ -78,11 +78,12 @@ module Alignment (fpbus.align bus);
         //Valid Floating Point Numbers                                
         else
         begin
-            //Add Implicit One and 
+            //Add Implicit One and Space for Guard and Round Bits
             extendedMantissaA = {1'b1, bus.mantissaA, 2'b0};
             extendedMantissaB = {1'b1, bus.mantissaB, 2'b0};
 
-            if (bus.exponentA > bus.exponentB)                                              //Case "A" > "B"
+            //Case Exponent "A" > "B"
+            if (bus.exponentA > bus.exponentB)                                              
             begin
                 exponentDifferential = bus.exponentA - bus.exponentB;                       //Subtract Smaller Exponent From Larger
                 bus.alignedMantissaA = extendedMantissaA[25:2];                             //Set Aligned "A" = Extended "A"
@@ -96,8 +97,8 @@ module Alignment (fpbus.align bus);
                     //Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One                                                               
                     bus.stickyBit = |(extendedMantissaB & ((1 << exponentDifferential) - 1));
             end
-
-            else if (bus.exponentB > bus.exponentA)                                         //Case "B" > "A"
+            //Case Exponent "B" > "A"
+            else if (bus.exponentB > bus.exponentA)                                         
             begin
                 exponentDifferential = bus.exponentB - bus.exponentA;                       //Subtract Smaller Exponent From Larger
                 bus.alignedMantissaB = extendedMantissaB[25:2];                             //Set Aligned "B" = Extended "B"
@@ -111,8 +112,8 @@ module Alignment (fpbus.align bus);
                     //Set Sticky Bit to the Reduction OR of the Shifted Out Bits with Implicit One                                                
                     bus.stickyBit = |(extendedMantissaA & ((1 << exponentDifferential) - 1));    
             end
-
-            else                                                                            //Case "A" = "B"
+            //Case Exponent "A" = "B"
+            else                                                                            
             begin
                 exponentDifferential = 0;                                                   //Set Exponent Differential to Zero
                 bus.alignedMantissaA = extendedMantissaA[25:2];                             //Aligned "A" = Extended "A"
