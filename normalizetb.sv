@@ -62,8 +62,8 @@ end
         end
 
         do begin
-            do  rawA = $urandom; 
-            do  rawB = $urandom;
+            rawA = $urandom; 
+            rawB = $urandom;
             fA = $bitstoshortreal(rawA);
             fB = $bitstoshortreal(rawB);
             #10;

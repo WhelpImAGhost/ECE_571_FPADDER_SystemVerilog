@@ -15,7 +15,7 @@ module Normalize(fpbus.normal bus);
     always_comb
     begin 
         //Zero Case
-        if (bus.exponentOut == 0 && )             
+        if (bus.exponentOut == 0 )             
         begin
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
