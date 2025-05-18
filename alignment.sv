@@ -61,7 +61,7 @@ module Alignment (fpbus.align bus);
             begin
                 bus.exponentOut = bus.exponentB;
                 exponentDifferential = bus.exponentB;                                                                                          
-                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
+                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0} >> exponentDifferential;                                                         
                 bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
                 $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
             end
@@ -71,7 +71,7 @@ module Alignment (fpbus.align bus);
                 bus.exponentOut = bus.exponentA;
                 exponentDifferential = bus.exponentA;                                                                                      
                 bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
-                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};    
+                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0} >> exponentDifferential;    
                 $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                        
             end
         end

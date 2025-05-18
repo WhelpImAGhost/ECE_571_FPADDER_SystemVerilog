@@ -20,94 +20,254 @@ module top;
 	            $display("Aex: %h (%d)\nBex: %h (%d)", bus.exponentA, bus.exponentA, bus.exponentB, bus.exponentB);
 	            $display("AM: %h\nBM: %h", bus.mantissaA, bus.mantissaB);
             `endif
-            if (bus.exponentA > bus.exponentB)
+            // Special Cases: Infinity or NaN
+            if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
             begin
-                if(bus.exponentOut !== bus.A[30:23])
+                //Checking for Incorrect Exponent Output
+                if (bus.exponentOut !== 8'hFF)
                 begin
                     Error++;
-                    $display("Expected Normalization Exponent: %h, but Received: %h",
-                    bus.A[30:23], bus.exponentOut);
-`ifdef DEBUGTB
-$stop;
-`endif
+                    $display("Expected exponentOut: 8'hFF, but Received: %h", bus.exponentOut);
+                    `ifdef DEBUGTB
+                        $stop;
+                    `endif
                 end
-                if(bus.alignedMantissaB !== ({1'b1,bus.mantissaB} >> (bus.exponentA - bus.exponentB)))
+                //Case: Both A and B are +/- Infinity or NaN
+                if (bus.exponentA == 8'hFF && bus.exponentB == 8'hFF)
                 begin
-                    Error++;
-                    $display("Expected Aligned B Mantissa: %h, but Received: %h",
-                    ({1'b1,bus.mantissaB} >> (bus.exponentA - bus.exponentB)), bus.alignedMantissaB);
-`ifdef DEBUGTB
-$stop;
-`endif
+                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
-
-                if(bus.alignedMantissaA !== {1'b1,bus.mantissaA})
+                //Case: A is +/- Infinity or NaN
+                else if (bus.exponentA == 8'hFF)
                 begin
-                    Error++;
-                    $display("Expected A Mantissa: %h, but Received: %h",
-                    {1'b1,bus.mantissaA}, bus.alignedMantissaA);
-`ifdef DEBUGTB
-$stop;
-`endif
+                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b1, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b1, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                end
+                //Case: B is +/- Infinity or NaN
+                else if (bus.exponentB == 8'hFF)
+                begin
+                    if (bus.alignedMantissaA !== {1'b1, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b1, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
             end
-            else if (bus.exponentB > bus.exponentA)
+            //Special Cases: Zero or Subnormal
+            else if (bus.exponentA == 0 || bus.exponentB == 0)
             begin
-                if(bus.exponentOut !== bus.B[30:23])
+                //Case
+                if (bus.exponentA == 0 && bus.exponentB == 0)
                 begin
-                    Error++;
-                    $display("Expected Normalization Exponent: %h, but Received: %h",
-                    bus.B[30:23], bus.exponentOut);
+                    if (bus.exponentOut !== 8'h00)
+                    begin
+                        Error++;
+                        $display("Expected exponentOut: 8'h00, but Received: %h", bus.exponentOut);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
-                if(bus.alignedMantissaA !== ({1'b1,bus.mantissaA} >> (bus.exponentB - bus.exponentA)))
+                else if (bus.exponentA == 0)
                 begin
-                    Error++;
-                    $display("Expected Aligned A Mantissa: %h, but Received: %h",
-                    ({1'b1,bus.mantissaA} >> (bus.exponentB - bus.exponentA)), bus.alignedMantissaA);
-`ifdef DEBUGTB
-$stop;
-`endif
+                    if (bus.exponentOut !== bus.exponentB)
+                    begin
+                        Error++;
+                        $display("Expected exponentOut: %h, but Received: %h", bus.exponentB, bus.exponentOut);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b1, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b1, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
-                if(bus.alignedMantissaB !== {1'b1,bus.mantissaB})
+                else if (bus.exponentB == 0)
                 begin
-                    Error++;
-                    $display("Expected B Mantissa: %h, but Received: %h",
-                    {1'b1,bus.mantissaB}, bus.alignedMantissaB);
+                    if (bus.exponentOut !== bus.exponentA)
+                    begin
+                        Error++;
+                        $display("Expected exponentOut: %h, but Received: %h", bus.exponentA, bus.exponentOut);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaA !== {1'b1, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b1, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
             end
+            // Normal floating-point numbers
             else
             begin
-                if(bus.exponentOut !== bus.A[30:23])
+                if (bus.exponentA > bus.exponentB)
                 begin
-                    Error++;
-                    $display("Expected Normalization Exponent: %h, but Received: %h",
-                    bus.A[30:23], bus.exponentOut);
-`ifdef DEBUGTB
-$stop;
-`endif
+                    if (bus.exponentOut !== bus.exponentA)
+                    begin
+                        Error++;
+                        $display("Expected exponentOut: %h, but Received: %h", bus.exponentA, bus.exponentOut);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaA !== {1'b1, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b1, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== ({1'b1, bus.mantissaB, 2'b0} >> (bus.exponentA - bus.exponentB))[25:2])
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", 
+                                 ({1'b1, bus.mantissaB, 2'b0} >> (bus.exponentA - bus.exponentB))[25:2], bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
-                if(bus.alignedMantissaA !== {1'b1,bus.mantissaA})
+                else if (bus.exponentB > bus.exponentA)
                 begin
-                    Error++;
-                    $display("Expected A Mantissa : %h, but Received: %h",
-                    {1'b1,bus.mantissaA}, bus.alignedMantissaA);
-`ifdef DEBUGTB
-$stop;
-`endif
+                    if (bus.exponentOut !== bus.exponentB)
+                    begin
+                        Error++;
+                        $display("Expected exponentOut: %h, but Received: %h", bus.exponentB, bus.exponentOut);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b1, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b1, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaA !== ({1'b1, bus.mantissaA, 2'b0} >> (bus.exponentB - bus.exponentA))[25:2])
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", 
+                                 ({1'b1, bus.mantissaA, 2'b0} >> (bus.exponentB - bus.exponentA))[25:2], bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
-                if(bus.alignedMantissaB !== {1'b1,bus.mantissaB})
+                else
                 begin
-                    Error++;
-                    $display("Expected B Mantissa: %h, but Received: %h",
-                    {1'b1,bus.mantissaB}, bus.alignedMantissaB);
-`ifdef DEBUGTB
-$stop;
-`endif
+                    if (bus.exponentOut !== bus.exponentA)
+                    begin
+                        Error++;
+                        $display("Expected exponentOut: %h, but Received: %h", bus.exponentA, bus.exponentOut);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaA !== {1'b1, bus.mantissaA})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b1, bus.mantissaA}, bus.alignedMantissaA);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
+                    if (bus.alignedMantissaB !== {1'b1, bus.mantissaB})
+                    begin
+                        Error++;
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b1, bus.mantissaB}, bus.alignedMantissaB);
+                        `ifdef DEBUGTB
+                            $stop;
+                        `endif
+                    end
                 end
             end
         end
-        $display("Simulation finished with %d %s\n", Error, (Error === 1 ? "Error" : "Errors"));
+        $display("Simulation finished with %d %s\n", Error, (Error == 1 ? "Error" : "Errors"));
         $finish;
     end
-
 endmodule
