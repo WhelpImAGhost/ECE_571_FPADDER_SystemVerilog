@@ -12,31 +12,73 @@ module Alignment (fpbus.align bus);
         //Initialize Tracked Rounding Bits
         bus.guardBit, bus.roundBit, bus.stickyBit = 0;   
 
-        if (bus.exponentA == 0 && bus.exponentB == 0)                                       //Case Both Exponents are Zero
+        // +/- Infinity or NaN 
+        if (bus.exponentA == 2'hFF || bus.exponentB == 2'hFF)
         begin
-            exponentDifferential = 0;                                                       //Set Exponent Differential to Zero
-            bus.exponentOut = 0;                                                            //Set Exponent Out to Zero
-            bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                       
-            bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};                                                                                                        
+            //A and B are both +/- Infinity or NaN
+            if (bus.exponentA == 2'hFF && bus.exponentB == 2'hFF)                                       
+            begin
+                bus.exponentOut = 2'hFF;
+                exponentDifferential = 0;                                                                                                                
+                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};
+                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};
+                $error("Addend A is %s%s" (bus.signA ? "-", "+"), (bus.mantissaA ? "NaN" : "Infinity"));
+                $error("Addend B is %s%s" (bus.signB ? "-", "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                  
+            end
+            //A is +/- Infinity or NaN
+            else if (bus.exponentA == 2'hFF)                                                       
+            begin
+                bus.exponentOut = 2'hFF;
+                exponentDifferential = 0;                                                                                          
+                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
+                bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
+                $error("Addend A is %s%s" (bus.signA ? "-", "+"), (bus.mantissaA ? "NaN" : "Infinity"));                                                                     
+            end
+            //B is +/- Infinity or NaN
+            else if (bus.exponentB == 2'hFF)                                                      
+            begin
+                bus.exponentOut = 2'hFF;
+                exponentDifferential = 0;                                                                                      
+                bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
+                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};                                                                                            
+                $error("Addend B is %s%s" (bus.signB ? "-", "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                        
+            end
         end
-        else if (bus.exponentA == 0)                                                        //Case "A" Exponent is Zero
+        // +/- Zero or NaN
+        else if (bus.exponentA == 0 || bus.exponentB == 0)
         begin
-        exponentDifferential = bus.exponentB;                                               //Set Exponent Differential to Zero
-            bus.exponentOut = bus.exponentB;                                                //Set Exponent Out to "B"
-            bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
-            bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};                             //Set Aligned "B" to Extended "B"                                                 
+            //A and B are both +/- Zero
+            if (bus.exponentA == 0 && bus.exponentB == 0)                                       
+            begin
+                bus.exponentOut, exponentDifferential = 0;                                                                                                                
+                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                       
+                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};  
+                $error("Addend A is %s%s" (bus.signA ? "-", "+"), (bus.mantissaA ? "NaN" : "Zero"));
+                $error("Addend B is %s%s" (bus.signB ? "-", "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                                           
+            end
+            //A is +/- Zero
+            else if (bus.exponentA == 0)                                                       
+            begin
+                bus.exponentOut, exponentDifferential = bus.exponentB;                                                                                          
+                bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
+                bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};
+                $error("Addend A is %s%s" (bus.signA ? "-", "+"), (bus.mantissaA ? "NaN" : "Zero"));
+            end
+            //B is +/- Zero
+            else if (bus.exponentB == 0)                                                      
+            begin
+                bus.exponentOut, exponentDifferential = bus.exponentA;                                                                                      
+                bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                          
+                bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};    
+                $error("Addend B is %s%s" (bus.signB ? "-", "+"), (bus.mantissaB ? "NaN" : "Zero"));                                                                                        
+            end
         end
-        else if (bus.exponentB == 0)                                                        //Case "B" Exponent is Zero
-        begin
-            exponentDifferential = bus.exponentA;                                           //Set Exponent Differential to Zero
-            bus.exponentOut = bus.exponentA;                                                //Set Exponent Out to "A"
-            bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                             //Set Aligned "A" to Extended "A"
-            bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};                                                                                            
-        end
+        //Valid Floating Point Numbers                                
         else
         begin
-            extendedMantissaA = {1'b1, bus.mantissaA, 2'b0};                                //Add Implicit One to "A" Before Shift
-            extendedMantissaB = {1'b1, bus.mantissaB, 2'b0};                                //Add Implicit One to "B" Before Shift
+            //Add Implicit One and 
+            extendedMantissaA = {1'b1, bus.mantissaA, 2'b0};
+            extendedMantissaB = {1'b1, bus.mantissaB, 2'b0};
 
             if (bus.exponentA > bus.exponentB)                                              //Case "A" > "B"
             begin
