@@ -17,13 +17,14 @@ module top;
 
     initial
     begin
-        repeat (2048)
+        repeat (2 << 20)
         begin
             bus.A = $random;
             bus.B = $random;
             #10;
-            `ifdef DEBUG
-	            $display("A: %h\nB: %h", bus.A, bus.B);
+            `ifdef DEBUGTB
+	            $display("\n\nA: %h	B: %h", bus.A, bus.B);
+		    $display("Af: %e	Bf: %e", $bitstoshortreal(bus.A), $bitstoshortreal(bus.B));
 	            $display("Aex: %h (%d)\nBex: %h (%d)", bus.exponentA, bus.exponentA, bus.exponentB, bus.exponentB);
 	            $display("AM: %h\nBM: %h", bus.mantissaA, bus.mantissaB);
             `endif
@@ -34,18 +35,28 @@ module top;
                     Error++;
                     $display("Expected Normalization Exponent: %h, but Received: %h",
                     bus.A[30:23], bus.exponentOut);
+`ifdef DEBUGTB
+$stop;
+`endif
                 end
                 if(bus.alignedMantissaB !== ({1'b1,bus.mantissaB} >> (bus.exponentA - bus.exponentB)))
                 begin
                     Error++;
                     $display("Expected Aligned B Mantissa: %h, but Received: %h",
                     ({1'b1,bus.mantissaB} >> (bus.exponentA - bus.exponentB)), bus.alignedMantissaB);
+`ifdef DEBUGTB
+$stop;
+`endif
                 end
+
                 if(bus.alignedMantissaA !== {1'b1,bus.mantissaA})
                 begin
                     Error++;
                     $display("Expected A Mantissa: %h, but Received: %h",
                     {1'b1,bus.mantissaA}, bus.alignedMantissaA);
+`ifdef DEBUGTB
+$stop;
+`endif
                 end
             end
             else if (bus.exponentB > bus.exponentA)
@@ -61,6 +72,9 @@ module top;
                     Error++;
                     $display("Expected Aligned A Mantissa: %h, but Received: %h",
                     ({1'b1,bus.mantissaA} >> (bus.exponentB - bus.exponentA)), bus.alignedMantissaA);
+`ifdef DEBUGTB
+$stop;
+`endif
                 end
                 if(bus.alignedMantissaB !== {1'b1,bus.mantissaB})
                 begin
@@ -76,18 +90,27 @@ module top;
                     Error++;
                     $display("Expected Normalization Exponent: %h, but Received: %h",
                     bus.A[30:23], bus.exponentOut);
+`ifdef DEBUGTB
+$stop;
+`endif
                 end
                 if(bus.alignedMantissaA !== {1'b1,bus.mantissaA})
                 begin
                     Error++;
                     $display("Expected A Mantissa : %h, but Received: %h",
                     {1'b1,bus.mantissaA}, bus.alignedMantissaA);
+`ifdef DEBUGTB
+$stop;
+`endif
                 end
                 if(bus.alignedMantissaB !== {1'b1,bus.mantissaB})
                 begin
                     Error++;
                     $display("Expected B Mantissa: %h, but Received: %h",
                     {1'b1,bus.mantissaB}, bus.alignedMantissaB);
+`ifdef DEBUGTB
+$stop;
+`endif
                 end
             end
         end
