@@ -27,22 +27,18 @@ module Normalize(fpbus.normal bus);
             //Normalization
             shiftAmount = countZeros(bus.alignedResult); //Count Leading Zeros
 
-            //Handle ALU Carry-Out
-            if (bus.carryOut)
+            //Check for Overflow
+            if ((bus.exponentOut + bus.carryOut) >= 255)
             begin
-                //Check for Overflow
-                if ((bus.exponentOut + bus.carryOut) >= 255)
-                begin
-                    bus.normalizedExponent = 255; 
-                    bus.normalizedMantissa = 0;
-                end
-                else
-                begin
-                    shiftAmount = 0;
-                    shiftedMantissa = {1'b0, bus.alignedResult[23:1]};
-                    bus.normalizedExponent = bus.exponentOut + 1;
-                end 
+                bus.normalizedExponent = 255; 
+                bus.normalizedMantissa = 0;
             end
+            else if (carryOut == 1)
+            begin
+                shiftAmount = 0;
+                shiftedMantissa = {1'b0, bus.alignedResult[23:1]};
+                bus.normalizedExponent = bus.exponentOut + 1;
+            end 
             else
             begin                  
                 shiftedMantissa = bus.alignedResult << shiftAmount;  
