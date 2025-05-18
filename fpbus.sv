@@ -20,6 +20,7 @@ interface fpbus;
     modport alu (   input signA, signB,
                     input alignedMantissaA, alignedMantissaB,
                     input stickyBit, guardBit, roundBit,
+                    input exponentA, exponentB,
                     output alignedResult, alignedSign, carryOut);
 
     modport normal (input alignedResult, exponentOut, alignedSign,
