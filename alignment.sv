@@ -24,14 +24,12 @@ module Alignment (fpbus.align bus);
         end
         else if (bus.exponentA == 0)                                                        //Case "A" Exponent is Zero
         begin
-            exponentDifferential = 0;                                                       //Set Exponent Differential to Zero
             bus.exponentOut = bus.exponentB;                                                //Set Exponent Out to "B"
             bus.alignedMantissaA = {1'b0, bus.mantissaA, 2'b0};                                                           
             bus.alignedMantissaB = {1'b1, bus.mantissaB, 2'b0};                             //Set Aligned "B" to Extended "B"                                                 
         end
         else if (bus.exponentB == 0)                                                        //Case "B" Exponent is Zero
         begin
-            exponentDifferential = 0;                                                       //Set Exponent Differential to Zero
             bus.exponentOut = bus.exponentA;                                                //Set Exponent Out to "A"
             bus.alignedMantissaA = {1'b1, bus.mantissaA, 2'b0};                             //Set Aligned "A" to Extended "A"
             bus.alignedMantissaB = {1'b0, bus.mantissaB, 2'b0};                                                                                            
