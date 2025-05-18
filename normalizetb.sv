@@ -70,8 +70,9 @@ end
 `endif
         end
         do begin
-            rawA = $urandom; 
-            rawB = $urandom;
+		tests++;
+		rawA = $urandom;
+		rawB = $urandom;
             fA = $bitstoshortreal(rawA);
             fB = $bitstoshortreal(rawB);
             #10;
