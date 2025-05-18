@@ -20,13 +20,22 @@ module Normalize(fpbus.normal bus);
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
         end
+        // NaN and Inf cases
+        else if (bus.exponentA == 255 || bus.exponentB == 255)
+        begin
+            if (bus.exponentA == 255 && bus.mantissaA == 0)
+                {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
+            else if (bus.exponentB == 255 && bus.mantissaB ==0)
+                {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
+            
+        end
         //Non-Zero Case
         else
         begin      
             //Normalization
             shiftAmount = countZeros(bus.alignedResult);                //Count Leading Zeros
             shiftedMantissa = bus.alignedResult << shiftAmount; 
-
+            bus.normalizedSign = bus.alignedSign;
             //Check for Overflow
             if ((bus.exponentOut + bus.carryOut) >= 255)
             begin
@@ -78,7 +87,7 @@ module Normalize(fpbus.normal bus);
             end
         end
 
-        bus.normalizedSign = bus.alignedSign;
+        
 
         //Debugging
         `ifdef DEBUGNORM
