@@ -16,15 +16,18 @@ module Mask(fpbus.mask bus);
         bus.mantissaA = bus.A [22:0];   
         bus.mantissaB = bus.B [22:0];   
 
-        `define DEBUGMASK ((FULLDEBUG) || (DEBUGMASK))
+        `ifdef FULLDEBUG
+            `define DEBUGMASK
+        `endif
 
         `ifdef DEBUGMASK
             $display("\nMODULE MASK---------------------------");
-            $display("Inputs- A: %h (%b) B: %h (%b) ", bus.A, bus.A, bus.B, bus.B);
-            $display("Sign A: %0b Sign B: %0b\nEx A: %0b Ex B: %0b\nMantissa A: %h (%0b) Mantissa B: %h (%0b)\n", bus.signA, bus.signB, bus.exponentA,
-                    bus.exponentB, bus.mantissaA, bus.mantissaA, bus.mantissaB, bus.mantissaB);
+            $display("Inputs- A: %h (%32b) B: %h (%32b) ", 
+                    bus.A, bus.A, bus.B, bus.B);
+            $display("Sign A: %b Sign B: %b\nEx A: %8b Ex B: %8b\nMantissa A: %h (%23b) Mantissa B: %h (%23b)\n",
+                    bus.signA, bus.signB, bus.exponentA, bus.exponentB, bus.mantissaA, bus.mantissaA, bus.mantissaB, bus.mantissaB);
         `endif
-        
+
     end
 
 endmodule
