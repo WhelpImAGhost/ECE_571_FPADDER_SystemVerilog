@@ -11,16 +11,6 @@ module top;
     ALU alu(bus.alu);
     Normalize N1(bus.normal);
 
-    // Create a union to easily switch between 
-    // bit representation and shortreal representation
-    typedef union {
-            shortreal f;
-            logic [31:0] bits;
-    } f_union;
-
-    // Create unions for A, B, and X
-    f_union unionA, unionB, unionX;
-
 always_comb begin
 	iA = $shortrealtobits(fA);
 	iB = $shortrealtobits(fB);
@@ -44,7 +34,7 @@ end
             $display("f- A: %0f, B: %0f", fA, fB);
             $display("bits- A: %h, B: %h", iA, iB);
             $display("bus- A: %h, B: %h", bus.A, bus.B);
-            $display("f- X: %0f", unionX.f);
+            $display("f- X: %0f", fX);
         `endif
 
         if (bus.normalizedExponent !== iEx[30:23])
