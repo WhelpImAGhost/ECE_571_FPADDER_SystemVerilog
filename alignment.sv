@@ -62,7 +62,7 @@ module Alignment (fpbus.align bus);
         $display("MODULE ALIGNMENT---------------------------");
         $display("exponentDifferential: %0d, exponentOut: %h (%0d)", exponentDifferential, bus.exponentOut, bus.exponentOut);
         $display("extendedMantissaA: %h (%b), extendedMantissaB: %h (%b)", extendedMantissaA, extendedMantissaA, extendedMantissaB, extendedMantissaB);
-        $display("alignedMantissaA: %h (%b), alignedMantissaB: %h (%b)", bus.alignedMantissaA, bus.alignedMantissaB);
+        $display("alignedMantissaA: %h (%b), alignedMantissaB: %h (%b)", bus.alignedMantissaA, bus.alignedMantissaA, bus.alignedMantissaB, bus.alignedMantissaB);
         $display("Guard Bit: %0b, Round Bit: %0b, Sticky Bit: %0b", bus.guardBit, bus.roundBit, bus.stickyBit);
         `endif
     end
