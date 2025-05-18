@@ -8,41 +8,60 @@ module Normalize(fpbus.normal bus);
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
         int i;                                          
         for (i = 23; i >= 0; i--)
-            if (mantissa[i])    return 23 - i;                  
+            if (mantissa[i])    return 23 - i;    
+        return 24;              
     endfunction
 
     always_comb
-    begin
-
+    begin 
+        //Zero Case
         if (bus.alignedResult == 0)             
         begin
             bus.normalizedMantissa = 0;                                 
             bus.normalizedExponent = 0;
-        end 
-
+            bus.normalizedSign = alignedSign;
+        end
+        //Non-Zero Case
         else
         begin      
+            //Normalization
+            shiftAmount = countZeros(bus.alignedResult); //Count Leading Zeros
 
-            //Check for Overflow
+            //Handle ALU Carry-Out
             if (bus.carryOut)
             begin
-                shiftAmount = 0;
-                shiftedMantissa = {1'b0, bus.alignedResult[23:1]};
-                bus.normalizedExponent = bus.exponentOut + 1; 
+                //Check for Overflow
+                if ((bus.exponentOut + carryOut) >= 255)
+                begin
+                    bus.normalizedExponent = 255; 
+                    bus.normalizedMantissa = 0;
+                end
+                else
+                begin
+                    shiftAmount = 0;
+                    shiftedMantissa = {1'b0, bus.alignedResult[23:1]};
+                    bus.normalizedExponent = bus.exponentOut + 1;
+                end 
             end
             else
-            begin
-                shiftAmount = countZeros(bus.alignedResult);                    
-                shiftedMantissa = bus.alignedResult << shiftAmount;   
-                bus.normalizedExponent = bus.exponentOut - shiftAmount;
+            begin                  
+                shiftedMantissa = bus.alignedResult << shiftAmount;  
+                //Check for Underflow
+                if ((bus.exponentOut - shiftAmount) <= 0)
+                begin
+                    bus.normalizedExponent = 0;
+                    bus.normalizedMantissa = 0;
+                end
+                else    bus.normalizedExponent = bus.exponentOut - shiftAmount;
             end    
 
-            //Round-to-Nearest-Even
+            //Round-to-Nearest (Even)
             if (bus.guardBit) 
             begin
                 if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
                 begin
                     bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
+                    
                     `ifdef DEBUGNORM
                     $display("Round Up");
                     `endif
@@ -52,14 +71,16 @@ module Normalize(fpbus.normal bus);
             else
             begin
                 bus.normalizedMantissa = shiftedMantissa [22:0];
+
                 `ifdef DEBUGNORM
-                    $display("No rounding happened");
+                    $display("Round Down (No Change)");
                 `endif
             end
-
-            bus.normalizedSign = bus.alignedSign;
         end
 
+        bus.normalizedSign = bus.alignedSign;
+
+        //Debugging
         `ifdef DEBUGNORM
             $display("ShMta: %h", shiftedMantissa);
             $display("ShAmt: %d", shiftAmount);
