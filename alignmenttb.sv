@@ -124,6 +124,7 @@ module top;
                         `endif
                     end
                 end
+                //Case 2: A is +/- Zero or Subnormal
                 else if (bus.exponentA == 0)
                 begin
                     if (bus.exponentOut !== bus.exponentB)
@@ -151,6 +152,7 @@ module top;
                         `endif
                     end
                 end
+                //Case 3: B is +/- Zero or Subnormal
                 else if (bus.exponentB == 0)
                 begin
                     if (bus.exponentOut !== bus.exponentA)
@@ -179,7 +181,7 @@ module top;
                     end
                 end
             end
-            // Normal floating-point numbers
+            //Normal Floating-Point Numbers
             else
             begin
                 if (bus.exponentA > bus.exponentB)
