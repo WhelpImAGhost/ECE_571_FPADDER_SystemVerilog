@@ -21,11 +21,11 @@ module Normalize(fpbus.normal bus);
             bus.normalizedExponent = 0;
         end
         // NaN and Inf cases
-        else if (bus.exponentA == 255 || bus.exponentB == 255)
+        else if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
         begin
-            if (bus.exponentA == 255 && bus.mantissaA == 0)
+            if (bus.exponentA == 8'hFF && bus.mantissaA == 23'b0)
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
-            else if (bus.exponentB == 255 && bus.mantissaB ==0)
+            else if (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0 )
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
             
         end
