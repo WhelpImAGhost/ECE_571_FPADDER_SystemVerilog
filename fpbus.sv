@@ -24,6 +24,7 @@ interface fpbus;
                     output alignedResult, alignedSign, carryOut);
 
     modport normal (input alignedResult, exponentOut, alignedSign, carryOut,
+                    input A, B, exponentA, exponentB, mantissaA, mantissaB,
                     input stickyBit, guardBit, roundBit,
                     output normalizedSign, normalizedExponent, normalizedMantissa);
 
