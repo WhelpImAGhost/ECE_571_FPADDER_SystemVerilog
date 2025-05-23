@@ -21,14 +21,23 @@ module Normalize(fpbus.normal bus);
             bus.normalizedExponent = 0;
             bus.normalizedSign = bus.alignedSign;
         end
+<<<<<<< Updated upstream
         // NaN and Inf cases
         else if (bus.exponentOut == 8'hff) 
+=======
+        //NaN and Infinity Cases
+        else if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
+>>>>>>> Stashed changes
         begin
             // A NaN B anything
             if (bus.exponentA == 8'hFF && bus.mantissaA != 23'b0)
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
+<<<<<<< Updated upstream
             // A anything B NaN
             else if (bus.exponentB == 8'hFF && bus.mantissaB != 23'b0)
+=======
+            else if (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0)
+>>>>>>> Stashed changes
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
             // A inf B anything
             else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0) && (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0) )
