@@ -199,7 +199,7 @@ begin
     bus.signA = 0;
     bus.signB = 0;
     bus.exponentA = 8'h7F;
-    bus.exponentB = 8'h80;
+    bus.exponentB = 8'h80; 
     bus.alignedMantissaA = 24'h400000;
     bus.alignedMantissaB = 24'h200000;
     bus.guardBit = 1;
