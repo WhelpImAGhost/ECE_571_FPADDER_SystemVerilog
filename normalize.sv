@@ -17,17 +17,34 @@ module Normalize(fpbus.normal bus);
         //Zero Case
         if (bus.exponentOut == 0 )             
         begin
-            bus.normalizedMantissa = 0;                                 
+            bus.normalizedMantissa = bus.alignedResult;                                 
             bus.normalizedExponent = 0;
+            bus.normalizedSign = bus.alignedSign;
         end
         // NaN and Inf cases
-        else if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
-        begin
-            if (bus.exponentA == 8'hFF && bus.mantissaA == 23'b0)
+        else if (bus.exponentOut == 8'hff) begin
+
+            // A NaN B anything
+            if (bus.exponentA == 8'hFF && bus.mantissaA != 23'b0)
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
-            else if (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0 )
+            // A anything B NaN
+            else if (bus.exponentB == 8'hFF && bus.mantissaB != 23'b0)
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
+            // A inf B anything
+            else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0) && (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0) )
+            begin
+                if (bus.signA == bus.signB)
+                    {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
+                else
+                    {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = {1'b0, 8'hFF, 23'h7FFFFF};
+            end
+            else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0))
+                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
+            else 
+                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
+
             
+
         end
         //Non-Zero Case
         else
