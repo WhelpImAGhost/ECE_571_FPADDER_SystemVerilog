@@ -14,13 +14,14 @@ module Normalize(fpbus.normal bus);
 
     always_comb
     begin 
-        //Zero Case
+        //Zero or Denormalized Cases
         if (bus.exponentOut == 0 )             
         begin
             bus.normalizedMantissa = bus.alignedResult;                                 
             bus.normalizedExponent = 0;
             bus.normalizedSign = bus.alignedSign;
         end
+<<<<<<< Updated upstream
         // NaN and Inf cases
         else if (bus.exponentOut == 8'hff) begin
 
@@ -29,6 +30,14 @@ module Normalize(fpbus.normal bus);
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
             // A anything B NaN
             else if (bus.exponentB == 8'hFF && bus.mantissaB != 23'b0)
+=======
+        //NaN and Infinity Cases
+        else if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
+        begin
+            if (bus.exponentA == 8'hFF && bus.mantissaA == 23'b0)
+                {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
+            else if (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0)
+>>>>>>> Stashed changes
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
             // A inf B anything
             else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0) && (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0) )
