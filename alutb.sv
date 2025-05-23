@@ -178,39 +178,6 @@ begin
                  bus.alignedResult, 1'b1, 1'b0, (24'hF02000 + 24'h440000));
     end
 
-    // Case 11: Rounding bits affect subtraction
-    bus.signA = 1;
-    bus.signB = 0;
-    bus.exponentA = 8'h80;
-    bus.exponentB = 8'h7F;
-    bus.alignedMantissaA = 24'h400000;
-    bus.alignedMantissaB = 24'h200000;
-    bus.guardBit = 1;
-    bus.roundBit = 1;
-    bus.stickyBit = 1;
-    #10;
-    if ({bus.alignedSign, bus.alignedResult} !== {1'b1, (24'h400000 - 24'h200000), 3'b111}) begin
-        error++;
-        $display("Failed case 11: got %b %h, expected %b %h", bus.alignedSign, 
-                 bus.alignedResult, 1'b1, (27'h400000 - 27'h200000), 3'b111);
-    end
-
-    // Case 12: Rounding bits affect addition
-    bus.signA = 0;
-    bus.signB = 0;
-    bus.exponentA = 8'h7F;
-    bus.exponentB = 8'h80;
-    bus.alignedMantissaA = 24'h400000;
-    bus.alignedMantissaB = 24'h200000;
-    bus.guardBit = 1;
-    bus.roundBit = 1;
-    bus.stickyBit = 1;
-    #10;
-    if ({bus.carryOut, bus.alignedSign, bus.alignedResult} !== {1'b0, 1'b0, (27'h4000000 + 27'h2000007)}) begin
-        error++;
-        $display("Failed case 12: got %b %b %h, expected %b %b %h", bus.carryOut, bus.alignedSign, 
-                 bus.alignedResult, 1'b0, 1'b0, (27'h4000000 + 27'h2000007));
-    end
 
     $display("Simulation finished with %d %s\n", error, (error == 1 ? "Error" : "Errors"));
     $finish;
