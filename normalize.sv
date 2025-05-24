@@ -1,7 +1,7 @@
 //Module to Renormalize the Result
 
 module Normalize(fpbus.normal bus);
-    logic [23:0] shiftedMantissa;
+    logic [25:0] shiftedMantissa;
     logic [4:0] shiftAmount;   
     logic roundCarry;                                      
 
@@ -58,37 +58,37 @@ module Normalize(fpbus.normal bus);
             if (bus.carryOut == 1)
             begin
                 shiftAmount = 0;
-                shiftedMantissa = bus.alignedResult << shiftAmount;
-                bus.normalizedMantissa =  shiftedMantissa[23:1];
+                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit} << shiftAmount;
+                bus.normalizedMantissa =  shiftedMantissa[25:3];
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)
                 begin
                     bus.normalizedExponent = 255;
-                    bus.normalizedMantissa = shiftedMantissa[22:0];        //If 0 Infinity, if Non-Zero NaN 
+                    bus.normalizedMantissa = shiftedMantissa[24:2];        //If 0 Infinity, if Non-Zero NaN 
                 end
                 else    bus.normalizedExponent = bus.exponentOut + 1;      //Increment Exponent Out
             end 
-            //Underflow or Valid Case
+            //Normal Cases
             else
             begin     
                 shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros  
-                shiftedMantissa = bus.alignedResult << shiftAmount;         
+                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit} << shiftAmount;         
                 //Check for Underflow
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
                     bus.normalizedExponent = 0;
-                    bus.normalizedMantissa = shiftedMantissa [22:0];    //If 0 Zero, if Non-Zero Subnormal
+                    bus.normalizedMantissa = shiftedMantissa [24:2];    //If 0 Zero, if Non-Zero Subnormal
                 end
-                //Valid Case
+                //Regular Case
                 else
                 begin
                     bus.normalizedExponent = bus.exponentOut - shiftAmount;  
                     //Round-to-Nearest (Even)
                     if (bus.guardBit) 
                     begin
-                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
+                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[2])
                         begin
-                            {roundCarry, bus.normalizedMantissa} = shiftedMantissa [22:0] + 1; 
+                            {roundCarry, bus.normalizedMantissa} = shiftedMantissa [24:2] + 1; 
                             if (roundCarry == 1)
                             begin
                                 if ((bus.exponentOut + roundCarry) >= 255)  bus.normalizedExponent = 255;
@@ -99,11 +99,11 @@ module Normalize(fpbus.normal bus);
                             $display("Round Up");
                             `endif
                         end
-                        else    bus.normalizedMantissa = shiftedMantissa [22:0];
+                        else    bus.normalizedMantissa = shiftedMantissa [24:2];
                     end
                     else
                     begin
-                        bus.normalizedMantissa = shiftedMantissa [22:0];
+                        bus.normalizedMantissa = shiftedMantissa [24:2];
 
                         `ifdef DEBUGNORM
                             $display("Round Down (No Change)");
