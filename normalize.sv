@@ -53,15 +53,14 @@ module Normalize(fpbus.normal bus);
         else
         begin      
             //Normalization
-            shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros
-            shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
-            {guard, round, sticky} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
             bus.normalizedSign = bus.alignedSign;
             //Handle Carry-Out
             if (bus.carryOut == 1)
             begin
                 shiftAmount = 0;
                 bus.normalizedMantissa =  shiftedMantissa[26:4];
+                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
+                {guard, round, sticky} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)
                 begin
@@ -72,7 +71,10 @@ module Normalize(fpbus.normal bus);
             end 
             //Underflow or Valid Case
             else
-            begin                   
+            begin     
+                shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros  
+                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
+                {guard, round, sticky} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;            
                 //Check for Underflow
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
