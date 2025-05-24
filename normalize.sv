@@ -2,7 +2,8 @@
 
 module Normalize(fpbus.normal bus);
     logic [23:0] shiftedMantissa;
-    logic [4:0] shiftAmount;                                         
+    logic [4:0] shiftAmount;   
+    logic roundCarry;                                      
 
     //Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
@@ -87,7 +88,18 @@ module Normalize(fpbus.normal bus);
                     begin
                         if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
                         begin
-                            bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
+                            {roundCarry, bus.normalizedMantissa} = shiftedMantissa [22:0] + 1; 
+                            if (roundCarry == 1)
+                            begin
+                                bus.normalizedMantissa =  0;
+                                //Check for Overflow
+                                if ((bus.exponentOut + roundCarry) >= 255)
+                                begin
+                                    bus.normalizedExponent = 255;
+                                    bus.normalizedMantissa = 0;                             //If 0 Infinity, if Non-Zero NaN 
+                                end
+                                else    bus.normalizedExponent = bus.exponentOut + 1;      //Increment Exponent Out
+                            end 
 
                             `ifdef DEBUGNORM
                             $display("Round Up");
