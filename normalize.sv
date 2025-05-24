@@ -74,8 +74,8 @@ module Normalize(fpbus.normal bus);
                 //Check for Underflow
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
-                    bus.normalizedExponent = 255;
-                    bus.normalizedMantissa = shiftedMantissa [22:0];    //If 0 Infinity, if Non-Zero NaN
+                    bus.normalizedExponent = 0;
+                    bus.normalizedMantissa = shiftedMantissa [22:0];    //If 0 Zero, if Non-Zero Subnormal
                 end
                 //Valid Case
                 else
