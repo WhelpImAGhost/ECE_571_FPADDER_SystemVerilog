@@ -57,7 +57,7 @@ end
             $display("Expected Normalized Mantissa: %h, but Received: %h",
             iEx[22:0], bus.normalizedMantissa);
 `ifdef DEBUGTB2
-        //    $stop;
+            $stop;
 `endif
         end
         if(bus.normalizedSign !== iEx[31])
@@ -83,7 +83,7 @@ end
                 $display("Expected Normalized Exponent: %h, but Received: %h",
                 iEx[30:23], bus.normalizedExponent);
 `ifdef DEBUGTB2
-            $stop;
+           // $stop;
 `endif
             end
             if (bus.normalizedMantissa !== iEx[22:0] &&
@@ -94,7 +94,7 @@ end
                 $display("Expected Normalized Mantissa: %h, but Received: %h",
                 iEx[22:0], bus.normalizedMantissa);
 `ifdef DEBUGTB2
-            // $stop;
+             $stop;
 `endif
             end
             if(bus.normalizedSign !== iEx[31])

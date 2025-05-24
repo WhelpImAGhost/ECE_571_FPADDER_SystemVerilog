@@ -14,11 +14,11 @@ module top;
 
     initial begin
         Error = 0;
-        for (i = 0; i < 1000000; i++) 
+        for (i = 0; i < 2 << 20; i++) 
         begin
             //Generate Random 32-bit Inputs
-            bus.A = $urandom_range(0, 32'hFFFFFFFF);
-            bus.B = $urandom_range(0, 32'hFFFFFFFF);
+            bus.A = $urandom;
+            bus.B = $urandom;
             #10;
 
             if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF || bus.exponentA == 0 || bus.exponentB == 0) begin

@@ -6,10 +6,10 @@ module top;
 
     initial
     begin
-        repeat (1024)
+        repeat (2 << 20)
         begin
-            bus.A = $random;
-            bus.B = $random;
+            bus.A = $urandom;
+            bus.B = $urandom;
             #10;
             //Sign Error Check
             if ((bus.signA !== bus.A[31]) || (bus.signB !== bus.B[31]))             
