@@ -14,6 +14,7 @@ module Normalize(fpbus.normal bus);
 
     always_comb
     begin 
+
         //Zero or Denormalized Cases
         if (bus.exponentOut == 0 )             
         begin
@@ -22,28 +23,31 @@ module Normalize(fpbus.normal bus);
             bus.normalizedSign = bus.alignedSign;
         end
 
-        // NaN and Inf cases
+
+        //NaN and Inf Cases                                                                     //Checked 
         else if (bus.exponentOut == 8'hff) 
         begin
-            // A NaN B anything
+            //A NaN, B anything, Result is NaN (A)
             if (bus.exponentA == 8'hFF && bus.mantissaA != 23'b0)
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
-            // A anything B NaN
+            //A anything, B NaN, Result is NaN (B)
             else if (bus.exponentB == 8'hFF && bus.mantissaB != 23'b0)
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
-            // A inf B anything
+            //A inf & B inf
             else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0) && (bus.exponentB == 8'hFF && bus.mantissaB == 23'b0) )
             begin
-                if (bus.signA == bus.signB)
+                if (bus.signA == bus.signB) //Result is Inf (Same Sign)
                     {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
-                else
+                else                        //Result is Nan
                     {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = {1'b0, 8'hFF, 23'h7FFFFF};
             end
-            else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0))
+            else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0))    //A inf, B anything, Result is inf (A)
                  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
-            else 
+            else                                                            //A anything, B inf, Result is inf (B)
                  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
         end
+        
+        
         //Non-Zero Case
         else
         begin      

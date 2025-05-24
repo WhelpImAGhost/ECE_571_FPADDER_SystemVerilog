@@ -30,6 +30,7 @@ module ALU(fpbus.alu bus);
                 bus.alignedResult = extendedResult [26:3];
                 bus.alignedSign = bus.signA;
             end
+
             else
             begin
                 if      (bus.exponentA > bus.exponentB) {extendedResult} = {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit} - {bus.alignedMantissaA, 3'b0};
