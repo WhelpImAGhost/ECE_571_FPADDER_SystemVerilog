@@ -1,7 +1,7 @@
 //Module to Renormalize the Result
 
 module Normalize(fpbus.normal bus);
-    logic [23:0] shiftedMantissa;
+    logic [26:0] shiftedMantissa;
     logic [4:0] shiftAmount;                                           
 
     //Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
@@ -41,9 +41,9 @@ module Normalize(fpbus.normal bus);
                 else                        //Result is Nan
                     {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = {1'b0, 8'hFF, 23'h7FFFFF};
             end
-            else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0))    //A inf, B anything, Result is inf (A)
+            else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0)) //A inf, B anything, Result is inf (A)
                  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
-            else                                                            //A anything, B inf, Result is inf (B)
+            else    //A anything, B inf, Result is inf (B)
                  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
         end
         
@@ -52,19 +52,20 @@ module Normalize(fpbus.normal bus);
         else
         begin      
             //Normalization
-            shiftAmount = countZeros(bus.alignedResult);                //Count Leading Zeros
-            shiftedMantissa = bus.alignedResult << shiftAmount; 
+            shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros
+            shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
+            {bus.guardBit, bus.roundBit, bus.stickyBit} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
             bus.normalizedSign = bus.alignedSign;
             //Handle Carry-Out
             if (bus.carryOut == 1)
             begin
                 shiftAmount = 0;
-                bus.normalizedMantissa =  bus.alignedResult[23:1];
+                bus.normalizedMantissa =  shiftedMantissa[26:4];
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)
                 begin
                     bus.normalizedExponent = 255;
-                    bus.normalizedMantissa = shiftedMantissa[22:0];        //If 0 Infinity, if Non-Zero NaN
+                    bus.normalizedMantissa = shiftedMantissa[26:3];        //If 0 Infinity, if Non-Zero NaN 
                 end
                 else    bus.normalizedExponent = bus.exponentOut + 1;      //Increment Exponent Out
             end 
@@ -75,7 +76,7 @@ module Normalize(fpbus.normal bus);
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
                     bus.normalizedExponent = 0;
-                    bus.normalizedMantissa = shiftedMantissa [22:0];    //If 0 Zero, if Non-Zero Subnormal
+                    bus.normalizedMantissa = shiftedMantissa [26:3];    //If 0 Zero, if Non-Zero Subnormal
                 end
                 //Valid Case
                 else
@@ -84,19 +85,19 @@ module Normalize(fpbus.normal bus);
                     //Round-to-Nearest (Even)
                     if (bus.guardBit) 
                     begin
-                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
+                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[3])
                         begin
-                            bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
+                            bus.normalizedMantissa = shiftedMantissa [26:3] + 1; 
 
                             `ifdef DEBUGNORM
                             $display("Round Up");
                             `endif
                         end
-                        else    bus.normalizedMantissa = shiftedMantissa [22:0];
+                        else    bus.normalizedMantissa = shiftedMantissa [26:3];
                     end
                     else
                     begin
-                        bus.normalizedMantissa = shiftedMantissa [22:0];
+                        bus.normalizedMantissa = shiftedMantissa [26:3];
 
                         `ifdef DEBUGNORM
                             $display("Round Down (No Change)");
