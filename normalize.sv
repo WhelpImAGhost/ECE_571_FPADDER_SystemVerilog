@@ -91,14 +91,8 @@ module Normalize(fpbus.normal bus);
                             {roundCarry, bus.normalizedMantissa} = shiftedMantissa [22:0] + 1; 
                             if (roundCarry == 1)
                             begin
-                                bus.normalizedMantissa =  0;
-                                //Check for Overflow
-                                if ((bus.exponentOut + roundCarry) >= 255)
-                                begin
-                                    bus.normalizedExponent = 255;
-                                    bus.normalizedMantissa = 0;                             //If 0 Infinity, if Non-Zero NaN 
-                                end
-                                else    bus.normalizedExponent = bus.exponentOut + 1;      //Increment Exponent Out
+                                if ((bus.exponentOut + roundCarry) >= 255)  bus.normalizedExponent = 255;
+                                else                                        bus.normalizedExponent = bus.exponentOut + 1;
                             end 
 
                             `ifdef DEBUGNORM
