@@ -3,7 +3,7 @@
 module Normalize(fpbus.normal bus);
     logic [25:0] shiftedMantissa;
     logic [4:0] shiftAmount;   
-    logic roundCarry;                                      
+    logic roundCarry, guard, round, sticky;                                      
 
     //Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
@@ -59,6 +59,7 @@ module Normalize(fpbus.normal bus);
             begin
                 shiftAmount = 0;
                 shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit} << shiftAmount;
+                {guard, round, sticky} = {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
                 bus.normalizedMantissa =  shiftedMantissa[25:3];
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)
@@ -72,7 +73,8 @@ module Normalize(fpbus.normal bus);
             else
             begin     
                 shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros  
-                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit} << shiftAmount;         
+                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit} << shiftAmount;
+                {guard, round, sticky} = {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;         
                 //Check for Underflow
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
@@ -84,9 +86,9 @@ module Normalize(fpbus.normal bus);
                 begin
                     bus.normalizedExponent = bus.exponentOut - shiftAmount;  
                     //Round-to-Nearest (Even)
-                    if (bus.guardBit) 
+                    if (guard) 
                     begin
-                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[2])
+                        if (round || sticky || shiftedMantissa[2])
                         begin
                             {roundCarry, bus.normalizedMantissa} = shiftedMantissa [24:2] + 1; 
                             if (roundCarry == 1)
