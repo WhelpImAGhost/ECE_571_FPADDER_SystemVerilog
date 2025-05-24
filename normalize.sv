@@ -58,9 +58,9 @@ module Normalize(fpbus.normal bus);
             if (bus.carryOut == 1)
             begin
                 shiftAmount = 0;
-                bus.normalizedMantissa =  shiftedMantissa[26:4];
                 shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
                 {guard, round, sticky} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
+                bus.normalizedMantissa =  shiftedMantissa[26:4];
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)
                 begin
