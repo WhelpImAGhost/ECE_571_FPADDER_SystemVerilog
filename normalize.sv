@@ -2,7 +2,8 @@
 
 module Normalize(fpbus.normal bus);
     logic [26:0] shiftedMantissa;
-    logic [4:0] shiftAmount;                                           
+    logic [4:0] shiftAmount;
+    logic guard, round, sticky;                                           
 
     //Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
@@ -54,7 +55,7 @@ module Normalize(fpbus.normal bus);
             //Normalization
             shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros
             shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
-            {bus.guardBit, bus.roundBit, bus.stickyBit} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
+            {guard, round, sticky} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
             bus.normalizedSign = bus.alignedSign;
             //Handle Carry-Out
             if (bus.carryOut == 1)
@@ -83,9 +84,9 @@ module Normalize(fpbus.normal bus);
                 begin
                     bus.normalizedExponent = bus.exponentOut - shiftAmount;  
                     //Round-to-Nearest (Even)
-                    if (bus.guardBit) 
+                    if (guard) 
                     begin
-                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[3])
+                        if (round || sticky || shiftedMantissa[3])
                         begin
                             bus.normalizedMantissa = shiftedMantissa [26:3] + 1; 
 
