@@ -66,7 +66,7 @@ module Normalize(fpbus.normal bus);
                 if ((bus.exponentOut + bus.carryOut) >= 255)
                 begin
                     bus.normalizedExponent = 255;
-                    bus.normalizedMantissa = shiftedMantissa[26:3];        //If 0 Infinity, if Non-Zero NaN 
+                    bus.normalizedMantissa = shiftedMantissa[25:3];        //If 0 Infinity, if Non-Zero NaN 
                 end
                 else    bus.normalizedExponent = bus.exponentOut + 1;      //Increment Exponent Out
             end 
@@ -77,7 +77,7 @@ module Normalize(fpbus.normal bus);
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
                     bus.normalizedExponent = 0;
-                    bus.normalizedMantissa = shiftedMantissa [26:3];    //If 0 Zero, if Non-Zero Subnormal
+                    bus.normalizedMantissa = shiftedMantissa [25:3];    //If 0 Zero, if Non-Zero Subnormal
                 end
                 //Valid Case
                 else
@@ -88,17 +88,17 @@ module Normalize(fpbus.normal bus);
                     begin
                         if (round || sticky || shiftedMantissa[3])
                         begin
-                            bus.normalizedMantissa = shiftedMantissa [26:3] + 1; 
+                            bus.normalizedMantissa = shiftedMantissa [25:3] + 1; 
 
                             `ifdef DEBUGNORM
                             $display("Round Up");
                             `endif
                         end
-                        else    bus.normalizedMantissa = shiftedMantissa [26:3];
+                        else    bus.normalizedMantissa = shiftedMantissa [25:3];
                     end
                     else
                     begin
-                        bus.normalizedMantissa = shiftedMantissa [26:3];
+                        bus.normalizedMantissa = shiftedMantissa [25:3];
 
                         `ifdef DEBUGNORM
                             $display("Round Down (No Change)");
