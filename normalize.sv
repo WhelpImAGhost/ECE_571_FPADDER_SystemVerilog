@@ -21,6 +21,7 @@ module Normalize(fpbus.normal bus);
             bus.normalizedExponent = 0;
             bus.normalizedSign = bus.alignedSign;
         end
+
         // NaN and Inf cases
         else if (bus.exponentOut == 8'hff) 
         begin
@@ -61,7 +62,7 @@ module Normalize(fpbus.normal bus);
             else if ((bus.exponentOut + bus.carryOut) >= 255)
             begin
                 bus.normalizedExponent = 255;
-                bus.normalizedMantissa = shiftedMantissa[22:0];             //If 0 Infinity, if Non-Zero NaN
+                bus.normalizedMantissa = shiftedMantissa[22:0];        //If 0 Infinity, if Non-Zero NaN
             end
             //Underflow or Valid Case
             else
