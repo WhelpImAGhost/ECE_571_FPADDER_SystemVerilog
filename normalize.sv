@@ -1,9 +1,8 @@
 //Module to Renormalize the Result
 
 module Normalize(fpbus.normal bus);
-    logic [26:0] shiftedMantissa;
-    logic [4:0] shiftAmount;
-    logic guard, round, sticky;                                           
+    logic [23:0] shiftedMantissa;
+    logic [4:0] shiftAmount;                                         
 
     //Count Leading Zeros in a 24-bit Number (23-bit Mantissa + Implicit 1)
     function automatic [4:0] countZeros(input logic [23:0] mantissa);
@@ -58,14 +57,13 @@ module Normalize(fpbus.normal bus);
             if (bus.carryOut == 1)
             begin
                 shiftAmount = 0;
-                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
-                {guard, round, sticky} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
-                bus.normalizedMantissa =  shiftedMantissa[26:4];
+                shiftedMantissa = bus.alignedResult << shiftAmount;
+                bus.normalizedMantissa =  shiftedMantissa[23:1];
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)
                 begin
                     bus.normalizedExponent = 255;
-                    bus.normalizedMantissa = shiftedMantissa[25:3];        //If 0 Infinity, if Non-Zero NaN 
+                    bus.normalizedMantissa = shiftedMantissa[22:0];        //If 0 Infinity, if Non-Zero NaN 
                 end
                 else    bus.normalizedExponent = bus.exponentOut + 1;      //Increment Exponent Out
             end 
@@ -73,34 +71,33 @@ module Normalize(fpbus.normal bus);
             else
             begin     
                 shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros  
-                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
-                {guard, round, sticky} =  {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;            
+                shiftedMantissa = bus.alignedResult << shiftAmount;         
                 //Check for Underflow
                 if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
                 begin
                     bus.normalizedExponent = 0;
-                    bus.normalizedMantissa = shiftedMantissa [25:3];    //If 0 Zero, if Non-Zero Subnormal
+                    bus.normalizedMantissa = shiftedMantissa [22:0];    //If 0 Zero, if Non-Zero Subnormal
                 end
                 //Valid Case
                 else
                 begin
                     bus.normalizedExponent = bus.exponentOut - shiftAmount;  
                     //Round-to-Nearest (Even)
-                    if (guard) 
+                    if (bus.guardBit) 
                     begin
-                        if (round || sticky || shiftedMantissa[3])
+                        if (bus.roundBit || bus.stickyBit || shiftedMantissa[0])
                         begin
-                            bus.normalizedMantissa = shiftedMantissa [25:3] + 1; 
+                            bus.normalizedMantissa = shiftedMantissa [22:0] + 1; 
 
                             `ifdef DEBUGNORM
                             $display("Round Up");
                             `endif
                         end
-                        else    bus.normalizedMantissa = shiftedMantissa [25:3];
+                        else    bus.normalizedMantissa = shiftedMantissa [22:0];
                     end
                     else
                     begin
-                        bus.normalizedMantissa = shiftedMantissa [25:3];
+                        bus.normalizedMantissa = shiftedMantissa [22:0];
 
                         `ifdef DEBUGNORM
                             $display("Round Down (No Change)");
