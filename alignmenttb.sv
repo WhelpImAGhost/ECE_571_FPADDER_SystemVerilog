@@ -11,8 +11,8 @@ module top;
     begin
         repeat (2 << 20)
         begin
-            bus.A = $random;
-            bus.B = $random;
+            bus.A = $urandom;
+            bus.B = $urandom;
             #10;
             // Special Cases: Infinity or NaN
             if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)

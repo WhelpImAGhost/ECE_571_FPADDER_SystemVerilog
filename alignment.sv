@@ -60,7 +60,7 @@ module Alignment (fpbus.align bus);
             else if (bus.exponentA == 0)                                                       
             begin
                 bus.exponentOut = bus.exponentB;
-                exponentDifferential = bus.exponentB;
+                exponentDifferential = bus.exponentB - 1;
                 bus.alignedMantissaB = {1'b1, bus.mantissaB};                                                                                          
                 {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaA, 2'b0} >> exponentDifferential;                                                         
                 if (exponentDifferential > 26)                                          
@@ -73,7 +73,7 @@ module Alignment (fpbus.align bus);
             else if (bus.exponentB == 0)                                                      
             begin
                 bus.exponentOut = bus.exponentA;
-                exponentDifferential = bus.exponentA;                                                                                      
+                exponentDifferential = bus.exponentA - 1;                                                                                      
                 bus.alignedMantissaA = {1'b1, bus.mantissaA};                          
                 {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaB, 2'b0} >> exponentDifferential;
                 if (exponentDifferential > 26)                                          

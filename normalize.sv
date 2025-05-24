@@ -63,7 +63,8 @@ module Normalize(fpbus.normal bus);
             else if (bus.carryOut == 1)
             begin
                 shiftAmount = 0;
-                shiftedMantissa = {1'b0, bus.alignedResult[23:1]};
+		shiftedMantissa =  {1'b1,bus.alignedResult[23:1]};
+		bus.normalizedMantissa = bus.alignedResult[23:1];
                 bus.normalizedExponent = bus.exponentOut + 1;
             end 
             //Underflow or Valid Case
