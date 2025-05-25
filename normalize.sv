@@ -1,18 +1,34 @@
 //Module to Renormalize the Result
 module Normalize(fpbus.normal bus);
     logic [31:0] shiftedMantissa;
-    logic [5:0] shiftAmount;   
+    logic [5:0]  shiftAmount;
     logic roundCarry, guard, round, sticky;                                      
 
     function automatic [5:0] countZeros(input logic [31:0] result);
         int i;                                          
         for (i = 31; i >= 0; i--)
-            if (result[i])    return 31 - i;               
+            if (result[i])    return 31 - i;
+        return 32;               
     endfunction
+
+    function automatic [] rounding(input logic gB, input logic rB, input logic sB, input logic [32:0] mantissa)
+            if (gB)
+                if (rB || sB || mantissa[8])    
+                    return mantissa + (1 << 8);
+            return mantissa;
+    endfunction    
+
+    //Rounding Bits
+    assign guard  =  shiftedMantissa[7];
+    assign round  =  shiftedMantissa[6];
+    assign sticky = |shiftedMantissa[5:0];
+
+    //Input Exponent
+    assign intermediateExponent = bus.exponentOut;
 
     always_comb
     begin 
-        //NaN or Infinity
+        //NaN or Infinity Cases
         if (bus.ANaN || bus.BNaN || bus.Ainf || bus.Binf)
         begin
             if (bus.ANaN)       {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
@@ -27,7 +43,7 @@ module Normalize(fpbus.normal bus);
             else if (bus.Binf)  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
         end
 
-        //Zero
+        //Zero Case
         else if (bus.Azero || bus.Bzero)
         begin
             if (bus.Azero && bus.Bzero)
@@ -38,69 +54,31 @@ module Normalize(fpbus.normal bus);
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
         end
 
-        //Non-Zero Case
+        //Normal or Subnormal Cases
         else
         begin      
-            //Normalization
             bus.normalizedSign = bus.alignedSign;
+            shiftAmount = countZeros(bus.alignedResult);
+            {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, bus.alignedResult << shiftAmount);
+            
             //Handle Carry-Out
-            if (bus.carryOut == 1)
+            if (bus.carryOut == 1 || roundCarry == 1)
             begin
-                shiftAmount = 0;
-                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit} << shiftAmount;
-                {guard, round, sticky} = {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;
-                bus.normalizedMantissa =  shiftedMantissa[25:3];
+                bus.normalizedMantissa = [31:9] shiftedMantissa;
                 //Check for Overflow
-                if ((bus.exponentOut + bus.carryOut) >= 255)
-                begin
-                    bus.normalizedExponent = 255;
-                    bus.normalizedMantissa = shiftedMantissa[24:2];        //If 0 Infinity, if Non-Zero NaN 
-                end
-                else    bus.normalizedExponent = bus.exponentOut + 1;      //Increment Exponent Out
+                if ((bus.exponentOut + bus.carryOut) >= 255)    bus.normalizedExponent = 255;
+                else if ((bus.exponentOut + roundCarry) >= 255) bus.normalizedExponent = 255;
+                else                                            bus.normalizedExponent = bus.exponentOut + bus.carryOut + roundCarry;
             end 
+
             //Normal Cases
             else
-            begin     
-                shiftAmount = countZeros(bus.alignedResult);    //Count Leading Zeros  
-                shiftedMantissa = {bus.alignedResult, bus.guardBit, bus.roundBit} << shiftAmount;
-                {guard, round, sticky} = {bus.guardBit, bus.roundBit, bus.stickyBit} << shiftAmount;         
+            begin    
+                bus.normalizedMantissa = shiftedMantissa [30:8];       
                 //Check for Underflow
-                if ((bus.exponentOut - shiftAmount) > bus.exponentOut)
-                begin
-                    bus.normalizedExponent = 0;
-                    bus.normalizedMantissa = shiftedMantissa [24:2];    //If 0 Zero, if Non-Zero Subnormal
-                end
+                if ((bus.exponentOut - shiftAmount) > bus.exponentOut)  bus.normalizedExponent = 0;
                 //Regular Case
-                else
-                begin
-                    bus.normalizedExponent = bus.exponentOut - shiftAmount;  
-                    //Round-to-Nearest (Even)
-                    if (guard) 
-                    begin
-                        if (round || sticky || shiftedMantissa[2])
-                        begin
-                            {roundCarry, bus.normalizedMantissa} = shiftedMantissa [24:2] + 1; 
-                            if (roundCarry == 1)
-                            begin
-                                if ((bus.exponentOut + roundCarry) >= 255)  bus.normalizedExponent = 255;
-                                else                                        bus.normalizedExponent = bus.exponentOut + 1;
-                            end 
-
-                            `ifdef DEBUGNORM
-                            $display("Round Up");
-                            `endif
-                        end
-                        else    bus.normalizedMantissa = shiftedMantissa [24:2];
-                    end
-                    else
-                    begin
-                        bus.normalizedMantissa = shiftedMantissa [24:2];
-
-                        `ifdef DEBUGNORM
-                            $display("Round Down (No Change)");
-                        `endif
-                    end
-                end
+                else    bus.normalizedExponent = bus.exponentOut - shiftAmount;  
             end
         end
 
@@ -109,11 +87,11 @@ module Normalize(fpbus.normal bus);
         `endif
         
         `ifdef DEBUGNORM
-        $display("\nMODULE NORMALIZE---------------------------");
-	    $display("shiftedMantissa: %h (%b), shiftAmount: %h", shiftedMantissa,shiftedMantissa, shiftAmount);
-        $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, sticky);
-        $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
-        $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
+            $display("\nMODULE NORMALIZE---------------------------");
+	        $display("shiftedMantissa: %h (%b), shiftAmount: %h", shiftedMantissa,shiftedMantissa, shiftAmount);
+            $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, sticky);
+            $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
+            $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
         `endif
     end
 endmodule

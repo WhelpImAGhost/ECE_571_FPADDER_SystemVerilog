@@ -12,7 +12,7 @@ module Normalize(fpbus.normal bus);
 
     always_comb
     begin 
-        //NaN or Infinity Cases
+        //NaN or Infinity
         if (bus.ANaN || bus.BNaN || bus.Ainf || bus.Binf)
         begin
             if (bus.ANaN)       {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
@@ -27,7 +27,7 @@ module Normalize(fpbus.normal bus);
             else if (bus.Binf)  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
         end
 
-        //Zero Case
+        //Zero
         else if (bus.Azero || bus.Bzero)
         begin
             if (bus.Azero && bus.Bzero)
@@ -38,9 +38,10 @@ module Normalize(fpbus.normal bus);
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
         end
 
-        //Normal or Subnormal Cases
+        //Non-Zero Case
         else
         begin      
+            //Normalization
             bus.normalizedSign = bus.alignedSign;
             //Handle Carry-Out
             if (bus.carryOut == 1)
@@ -86,7 +87,7 @@ module Normalize(fpbus.normal bus);
                             end 
 
                             `ifdef DEBUGNORM
-                            $display("Round Up");
+                                $display("Round Up");
                             `endif
                         end
                         else    bus.normalizedMantissa = shiftedMantissa [24:2];
@@ -108,11 +109,11 @@ module Normalize(fpbus.normal bus);
         `endif
         
         `ifdef DEBUGNORM
-        $display("\nMODULE NORMALIZE---------------------------");
-	    $display("shiftedMantissa: %h (%b), shiftAmount: %h", shiftedMantissa,shiftedMantissa, shiftAmount);
-        $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, sticky);
-        $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
-        $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
+            $display("\nMODULE NORMALIZE---------------------------");
+            $display("shiftedMantissa: %h (%b), shiftAmount: %h", shiftedMantissa,shiftedMantissa, shiftAmount);
+            $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, sticky);
+            $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
+            $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
         `endif
     end
 endmodule

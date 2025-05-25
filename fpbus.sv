@@ -25,7 +25,7 @@ interface fpbus;
     modport align(  input exponentA, exponentB,
                     input mantissaA, mantissaB,
                     input Ainf, ANaN, Asub, Azero, Anormal,
-                    input Binf, BNaN, Bsub, Bzero, Bnormal
+                    input Binf, BNaN, Bsub, Bzero, Bnormal,
                     output alignedMantissaA, alignedMantissaB,
                     output exponentOut,
                     output bypassALU, Aex, Bex);
