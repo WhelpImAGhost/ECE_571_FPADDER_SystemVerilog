@@ -65,7 +65,7 @@ module Alignment (fpbus.align bus);
             bus.shiftOverflow = 0;
             if (bus.Aex)
             begin
-                extendedMantissa = bus.Bsub ? {1'b0, bus.mantissaB, 8'b0} : bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0};
+                extendedMantissa = bus.Bsub ? {1'b0, bus.mantissaB, 8'b0} : {1'b1, bus.mantissaB, 8'b0};
                 for(int i = 0; i < exponentDifferential; i++)                                    
                     if (extendedMantissa[i])
                     begin
@@ -75,7 +75,7 @@ module Alignment (fpbus.align bus);
             end
             else if (bus.Bex)
             begin
-                extendedMantissa = bus.Asub ? {1'b0, bus.mantissaA, 8'b0} : bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0};
+                extendedMantissa = bus.Asub ? {1'b0, bus.mantissaA, 8'b0} : {1'b1, bus.mantissaA, 8'b0};
                 for(int i = 0; i < exponentDifferential; i++)                                    
                     if (extendedMantissa[i])
                     begin
