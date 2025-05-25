@@ -9,7 +9,7 @@ module top;
 
     int i, Error;
     logic expectedSign;
-    logic [26:0] expectedResult;
+    logic [32:0] expectedResult;
     logic [7:0] expectedExponent;
 
     initial begin
@@ -45,12 +45,7 @@ module top;
             if (bus.signA == bus.signB)
             begin
                 //Addition
-                if (bus.exponentA > bus.exponentB)
-                    {expectedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
-                else if (bus.exponentB > bus.exponentA)
-                    {expectedResult} = {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit} + {bus.alignedMantissaB, 3'b0};
-                else
-                    {expectedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, 3'b0};
+                expectedResult = bus.alignedMantissaA + bus.alignedMantissaB;
                 expectedSign = bus.signA;
             end
             else
@@ -58,32 +53,21 @@ module top;
                 //Subtraction
                 if (bus.alignedMantissaA > bus.alignedMantissaB)
                 begin
-                    if (bus.exponentA > bus.exponentB)
-                        {expectedResult} = {bus.alignedMantissaA, 3'b0} - {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
-                    else if (bus.exponentB > bus.exponentA)
-                        {expectedResult} = {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit} - {bus.alignedMantissaB, 3'b0};
-                    else
-                        {expectedResult} = {bus.alignedMantissaA, 3'b0} - {bus.alignedMantissaB, 3'b0};
+                    expectedResult = bus.alignedMantissaA - bus.alignedMantissaB
                     expectedSign = bus.signA;
                 end
                 else
                 begin
-                    if (bus.exponentA > bus.exponentB)
-                        {expectedResult} = {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit} - {bus.alignedMantissaA, 3'b0};
-                    else if (bus.exponentB > bus.exponentA)
-                        {expectedResult} = {bus.alignedMantissaB, 3'b0} - {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit};
-                    else
-                        {expectedResult} = {bus.alignedMantissaB, 3'b0} - {bus.alignedMantissaA, 3'b0};
+                    expectedResult = bus.alignedMantissaB - bus.alignedMantissaA
                     expectedSign = bus.signB;
                 end
             end
 
             //Check Result
-            //if ({bus.carryOut, bus.alignedResult} !== expectedResult[26:3]) 
-            if (bus.alignedResult !== expectedResult[26:3]) 
+            if ({bus.carryOut, bus.alignedResult} !== expectedResult) 
             begin
                 $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", 
-                         bus.A, bus.B, expectedResult[26:3], {bus.carryOut, bus.alignedResult});
+                         bus.A, bus.B, expectedResult, {bus.carryOut, bus.alignedResult});
                 Error++;
             end
 
