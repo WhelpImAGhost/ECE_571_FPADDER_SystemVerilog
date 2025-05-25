@@ -18,7 +18,9 @@ interface fpbus;
     modport mask (  input A, B,
                     output signA, signB,
                     output exponentA, exponentB,
-                    output mantissaA, mantissaB);
+                    output mantissaA, mantissaB
+                    output Ainf, ANaN, Asub, Azero, Anormal,
+                    output Binf, BNaN, Bsub, Bzero, Bnormal);
 
     modport align ( input exponentA, exponentB,
                     input mantissaA, mantissaB,
