@@ -25,7 +25,7 @@ module Normalize(fpbus.normal bus);
         end
 
 
-        //NaN and Inf Cases                                                                     //Checked 
+        //NaN and Inf Cases
         else if (bus.exponentOut == 8'hff) 
         begin
             //A NaN, B anything, Result is NaN (A)

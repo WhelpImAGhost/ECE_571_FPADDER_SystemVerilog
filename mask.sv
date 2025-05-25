@@ -27,7 +27,7 @@ module Mask(fpbus.mask bus);
             $display("Sign A: %b Sign B: %b\nEx A: %8b Ex B: %8b\nMantissa A: %h (%23b) Mantissa B: %h (%23b)\n",
                     bus.signA, bus.signB, bus.exponentA, bus.exponentB, bus.mantissaA, bus.mantissaA, bus.mantissaB, bus.mantissaB);
         `endif
-
+        
     end
 
 endmodule
