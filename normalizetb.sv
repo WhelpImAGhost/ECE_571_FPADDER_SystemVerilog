@@ -80,7 +80,7 @@ end
 		rawB = $urandom;
             fA = $bitstoshortreal(rawA);
             fB = $bitstoshortreal(rawB);
-            #10;
+            #100;
 
             if (bus.normalizedExponent !== iEx[30:23])
             begin
