@@ -12,7 +12,7 @@ module Normalize(fpbus.normal bus);
     endfunction
 
     function automatic [32:0] rounding(input logic gB, rB, sB, [32:0] mantissa);
-        if (gB && (rB || sB || mantissa[8])) return mantissa + (1 << 8);
+        if (gB && (rB || sB || (bus.carryOut ? mantissaOut[9] : mantissa[8]))) return mantissa + (1 << 8);
         return mantissa;
     endfunction
 
@@ -56,25 +56,16 @@ module Normalize(fpbus.normal bus);
             shiftAmount = bus.carryOut ? 0 : countZeros(bus.alignedResult);
             mantissaOut = (bus.alignedResult << shiftAmount);
             {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, mantissaOut);
-            
-            //Handle Carry-Out
-            if (bus.carryOut == 1 || roundCarry == 1)
+
+            if (bus.carryOut || roundCarry) 
             begin
                 bus.normalizedMantissa = shiftedMantissa[31:9];
-                //Check for Overflow
-                if ((bus.exponentOut + bus.carryOut) >= 255)    bus.normalizedExponent = 255;
-                else if ((bus.exponentOut + roundCarry) >= 255) bus.normalizedExponent = 255;
-                else                                            bus.normalizedExponent = bus.exponentOut + bus.carryOut + roundCarry;
-            end 
-
-            //Normal Cases
-            else
-            begin    
-                bus.normalizedMantissa = shiftedMantissa [30:8];       
-                //Check for Underflow
-                if ((bus.exponentOut - shiftAmount) > bus.exponentOut)  bus.normalizedExponent = 0;
-                //Regular Case
-                else    bus.normalizedExponent = bus.exponentOut - shiftAmount;  
+                bus.normalizedExponent = (bus.exponentOut + bus.carryOut + roundCarry >= 255) ? 255 : bus.exponentOut + bus.carryOut + roundCarry;
+            end
+            else 
+            begin
+                bus.normalizedMantissa = shiftedMantissa[30:8];
+                bus.normalizedExponent = (bus.exponentOut <= shiftAmount) ? 0 : bus.exponentOut - shiftAmount;
             end
         end
 
