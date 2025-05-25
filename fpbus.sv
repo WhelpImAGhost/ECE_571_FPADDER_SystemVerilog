@@ -13,7 +13,7 @@ interface fpbus;
     //Intermediate Results
     logic [23:0] alignedMantissaA, alignedMantissaB, alignedResult;
     //Control Signals
-    logic Ainf, Binf, ANaN, BNaN, Asub, Bsub;
+    logic Ainf, Binf, ANaN, BNaN, Asub, Bsub, Azero, Bzero;
 
     modport mask (  input A, B,
                     output signA, signB,
