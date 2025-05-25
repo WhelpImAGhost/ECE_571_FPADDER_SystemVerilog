@@ -88,16 +88,13 @@ module Normalize(fpbus.normal bus);
             `define DEBUGNORM
         `endif
         
-       // `ifdef DEBUGNORM
-        if ((bus.A == 32'hf6fa6276) && (bus.B == 32'h108c442b))
-        begin
+       `ifdef DEBUGNORM
             $display("\nMODULE NORMALIZE---------------------------");
             $display("mantissaOut: %h (%b), shiftAmount: %h", mantissaOut, mantissaOut, shiftAmount);
 	        $display("shiftedMantissa: %h (%b)", shiftedMantissa, shiftedMantissa);
             $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, bus.sticky | stickyShift);
             $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
             $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa, bus.normalizedMantissa);
-       // `endif
-        end
+       `endif
     end
 endmodule
