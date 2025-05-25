@@ -1,5 +1,5 @@
 module top;
-parameter Tests = 2 << 20;
+parameter Tests = 1 << 22;
 
 shortreal fA, fB, fX;
 bit [31:0] rawA, rawB, iA, iB, iX, iEx;
@@ -76,7 +76,7 @@ begin
             
         end
     end
-    while (tests <= (Tests >> 8) );  
+    while (tests <= (1 << 20) );  
 
     tests = 0;
 
