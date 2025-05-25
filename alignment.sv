@@ -1,8 +1,7 @@
 //Module to Compare Exponents for Aligning Mantissa Bits for Addition
 module Alignment (fpbus.align bus);
 
-    logic [7:0] exponentDifferential;                                                                                         
-    logic Aex, Bex;                                                                              
+    logic [7:0] exponentDifferential;                                                                                                                                                                  
 
     //Control Signals
     assign Aex = (bus.exponentA > bus.exponentB);
@@ -13,13 +12,13 @@ module Alignment (fpbus.align bus);
     //Exponent Calculations
     always_comb
     begin
-        if (Aex) 
+        if (bus.Aex) 
         begin
             bus.exponentOut = bus.exponentA;
             if (bus.Bsub)   exponentDifferential = bus.exponentA - 1;
             else            exponentDifferential = bus.exponentA - bus.exponentB;
         end
-        else if (Bex) 
+        else if (bus.Bex) 
         begin
             bus.exponentOut = bus.exponentB;
             if (bus.Asub)   exponentDifferential = bus.exponentB - 1;
@@ -37,14 +36,14 @@ module Alignment (fpbus.align bus);
     always_comb
     begin
         //Case Exponent "A" > "B"
-        if (Aex)                                              
+        if (bus.Aex)                                              
         begin
             bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0};
             if (bus.Bsub)   bus.alignedMantissaB = {1'b0, bus.mantissaB, 8'b0} >> exponentDifferential;            
             else            bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0} >> exponentDifferential;
         end
         //Case Exponent "B" > "A"
-        else if (Bex)                                         
+        else if (bus.Bex)                                         
         begin                
             bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0};            
             if (bus.Asub)   bus.alignedMantissaA = {1'b0, bus.mantissaA, 8'b0} >> exponentDifferential;            
@@ -65,7 +64,7 @@ module Alignment (fpbus.align bus);
     //Rounding Bit Calculations
     always_comb
     begin
-        if (Aex)
+        if (bus.Aex)
         begin
             bus.guardBit = bus.alignedMantissaB[7];
             bus.roundBit = bus.alignedMantissaB[6];
@@ -73,7 +72,7 @@ module Alignment (fpbus.align bus);
             if (exponentDifferential > 26)  bus.stickyBit = |bus.mantissaB;
             else                            bus.stickyBit = |(bus.mantissaB & ((1 << exponentDifferential) - 1));
         end
-        else if (Bex)  
+        else if (bus.Bex)  
         begin
             bus.guardBit = bus.alignedMantissaA[7];
             bus.roundBit = bus.alignedMantissaA[6];
