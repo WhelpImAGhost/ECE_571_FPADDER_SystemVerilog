@@ -74,7 +74,8 @@ end
 `endif
         end
         do begin
-`ifdef DEBUGTB2		$display("Test number: %d", tests); `endif
+`ifdef DEBUGTB2 $display("Test number: %d", tests); `endif
+		
 		tests++;
 		rawA = $urandom;
 		rawB = $urandom;
@@ -88,7 +89,7 @@ end
                 $display("Expected Normalized Exponent: %h, but Received: %h",
                 iEx[30:23], bus.normalizedExponent);
 `ifdef DEBUGTB2
-           // $stop;
+            $stop;
 `endif
             end
             if (bus.normalizedMantissa !== iEx[22:0]
