@@ -89,13 +89,13 @@ module Alignment (fpbus.align bus);
         if (bus.Aex)
         begin
             if (exponentDifferential > 32)      bus.sticky = |bus.mantissaB;
-	    else if (exponentDifferential > 2)  bus.sticky = |(bus.mantissaB & ((1 << (exponentDifferential - 2)) - 1));
+            else if (exponentDifferential > 2)  bus.sticky = |(bus.mantissaB & ((1 << (exponentDifferential - 2)) - 1));
             else                                bus.sticky = 0;
         end
         else if (bus.Bex)  
         begin
             if (exponentDifferential > 32)      bus.sticky = |bus.mantissaA;
-	    else if (exponentDifferential > 2)  bus.sticky = |(bus.mantissaA & ((1 << (exponentDifferential - 2)) - 1));
+            else if (exponentDifferential > 2)  bus.sticky = |(bus.mantissaA & ((1 << (exponentDifferential - 2)) - 1));
             else                                bus.sticky = 0;
         end
         else                                    bus.sticky = 0;
