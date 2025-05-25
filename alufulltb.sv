@@ -34,7 +34,7 @@ module top;
                 expectedExponent = bus.exponentA;
 
             //Check Exponent Output
-	if (bus.exponentOut !== expectedExponent) 
+	        if (bus.exponentOut !== expectedExponent) 
             begin
                 $display("Case A = %h, B = %h | Incorrect Exponent: Expected %h, Got %h", 
                          bus.A, bus.B, expectedExponent, bus.exponentOut);
