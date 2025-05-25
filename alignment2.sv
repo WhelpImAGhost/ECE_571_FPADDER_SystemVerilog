@@ -15,19 +15,20 @@ module Alignment (fpbus.align bus);
     begin
         if (Aex) 
         begin
-            exponentOut = bus.exponentA;
+            bus.exponentOut = bus.exponentA;
             if (bus.Bsub)   exponentDifferential = bus.exponentA - 1;
             else            exponentDifferential = bus.exponentA - bus.exponentB;
         end
         else if (Bex) 
         begin
+            bus.exponentOut = bus.exponentB;
             if (bus.Asub)   exponentDifferential = bus.exponentB - 1;
             else            exponentDifferential = bus.exponentB - bus.exponentA;
         end
         else 
         begin
+            bus.exponentOut = bus.exponentA;
             exponentDifferential = 0;
-            exponentOut = bus.exponentA;
         end
     end
 
