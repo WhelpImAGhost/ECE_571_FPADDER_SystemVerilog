@@ -1,6 +1,6 @@
 //Module to Renormalize the Result
 module Normalize(fpbus.normal bus);
-    logic [31:0] shiftedMantissa;
+    logic [31:0] shiftedMantissa, mantissaOut;
     logic [5:0]  shiftAmount;
     logic roundCarry, guard, round, sticky;                                      
 
@@ -11,18 +11,15 @@ module Normalize(fpbus.normal bus);
         return 32;               
     endfunction
 
-    function automatic [32:0] rounding(input logic gB, input logic rB, input logic sB, input logic [32:0] mantissa);
-            if (gB)
-            begin
-                if (rB || sB || mantissa[8]) return mantissa + (1 << 8);
-            end
-            return mantissa;
-    endfunction    
+    function automatic [32:0] rounding(input logic gB, rB, sB, [32:0] mantissa);
+        if (gB && (rB || sB || mantissa[8])) return mantissa + (1 << 8);
+        return mantissa;
+    endfunction
 
     //Rounding Bits
-    assign guard  =  bus.carryOut ? (bus.alignedResult << shiftAmount)[8] : (bus.alignedResult << shiftAmount)[7];
-    assign round  =  bus.carryOut ? (bus.alignedResult << shiftAmount)[7] : (bus.alignedResult << shiftAmount)[6];
-    assign sticky =  bus.carryOut ? |(bus.alignedResult << shiftAmount)[6:0] : |(bus.alignedResult << shiftAmount)[5:0];
+    assign guard  =  bus.carryOut ? mantissaOut[8] : mantissaOut[7];
+    assign round  =  bus.carryOut ? mantissaOut[7] : mantissaOut[6];
+    assign sticky =  bus.carryOut ? |mantissaOut[6:0] : |mantissaOut[5:0];
 
     always_comb
     begin 
@@ -56,9 +53,9 @@ module Normalize(fpbus.normal bus);
         else
         begin      
             bus.normalizedSign = bus.alignedSign;
-            if (bus.carryOut)   shiftAmount = 0;
-            else                shiftAmount = countZeros(bus.alignedResult);
-            {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, (bus.alignedResult << shiftAmount));
+            shiftAmount = bus.carryOut ? 0 : countZeros(bus.alignedResult);
+            mantissaOut = (bus.alignedResult << shiftAmount);
+            {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, mantissaOut);
             
             //Handle Carry-Out
             if (bus.carryOut == 1 || roundCarry == 1)
