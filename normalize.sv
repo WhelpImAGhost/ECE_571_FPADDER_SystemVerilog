@@ -58,7 +58,7 @@ module Normalize(fpbus.normal bus);
         begin      
             bus.normalizedSign = bus.alignedSign;
             shiftAmount = bus.carryOut ? 0 : countZeros(bus.alignedResult);
-            mantissaOut = (shiftAmount > exponentOut) ?  (bus.alignedResult << exponentOut) :  (bus.alignedResult << shiftAmount);
+            mantissaOut = (shiftAmount > bus.exponentOut) ? (bus.alignedResult << bus.exponentOut) :  (bus.alignedResult << shiftAmount);
 
             guard  =  bus.carryOut ? mantissaOut[8] : mantissaOut[7];
             round  =  bus.carryOut ? mantissaOut[7] : mantissaOut[6];
@@ -73,7 +73,7 @@ module Normalize(fpbus.normal bus);
             end
             else 
             begin
-                bus.normalizedMantissa = shiftedMantissa[30:8];
+                bus.normalizedMantissa = (shiftAmount > bus.exponentOut) ? shiftedMantissa[31:9] : shiftedMantissa[30:8];
                 bus.normalizedExponent = (bus.exponentOut <= shiftAmount) ? 0 : bus.exponentOut - shiftAmount;
             end
         end
