@@ -26,7 +26,7 @@ module top;
                         $stop;
                     `endif
                 end
-                if (bus.alignedMantissaA !== 24'0)
+                if (bus.alignedMantissaA !== 24'b0)
                 begin
                     Error++;
                     $display("Expected alignedMantissaA: 00, but Received: %h", bus.alignedMantissaA);
@@ -34,7 +34,7 @@ module top;
                         $stop;
                     `endif
                 end
-                if (bus.alignedMantissaB !== 24'0)
+                if (bus.alignedMantissaB !== 24'b0)
                 begin
                     Error++;
                     $display("Expected alignedMantissaB: 00, but Received: %h", bus.alignedMantissaB);
