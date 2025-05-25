@@ -1,16 +1,19 @@
 interface fpbus;
 
+    //Initial Inputs & Final Output
     logic [31:0] A, B, Result;
-
-    logic signA, signB, alignedSign, carryOut, normalizedSign; 
-
-    logic stickyBit, guardBit, roundBit;
-
+    //Intermediate Sign Calculations
+    logic signA, signB, alignedSign, normalizedSign; 
+    //Rounding Bits
+    logic stickyBit, guardBit, roundBit, carryOut;
+    //Exponents
     logic [7:0] exponentA, exponentB, exponentOut, normalizedExponent;
-
+    //Mantissas
     logic [22:0] mantissaA, mantissaB, normalizedMantissa;
-    
+    //Intermediate Results
     logic [23:0] alignedMantissaA, alignedMantissaB, alignedResult;
+    //Control Signals
+    logic Ainf, Binf, ANaN, BNaN, Asub, Bsub;
 
     modport mask (  input A, B,
                     output signA, signB,
