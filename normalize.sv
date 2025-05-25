@@ -45,10 +45,10 @@ module Normalize(fpbus.normal bus);
         end
 
         // Subnormal case
-        else if (bus.Asub || bus.Bsub )
+      /*  else if (bus.Asub || bus.Bsub )
         begin 
 
-        end
+        end*/
         //Normal Cases
         else
         begin      
