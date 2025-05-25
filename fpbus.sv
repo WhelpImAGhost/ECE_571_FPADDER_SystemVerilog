@@ -4,8 +4,6 @@ interface fpbus;
     logic [31:0] A, B, Result;
     //Intermediate Sign Calculations
     logic signA, signB, alignedSign, normalizedSign; 
-    //Rounding Bits
-    logic carryOut;
     //Exponents
     logic [7:0] exponentA, exponentB, exponentOut, normalizedExponent;
     //Mantissas
@@ -13,6 +11,7 @@ interface fpbus;
     //Intermediate Results
     logic [31:0] alignedMantissaA, alignedMantissaB;
     logic [23:0] alignedResult;
+    logic carryOut;
     //Control Signals
     logic Ainf, Binf, ANaN, BNaN, Asub, Bsub, Azero, Bzero, Anormal, Bnormal;
     logic bypassALU, Aex, Bex;
