@@ -35,13 +35,16 @@ module ALU(fpbus.alu bus);
             `define DEBUGALU
         `endif
 
-        `ifdef DEBUGALU
+        //`ifdef DEBUGALU
+        if ((bus.A == 32'hf6fa6276) && (bus.B == 32'h108c442b))
+        begin
             $display("\nMODULE ALU---------------------------");
             $display("Input Mantissas- A: %h (%b) B: %h (%b) ", bus.alignedMantissaA, bus.alignedMantissaA, bus.alignedMantissaB, bus.alignedMantissaB);
             $display("Aligned Result: %h (%b) ", bus.alignedResult, bus.alignedResult);
             $display("Carry Out: %0b", bus.carryOut);
             $display("Aligned Sign: %0b\n", bus.alignedSign);
-        `endif
+        end
+        //`endif
 
     end
 endmodule

@@ -109,11 +109,14 @@ module Alignment (fpbus.align bus);
             `define DEBUGALIGN
         `endif
 
-        `ifdef DEBUGALIGN
+        //`ifdef DEBUGALIGN
+        if ((bus.A == 32'hf6fa6276) && (bus.B == 32'h108c442b))
+        begin
         $display("\nMODULE ALIGNMENT---------------------------");
         $display("exponentDifferential: %0d, exponentOut: %h (%0d)", exponentDifferential, bus.exponentOut, bus.exponentOut);
         $display("alignedMantissaA: %h (%b), alignedMantissaB: %h (%b)", bus.alignedMantissaA, bus.alignedMantissaA, bus.alignedMantissaB, bus.alignedMantissaB);
         $display("Bypass ALU: %b, shiftOverflow: %b", bus.bypassALU, bus.shiftOverflow);
-        `endif
+        //`endif
+        end
     end
 endmodule
