@@ -83,6 +83,7 @@ module Normalize(fpbus.normal bus);
         
        // `ifdef DEBUGNORM
         if ((bus.A == 32'hf6fa6276) && (bus.B == 32'h108c442b))
+        begin
             $display("\nMODULE NORMALIZE---------------------------");
             $display("mantissaOut: %h (%b), shiftAmount: %h", mantissaOut, mantissaOut, shiftAmount);
 	        $display("shiftedMantissa: %h (%b)", shiftedMantissa, shiftedMantissa);
@@ -91,4 +92,5 @@ module Normalize(fpbus.normal bus);
             $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa, bus.normalizedMantissa);
        // `endif
         end
+    end
 endmodule
