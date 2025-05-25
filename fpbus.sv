@@ -38,7 +38,7 @@ interface fpbus;
     modport normal( input alignedResult, exponentOut, alignedSign, carryOut,
                     input A, B, exponentA, exponentB, mantissaA, mantissaB, signA, signB,
                     input Ainf, ANaN, Asub, Azero, Anormal,
-                    input Binf, BNaN, Bsub, Bzero, Bnormal
+                    input Binf, BNaN, Bsub, Bzero, Bnormal,
                     output normalizedSign, normalizedExponent, normalizedMantissa);
 
     modport pack(   input normalizedSign, normalizedExponent, normalizedMantissa,

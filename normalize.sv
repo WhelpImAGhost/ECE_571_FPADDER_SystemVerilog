@@ -11,7 +11,7 @@ module Normalize(fpbus.normal bus);
         return 32;               
     endfunction
 
-    function automatic [] rounding(input logic gB, input logic rB, input logic sB, input logic [32:0] mantissa)
+    function automatic [] rounding(input logic gB, input logic rB, input logic sB, input logic [32:0] mantissa);
             if (gB)
                 if (rB || sB || mantissa[8])    
                     return mantissa + (1 << 8);
@@ -24,7 +24,7 @@ module Normalize(fpbus.normal bus);
     assign sticky = |shiftedMantissa[5:0];
 
     //Input Exponent
-    assign intermediateExponent = bus.exponentOut;
+    //assign intermediateExponent = bus.exponentOut;
 
     always_comb
     begin 
@@ -64,7 +64,7 @@ module Normalize(fpbus.normal bus);
             //Handle Carry-Out
             if (bus.carryOut == 1 || roundCarry == 1)
             begin
-                bus.normalizedMantissa = [31:9] shiftedMantissa;
+                bus.normalizedMantissa = shiftedMantissa[31:9];
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)    bus.normalizedExponent = 255;
                 else if ((bus.exponentOut + roundCarry) >= 255) bus.normalizedExponent = 255;
