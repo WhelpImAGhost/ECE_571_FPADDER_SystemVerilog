@@ -13,8 +13,9 @@ module Normalize(fpbus.normal bus);
 
     function automatic [32:0] rounding(input logic gB, input logic rB, input logic sB, input logic [32:0] mantissa);
             if (gB)
-                if (rB || sB || mantissa[8])    
-                    return mantissa + (1 << 8);
+            begin
+                if (rB || sB || mantissa[8]) return mantissa + (1 << 8);
+            end
             return mantissa;
     endfunction    
 
