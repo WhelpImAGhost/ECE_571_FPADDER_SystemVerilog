@@ -2,24 +2,22 @@
 
 module ALU(fpbus.alu bus);
 
-    logic [26:0] extendedResult;
+    logic [31:0] extendedResult;
 
     always_comb 
     begin
+        //Defaults
+        bus.carryOut        = 0;
+        bus.alignedResult   = 'z;
+        bus.alignedSign     = 'z;
 
-        bus.carryOut = 0;
-        bus.alignedResult = '0;
-        bus.alignedSign = '0;
-
-        if (~bus.BypassALU)
+        if (!bus.BypassALU)
         begin
             if (bus.signA == bus.signB)
             begin
-                if      (bus.exponentA > bus.exponentB) {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
-                else if (bus.exponentB > bus.exponentA) {bus.carryOut, extendedResult} = {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit} + {bus.alignedMantissaB, 3'b0};
-                else                                    {bus.carryOut, extendedResult} = {bus.alignedMantissaA, 3'b0} + {bus.alignedMantissaB, 3'b0};
+                {bus.carryOut, extendedResult} = bus.alignedMantissaA + alignedMantissaB;
                 
-                bus.alignedResult = extendedResult [26:3];
+                bus.alignedResult = extendedResult [31:];
                 bus.alignedSign = bus.signA;
             end
 
@@ -27,21 +25,17 @@ module ALU(fpbus.alu bus);
             begin
                 if (bus.alignedMantissaA > bus.alignedMantissaB)
                 begin
-                    if      (bus.exponentA > bus.exponentB) {extendedResult} = {bus.alignedMantissaA, 3'b0} - {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit};
-                    else if (bus.exponentB > bus.exponentA) {extendedResult} = {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit} - {bus.alignedMantissaB, 3'b0};
-                    else                                    {extendedResult} = {bus.alignedMantissaA, 3'b0} - {bus.alignedMantissaB, 3'b0};
+                    extendedResult = bus.alignedMantissaA - alignedMantissaB;
                     
-                    bus.alignedResult = extendedResult [26:3];
+                    bus.alignedResult = extendedResult [31:];
                     bus.alignedSign = bus.signA;
                 end
 
                 else
                 begin
-                    if      (bus.exponentA > bus.exponentB) {extendedResult} = {bus.alignedMantissaB, bus.guardBit, bus.roundBit, bus.stickyBit} - {bus.alignedMantissaA, 3'b0};
-                    else if (bus.exponentB > bus.exponentA) {extendedResult} = {bus.alignedMantissaB, 3'b0} - {bus.alignedMantissaA, bus.guardBit, bus.roundBit, bus.stickyBit};
-                    else                                    {extendedResult} = {bus.alignedMantissaB, 3'b0} - {bus.alignedMantissaA, 3'b0};
+                    extendedResult = bus.alignedMantissaA - alignedMantissaB;
                     
-                    bus.alignedResult = extendedResult [26:3];
+                    bus.alignedResult = extendedResult [31:];
                     bus.alignedSign = bus.signB;
                 end
             end

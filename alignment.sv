@@ -56,30 +56,7 @@ module Alignment (fpbus.align bus);
             else            bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0} >> exponentDifferential;                                                                                       
         end
     end
-
-
-    //Rounding Bit Calculations
-    always_comb
-    begin
-        if (bus.Aex)
-        begin
-            bus.guardBit = bus.alignedMantissaB[7];
-            bus.roundBit = bus.alignedMantissaB[6];
-
-            if (exponentDifferential > 26)  bus.stickyBit = |bus.mantissaB;
-            else                            bus.stickyBit = |(bus.mantissaB & ((1 << exponentDifferential) - 1));
-        end
-        else if (bus.Bex)  
-        begin
-            bus.guardBit = bus.alignedMantissaA[7];
-            bus.roundBit = bus.alignedMantissaA[6];
-
-            if (exponentDifferential > 26)  bus.stickyBit = |bus.mantissaA;
-            else                            bus.stickyBit = |(bus.mantissaA & ((1 << exponentDifferential) - 1));
-        end
-        else    {bus.guardBit, bus.roundBit, bus.stickyBit} = '0;
-    end
-
+    
 
     //DEBUG Statements
     always_comb
@@ -92,7 +69,6 @@ module Alignment (fpbus.align bus);
         $display("\nMODULE ALIGNMENT---------------------------");
         $display("exponentDifferential: %0d, exponentOut: %h (%0d)", exponentDifferential, bus.exponentOut, bus.exponentOut);
         $display("alignedMantissaA: %h (%b), alignedMantissaB: %h (%b)", bus.alignedMantissaA, bus.alignedMantissaA, bus.alignedMantissaB, bus.alignedMantissaB);
-        $display("Guard Bit: %0b, Round Bit: %0b, Sticky Bit: %0b\n", bus.guardBit, bus.roundBit, bus.stickyBit);
         $display("Bypass ALU: %b", bus.BypassALU);
         `endif
     end

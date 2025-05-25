@@ -5,7 +5,7 @@ interface fpbus;
     //Intermediate Sign Calculations
     logic signA, signB, alignedSign, normalizedSign; 
     //Rounding Bits
-    logic stickyBit, guardBit, roundBit, carryOut;
+    logic carryOut;
     //Exponents
     logic [7:0] exponentA, exponentB, exponentOut, normalizedExponent;
     //Mantissas
@@ -29,19 +29,17 @@ interface fpbus;
                     input signA, signB,
                     input Ainf, Binf, ANaN, BNaN, Asub, Bsub,
                     input Azero, Bzero, Anormal, Bnormal,
-                    output stickyBit, guardBit, roundBit,
                     output alignedMantissaA, alignedMantissaB,
                     output exponentOut,
                     output bypassALU, Aex, Bex);
 
     modport alu (   input signA, signB, exponentA, exponentB,
                     input alignedMantissaA, alignedMantissaB,
-                    input stickyBit, guardBit, roundBit, bypassALU,
+                    input bypassALU, Aex, Bex,
                     output alignedResult, alignedSign, carryOut);
 
     modport normal (input alignedResult, exponentOut, alignedSign, carryOut,
                     input A, B, exponentA, exponentB, mantissaA, mantissaB, signA, signB,
-                    input stickyBit, guardBit, roundBit,
                     input Ainf, Binf, ANaN, BNaN, Asub, Bsub,
                     input Azero, Bzero, Anormal, Bnormal,
                     output normalizedSign, normalizedExponent, normalizedMantissa);
