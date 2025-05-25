@@ -16,13 +16,31 @@ module Mask(fpbus.mask bus);
     //Combinational Block to Assign Control Signals
     always_comb
     begin
+
+        //Assign All Control Defaults to 0
+        {bus.Ainf, bus.ANaN, bus.Asub, bus.Azero, bus.Anormal} = '0;
+        {bus.Binf, bus.BNaN, bus.Bsub, bus.Bzero, bus.Bnormal} = '0;
     
-        case ({bus.exponentA, bus.mantissaA})
-        
+        //Input A Control Signals
+        case (bus.exponentA)
+            8'h00:
+                if (bus.mantissaA == 0) bus.Azero   = 1;
+                else                    bus.Asub    = 1;
+            8'hFF:
+                if (bus.mantissaA == 0) bus.Ainf    = 1;
+                else                    bus.ANaN    = 1;
+            default:                    bus.Anormal = 1;
         endcase
 
-        case ({bus.exponentB, bus.mantissaB})
-
+        //Input B Control Signals
+        case (bus.exponentB)
+            8'h00:
+                if (bus.mantissaB == 0) bus.Bzero   = 1;
+                else                    bus.Bsub    = 1;
+            8'hFF:
+                if (bus.mantissaB == 0) bus.Binf    = 1;
+                else                    bus.BNaN    = 1;
+            default:                    bus.Bnormal = 1;
         endcase
 
         `ifdef FULLDEBUG
