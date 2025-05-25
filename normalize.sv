@@ -11,7 +11,7 @@ module Normalize(fpbus.normal bus);
         return 32;               
     endfunction
 
-    function automatic [32:0] rounding(input logic gB, input logic rB, input logic sB, input logic [32:0] mantissa)
+    function automatic [32:0] rounding(input logic gB, input logic rB, input logic sB, input logic [32:0] mantissa);
             if (gB)
                 if (rB || sB || mantissa[8])    
                     return mantissa + (1 << 8);
@@ -56,7 +56,7 @@ module Normalize(fpbus.normal bus);
         begin      
             bus.normalizedSign = bus.alignedSign;
             shiftAmount = countZeros(bus.alignedResult);
-            {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, bus.alignedResult << shiftAmount);
+            {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, (bus.alignedResult << shiftAmount));
             
             //Handle Carry-Out
             if (bus.carryOut == 1 || roundCarry == 1)
