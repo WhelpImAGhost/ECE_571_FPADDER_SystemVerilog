@@ -2,7 +2,7 @@
 module Normalize(fpbus.normal bus);
     logic [31:0] shiftedMantissa, mantissaOut;
     logic [5:0]  shiftAmount;
-    logic roundCarry, guard, round, sticky;                                      
+    logic roundCarry, guard, round;                                      
 
     function automatic [5:0] countZeros(input logic [31:0] result);
         int i;                                          
@@ -53,9 +53,8 @@ module Normalize(fpbus.normal bus);
 
             guard  =  bus.carryOut ? mantissaOut[8] : mantissaOut[7];
             round  =  bus.carryOut ? mantissaOut[7] : mantissaOut[6];
-            sticky =  bus.carryOut ? |mantissaOut[6:0] : |mantissaOut[5:0];
 
-            {roundCarry, shiftedMantissa} = rounding(bus.carryOut, guard, round, sticky, mantissaOut);
+            {roundCarry, shiftedMantissa} = rounding(bus.carryOut, guard, round, bus.sticky, mantissaOut);
 
             if (bus.carryOut || roundCarry) 
             begin

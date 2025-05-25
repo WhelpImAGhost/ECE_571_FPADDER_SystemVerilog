@@ -83,6 +83,22 @@ module Alignment (fpbus.align bus);
         end
     end    
 
+    //Sticky Bit Calculation
+    always_comb
+    begin
+        if (bus.Aex)
+        begin
+            if (exponentDifferential > 32)  bus.stickyBit = |bus.mantissaB;
+            else                            bus.stickyBit = |(bus.mantissaB & ((1 << exponentDifferential) - 1));
+        end
+        else if (bus.Bex)  
+        begin
+            if (exponentDifferential > 32)  bus.stickyBit = |bus.mantissaA;
+            else                            bus.stickyBit = |(bus.mantissaA & ((1 << exponentDifferential) - 1));
+        end
+        else                                bus.stickyBit = 0;
+    end
+
     //DEBUG Statements
     always_comb
     begin
