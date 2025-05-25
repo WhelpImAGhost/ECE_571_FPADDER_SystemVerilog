@@ -2,6 +2,7 @@
 module Alignment (fpbus.align bus);
 
     logic [7:0] exponentDifferential;                                                                                                                                                                  
+    logic [31:0] extendedMantissa;
 
     //Control Signals
     assign bus.Aex = (bus.exponentA > bus.exponentB);
@@ -64,8 +65,9 @@ module Alignment (fpbus.align bus);
             bus.shiftOverflow = 0;
             if (bus.Aex)
             begin
+                extendedMantissa = bus.Bsub ? {1'b0, bus.mantissaB, 8'b0} : bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0};
                 for(int i = 0; i < exponentDifferential; i++)                                    
-                    if (bus.alignedMantissaB[i])
+                    if (extendedMantissa[i])
                     begin
                     bus.shiftOverflow = 1;
                     disable shiftOverflowCheck;
@@ -73,8 +75,9 @@ module Alignment (fpbus.align bus);
             end
             else if (bus.Bex)
             begin
+                extendedMantissa = bus.Asub ? {1'b0, bus.mantissaA, 8'b0} : bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0};
                 for(int i = 0; i < exponentDifferential; i++)                                    
-                    if (bus.alignedMantissaA[i])
+                    if (extendedMantissa[i])
                     begin
                     bus.shiftOverflow = 1;
                     disable shiftOverflowCheck;
