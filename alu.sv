@@ -1,5 +1,4 @@
 //Module to Add Aligned Values Together
-
 module ALU(fpbus.alu bus);
 
     logic [31:0] extendedResult;
