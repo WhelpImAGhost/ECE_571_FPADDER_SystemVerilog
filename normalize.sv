@@ -44,13 +44,12 @@ module Normalize(fpbus.normal bus);
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
         end
 
-        // Subnormal case
+        //Double Subnormal Case
         else if (bus.Asub && bus.Bsub )
         begin 
             bus.normalizedSign = bus.alignedSign;
             bus.normalizedExponent = (bus.carryOut) ? (8'b1) : (8'b0);
-            
-
+            bus.normalizedMantissa = bus.alignedResult[30:8]
         end
 
         //Normal Cases
