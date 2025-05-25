@@ -61,7 +61,7 @@ module Normalize(fpbus.normal bus);
             //Handle Carry-Out
             if (bus.carryOut == 1 || roundCarry == 1)
             begin
-                bus.normalizedMantissa = [31:9] shiftedMantissa;
+                bus.normalizedMantissa = shiftedMantissa[31:9];
                 //Check for Overflow
                 if ((bus.exponentOut + bus.carryOut) >= 255)    bus.normalizedExponent = 255;
                 else if ((bus.exponentOut + roundCarry) >= 255) bus.normalizedExponent = 255;
