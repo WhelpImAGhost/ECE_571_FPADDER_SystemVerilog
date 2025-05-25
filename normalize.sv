@@ -75,10 +75,11 @@ module Normalize(fpbus.normal bus);
         
         `ifdef DEBUGNORM
             $display("\nMODULE NORMALIZE---------------------------");
-	        $display("shiftedMantissa: %h (%b), shiftAmount: %h", shiftedMantissa,shiftedMantissa, shiftAmount);
+            $display("mantissaOut: %h (%b), shiftAmount: %h", mantissaOut, mantissaOut, shiftAmount);
+	        $display("shiftedMantissa: %h (%b)", shiftedMantissa, shiftedMantissa);
             $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, sticky);
             $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
-            $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
+            $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa, bus.normalizedMantissa);
         `endif
     end
 endmodule
