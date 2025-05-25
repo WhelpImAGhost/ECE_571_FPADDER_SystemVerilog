@@ -72,7 +72,7 @@ module Normalize(fpbus.normal bus);
             end
             else 
             begin
-                bus.normalizedMantissa = (shiftAmount > bus.exponentOut) ? shiftedMantissa[31:9] : shiftedMantissa[30:8];
+                bus.normalizedMantissa = (shiftAmount >= bus.exponentOut) ? shiftedMantissa[31:9] : shiftedMantissa[30:8];
                 bus.normalizedExponent = (bus.exponentOut <= shiftAmount) ? 0 : bus.exponentOut - shiftAmount;
             end
         end
