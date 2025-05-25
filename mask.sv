@@ -51,7 +51,7 @@ module Mask(fpbus.mask bus);
             $display("\nMODULE MASK---------------------------");
             $display("Inputs- A: %h (%32b) B: %h (%32b) ", 
                     bus.A, bus.A, bus.B, bus.B);
-            $display("Sign A: %b Exponent A: %h (%8b) Mantissa A: %h (%23b)\nSign B: %b Exponent B: %h (%8b) Mantissa B: %h (%23b)\n",
+            $display("Sign A: %b Exponent A: %h (%8b) Mantissa A: %h (%23b)\nSign B: %b Exponent B: %h (%8b) Mantissa B: %h (%23b)",
                     bus.signA, bus.exponentA, bus.exponentA, bus.mantissaA, bus.mantissaA, bus.signB, bus.exponentB, bus.exponentB, bus.mantissaB, bus.mantissaB);
             $display("Input A Control Signals- Ainf %b, ANaN %b, Asub %b, Azero %b, Anormal %b\nInput B Control Signals- Binf %b, BNaN %b, Bsub %b, Bzero %b, Bnormal %b\n",
                     bus.Ainf, bus.ANaN, bus.Asub, bus.Azero, bus.Anormal, bus.Binf, bus.BNaN, bus.Bsub, bus.Bzero, bus.Bnormal);
