@@ -56,7 +56,7 @@ module Normalize(fpbus.normal bus);
         else
         begin      
             bus.normalizedSign = bus.alignedSign;
-            if (carryOut)   shiftAmount = 0;
+            if (bus.carryOut)   shiftAmount = 0;
             else            shiftAmount = countZeros(bus.alignedResult);
             {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, (bus.alignedResult << shiftAmount));
             
