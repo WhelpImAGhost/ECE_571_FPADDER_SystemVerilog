@@ -76,7 +76,7 @@ module Normalize(fpbus.normal bus);
             $display("\nMODULE NORMALIZE---------------------------");
             $display("mantissaOut: %h (%b), shiftAmount: %h", mantissaOut, mantissaOut, shiftAmount);
 	        $display("shiftedMantissa: %h (%b)", shiftedMantissa, shiftedMantissa);
-            $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, sticky);
+            $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, bus.sticky);
             $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
             $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa, bus.normalizedMantissa);
         `endif
