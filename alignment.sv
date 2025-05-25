@@ -4,8 +4,8 @@ module Alignment (fpbus.align bus);
     logic [7:0] exponentDifferential;                                                                                                                                                                  
 
     //Control Signals
-    assign Aex = (bus.exponentA > bus.exponentB);
-    assign Bex = (bus.exponentA < bus.exponentB);
+    assign bus.Aex = (bus.exponentA > bus.exponentB);
+    assign bus.Bex = (bus.exponentA < bus.exponentB);
     assign bus.bypassALU = (bus.ANaN | bus.BNaN | bus.Ainf | bus.Binf | bus.Azero | bus.Bzero);  
 
 
