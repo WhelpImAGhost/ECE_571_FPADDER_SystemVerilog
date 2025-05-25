@@ -112,7 +112,7 @@ module Alignment (fpbus.align bus);
         $display("\nMODULE ALIGNMENT---------------------------");
         $display("exponentDifferential: %0d, exponentOut: %h (%0d)", exponentDifferential, bus.exponentOut, bus.exponentOut);
         $display("alignedMantissaA: %h (%b), alignedMantissaB: %h (%b)", bus.alignedMantissaA, bus.alignedMantissaA, bus.alignedMantissaB, bus.alignedMantissaB);
-        $display("Bypass ALU: %b", bus.bypassALU);
+        $display("Bypass ALU: %b, shiftOverflow: %b", bus.bypassALU, bus.shiftOverflow);
         `endif
     end
 endmodule
