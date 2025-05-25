@@ -26,7 +26,7 @@ module top;
                         $stop;
                     `endif
                 end
-                if (bus.alignedMantissaA !== 24'0)
+                if (bus.alignedMantissaA !== 24'b0)
                 begin
                     Error++;
                     $display("Expected alignedMantissaA: 00, but Received: %h", bus.alignedMantissaA);
@@ -34,7 +34,7 @@ module top;
                         $stop;
                     `endif
                 end
-                if (bus.alignedMantissaB !== 24'0)
+                if (bus.alignedMantissaB !== 24'b0)
                 begin
                     Error++;
                     $display("Expected alignedMantissaB: 00, but Received: %h", bus.alignedMantissaB);
@@ -85,10 +85,10 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA} >> bus.exponentB)
+                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA} >> bus.exponentB - 1)
                     begin
                         Error++;
-                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA} >> bus.exponentB, bus.alignedMantissaA);
+                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA} >> bus.exponentB - 1, bus.alignedMantissaA);
                         `ifdef DEBUGTB
                             $stop;
                         `endif
@@ -121,10 +121,10 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB} >> bus.exponentA)
+                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB} >> bus.exponentA - 1)
                     begin
                         Error++;
-                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB} >> bus.exponentA, bus.alignedMantissaB);
+                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB} >> bus.exponentA - 1, bus.alignedMantissaB);
                         `ifdef DEBUGTB
                             $stop;
                         `endif
