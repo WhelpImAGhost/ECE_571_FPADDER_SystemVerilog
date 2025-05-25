@@ -1,20 +1,47 @@
 //Module to Unpack Inputs Into Correct Fields for Addition
 module Mask(fpbus.mask bus);
 
+    //Unpack Addends Signs
+    assign bus.signA = bus.A [31];         
+    assign bus.signB = bus.B [31];         
+
+    //Unpack Addends Exponents
+    assign bus.exponentA = bus.A [30:23];  
+    assign bus.exponentB = bus.B [30:23];  
+
+    //Unpack Addends Mantissas
+    assign bus.mantissaA = bus.A [22:0];   
+    assign bus.mantissaB = bus.B [22:0];   
+
+    //Combinational Block to Assign Control Signals
     always_comb
     begin
 
-        //Unpack Addends Signs
-        bus.signA = bus.A [31];         
-        bus.signB = bus.B [31];         
+        //Assign All Control Defaults to 0
+        {bus.Ainf, bus.ANaN, bus.Asub, bus.Azero, bus.Anormal} = '0;
+        {bus.Binf, bus.BNaN, bus.Bsub, bus.Bzero, bus.Bnormal} = '0;
+    
+        //Input A Control Signals
+        case (bus.exponentA)
+            8'h00:
+                if (bus.mantissaA == 0) bus.Azero   = 1;
+                else                    bus.Asub    = 1;
+            8'hFF:
+                if (bus.mantissaA == 0) bus.Ainf    = 1;
+                else                    bus.ANaN    = 1;
+            default:                    bus.Anormal = 1;
+        endcase
 
-        //Unpack Addends Exponents
-        bus.exponentA = bus.A [30:23];  
-        bus.exponentB = bus.B [30:23];  
-
-        //Unpack Addends Mantissas
-        bus.mantissaA = bus.A [22:0];   
-        bus.mantissaB = bus.B [22:0];   
+        //Input B Control Signals
+        case (bus.exponentB)
+            8'h00:
+                if (bus.mantissaB == 0) bus.Bzero   = 1;
+                else                    bus.Bsub    = 1;
+            8'hFF:
+                if (bus.mantissaB == 0) bus.Binf    = 1;
+                else                    bus.BNaN    = 1;
+            default:                    bus.Bnormal = 1;
+        endcase
 
         `ifdef FULLDEBUG
             `define DEBUGMASK
@@ -24,10 +51,11 @@ module Mask(fpbus.mask bus);
             $display("\nMODULE MASK---------------------------");
             $display("Inputs- A: %h (%32b) B: %h (%32b) ", 
                     bus.A, bus.A, bus.B, bus.B);
-            $display("Sign A: %b Sign B: %b\nEx A: %8b Ex B: %8b\nMantissa A: %h (%23b) Mantissa B: %h (%23b)\n",
+            $display("Sign A: %b Sign B: %b\nEx A: %8b Ex B: %8b\nMantissa A: %h (%23b) Mantissa B: %h (%23b)",
                     bus.signA, bus.signB, bus.exponentA, bus.exponentB, bus.mantissaA, bus.mantissaA, bus.mantissaB, bus.mantissaB);
+            $display("Input A Control Signals- Ainf %b, ANaN %b, Asub %b, Azero %b, Anormal %b\nInput B Control Signals- Binf %b, BNaN %b, Bsub %b, Bzero %b, Bnormal %b\n",
+                    Ainf, ANaN, Asub, Azero, Anormal, Binf, BNaN, Bsub, Bzero, Bnormal);
         `endif
-        
     end
 
 endmodule
