@@ -15,83 +15,39 @@ module top;
             bus.B = $urandom;
             #10;
             // Special Cases: Infinity or NaN
-            if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
+            if (bus.ANaN || bus.Azero || bus.BNaN || bus.Bzero || bus.Ainf || bus.Binf)
             begin
                 //Checking for Incorrect Exponent Output
-                if (bus.exponentOut !== 8'hFF)
+                if (bus.exponentOut !== 8'h00)
                 begin
                     Error++;
-                    $display("Expected exponentOut: 8'hFF, but Received: %h", bus.exponentOut);
+                    $display("Expected exponentOut: 00, but Received: %h", bus.exponentOut);
                     `ifdef DEBUGTB
                         $stop;
                     `endif
                 end
-                //Case: Both A and B are +/- Infinity or NaN
-                if (bus.exponentA == 8'hFF && bus.exponentB == 8'hFF)
+                if (bus.alignedMantissaA !== 24'0)
                 begin
-                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA})
-                    begin
-                        Error++;
-                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA}, bus.alignedMantissaA);
-                        `ifdef DEBUGTB
-                            $stop;
-                        `endif
-                    end
-                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB})
-                    begin
-                        Error++;
-                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB}, bus.alignedMantissaB);
-                        `ifdef DEBUGTB
-                            $stop;
-                        `endif
-                    end
+                    Error++;
+                    $display("Expected alignedMantissaA: 00, but Received: %h", bus.alignedMantissaA);
+                    `ifdef DEBUGTB
+                        $stop;
+                    `endif
                 end
-                //Case: A is +/- Infinity or NaN
-                else if (bus.exponentA == 8'hFF)
+                if (bus.alignedMantissaB !== 24'0)
                 begin
-                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA})
-                    begin
-                        Error++;
-                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA}, bus.alignedMantissaA);
-                        `ifdef DEBUGTB
-                            $stop;
-                        `endif
-                    end
-                    if (bus.alignedMantissaB !== {1'b1, bus.mantissaB})
-                    begin
-                        Error++;
-                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b1, bus.mantissaB}, bus.alignedMantissaB);
-                        `ifdef DEBUGTB
-                            $stop;
-                        `endif
-                    end
-                end
-                //Case: B is +/- Infinity or NaN
-                else if (bus.exponentB == 8'hFF)
-                begin
-                    if (bus.alignedMantissaA !== {1'b1, bus.mantissaA})
-                    begin
-                        Error++;
-                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b1, bus.mantissaA}, bus.alignedMantissaA);
-                        `ifdef DEBUGTB
-                            $stop;
-                        `endif
-                    end
-                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB})
-                    begin
-                        Error++;
-                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB}, bus.alignedMantissaB);
-                        `ifdef DEBUGTB
-                            $stop;
-                        `endif
-                    end
+                    Error++;
+                    $display("Expected alignedMantissaB: 00, but Received: %h", bus.alignedMantissaB);
+                    `ifdef DEBUGTB
+                        $stop;
+                    `endif
                 end
             end
-            //Special Cases: Zero or Subnormal
-            else if (bus.exponentA == 0 || bus.exponentB == 0)
+            //Special Cases:  Subnormal
+            else if (bus.Asub || bus.Bsub)
             begin
                 //Case 1: Both A and B are +/- Zero or Subnormal
-                if (bus.exponentA == 0 && bus.exponentB == 0)
+                if (bus.Asub && bus.Bsub)
                 begin
                     if (bus.exponentOut !== 8'h00)
                     begin
@@ -101,25 +57,25 @@ module top;
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaA !== {1'b0, bus.mantissaA} >> bus.exponentB)
+                    if (bus.alignedMantissaA !==  bus.mantissaA)
                     begin
                         Error++;
-                        $display("Expected alignedMantissaA: %h, but Received: %h", {1'b0, bus.mantissaA} >> bus.exponentB, bus.alignedMantissaA);
+                        $display("Expected alignedMantissaA: %h, but Received: %h", bus.mantissaA, bus.alignedMantissaA);
                         `ifdef DEBUGTB
                             $stop;
                         `endif
                     end
-                    if (bus.alignedMantissaB !== {1'b0, bus.mantissaB} >> bus.exponentA)
+                    if (bus.alignedMantissaB !==  bus.mantissaB)
                     begin
                         Error++;
-                        $display("Expected alignedMantissaB: %h, but Received: %h", {1'b0, bus.mantissaB} >> bus.exponentA, bus.alignedMantissaB);
+                        $display("Expected alignedMantissaB: %h, but Received: %h", bus.mantissaB, bus.alignedMantissaB);
                         `ifdef DEBUGTB
                             $stop;
                         `endif
                     end
                 end
                 //Case 2: A is +/- Zero or Subnormal
-                else if (bus.exponentA == 0)
+                else if (bus.Asub)
                 begin
                     if (bus.exponentOut !== bus.exponentB)
                     begin
@@ -147,7 +103,7 @@ module top;
                     end
                 end
                 //Case 3: B is +/- Zero or Subnormal
-                else if (bus.exponentB == 0)
+                else if (bus.Bsub)
                 begin
                     if (bus.exponentOut !== bus.exponentA)
                     begin
