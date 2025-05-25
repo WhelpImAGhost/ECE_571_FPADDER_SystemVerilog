@@ -1,137 +1,93 @@
 //Module to Compare Exponents for Aligning Mantissa Bits for Addition
 module Alignment (fpbus.align bus);
 
-    //Local Variables
-    logic [7:0] exponentDifferential;                                                       
-    logic [25:0] extendedMantissaA, extendedMantissaB;                                      
-    int i;                                                                                  
+    logic [7:0] exponentDifferential;                                                                                         
+    logic Aex, Bex;                                                                              
 
+    //Control Signals
+    assign Aex = (bus.exponentA > bus.exponentB);
+    assign Bex = (bus.exponentA < bus.exponentB);
+    assign bus.bypassALU = (bus.ANaN | bus.BNaN | bus.Ainf | bus.Binf | bus.Azero | bus.Bzero);  
+
+
+    //Exponent Calculations
     always_comb
     begin
-
-        //Initialize Tracked Rounding Bits
-        {bus.guardBit, bus.roundBit, bus.stickyBit} = '0;   
-
-        // +/- Infinity or NaN 
-        if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF)
+        if (Aex) 
         begin
-            //A and B are both +/- Infinity or NaN
-            if (bus.exponentA == 8'hFF && bus.exponentB == 8'hFF)                                       
-            begin
-                bus.exponentOut = 8'hFF;
-                exponentDifferential = 0;                                                                                                                
-                bus.alignedMantissaA = {1'b0, bus.mantissaA};
-                bus.alignedMantissaB = {1'b0, bus.mantissaB};
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                  
-            end
-            //A is +/- Infinity or NaN
-            else if (bus.exponentA == 8'hFF)                                                       
-            begin
-                bus.exponentOut = 8'hFF;
-                exponentDifferential = 0;                                                                                          
-                bus.alignedMantissaA = {1'b0, bus.mantissaA};                                                           
-                bus.alignedMantissaB = {1'b1, bus.mantissaB};
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "NaN" : "Infinity"));                                                                     
-            end
-            //B is +/- Infinity or NaN
-            else if (bus.exponentB == 8'hFF)                                                      
-            begin
-                bus.exponentOut = 8'hFF;
-                exponentDifferential = 0;                                                                                      
-                bus.alignedMantissaA = {1'b1, bus.mantissaA};                          
-                bus.alignedMantissaB = {1'b0, bus.mantissaB};                                                                                            
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "NaN" : "Infinity"));                                                                                        
-            end
+            bus.exponentOut = bus.exponentA;
+            if (bus.Bsub)   exponentDifferential = bus.exponentA - 1;
+            else            exponentDifferential = bus.exponentA - bus.exponentB;
         end
-        // +/- Zero or Subnormal
-        else if (bus.exponentA == 0 || bus.exponentB == 0)
+        else if (Bex) 
         begin
-            //A and B are both +/- Zero or Subnormal
-            if (bus.exponentA == 0 && bus.exponentB == 0)                                       
-            begin
-                {bus.exponentOut, exponentDifferential} = '0;                                                                                                                
-                bus.alignedMantissaA = {1'b0, bus.mantissaA};
-                bus.alignedMantissaB = {1'b0, bus.mantissaB};
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                                    
-            end
-            //A is +/- Zero or Subnormal
-            else if (bus.exponentA == 0)                                                       
-            begin
-                bus.exponentOut = bus.exponentB;
-                exponentDifferential = bus.exponentB - 1;
-                bus.alignedMantissaB = {1'b1, bus.mantissaB};                                                                                
-                {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaA, 2'b0} >> exponentDifferential;                                             
-                if (exponentDifferential > 26)         
-                    bus.stickyBit = |{1'b0, bus.mantissaA, 2'b0};
-                else
-                    bus.stickyBit = |({1'b0, bus.mantissaA, 2'b0} & ((1 << exponentDifferential) - 1));  
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
-            end
-            //B is +/- Zero or Subnormal
-            else if (bus.exponentB == 0)                                                      
-            begin
-                bus.exponentOut = bus.exponentA;
-                exponentDifferential = bus.exponentA - 1;                                                                                      
-                bus.alignedMantissaA = {1'b1, bus.mantissaA};                          
-                {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaB, 2'b0} >> exponentDifferential;
-                if (exponentDifferential > 26)                                          
-                    bus.stickyBit = |{1'b0, bus.mantissaB, 2'b0};                                      
-                else                                                                  
-                    bus.stickyBit = |({1'b0, bus.mantissaB, 2'b0} & ((1 << exponentDifferential) - 1));       
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                        
-            end
+            bus.exponentOut = bus.exponentB;
+            if (bus.Asub)   exponentDifferential = bus.exponentB - 1;
+            else            exponentDifferential = bus.exponentB - bus.exponentA;
         end
-        //Valid Floating Point Numbers                                
-        else
+        else 
         begin
-            //Add Implicit One and Space for Guard and Round Bits
-            extendedMantissaA = {1'b1, bus.mantissaA, 2'b0};
-            extendedMantissaB = {1'b1, bus.mantissaB, 2'b0};
-
-            //Case Exponent "A" > "B"
-            if (bus.exponentA > bus.exponentB)                                              
-            begin
-                //Choose A Exponent, Set Differential for Normalization to (A - B), Set Aligned "A" to Extended "A"
-                exponentDifferential = bus.exponentA - bus.exponentB;
-                bus.alignedMantissaA = extendedMantissaA[25:2];            
-                bus.exponentOut = bus.exponentA;
-
-                //Shift Aligned "B" to the Right by the Exponent Differential, Set Guard and Round Bits
-                {bus.alignedMantissaB, bus.guardBit, bus.roundBit} = extendedMantissaB >> exponentDifferential;
-                //Set Sticky Bit to the Reduction OR of the Shifted Out "B" Bits with Implicit One       
-                if (exponentDifferential > 26)                                          
-                    bus.stickyBit = |extendedMantissaB;                                     
-                else                                                                  
-                    bus.stickyBit = |(extendedMantissaB & ((1 << exponentDifferential) - 1));
-            end
-            //Case Exponent "B" > "A"
-            else if (bus.exponentB > bus.exponentA)                                         
-            begin
-                //Choose B Exponent, Set Differential for Normalization to (B - A), Set Aligned "B" to Extended "B"
-                exponentDifferential = bus.exponentB - bus.exponentA;                       
-                bus.alignedMantissaB = extendedMantissaB[25:2];                            
-                bus.exponentOut = bus.exponentB;                                            
-
-                //Shift Aligned "A" to the Right by the Exponent Differential, Set Guard and Round Bits
-                {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = extendedMantissaA >> exponentDifferential; 
-                //Set Sticky Bit to the Reduction OR of the Shifted Out "A" Bits with Implicit One
-                if (exponentDifferential > 26)                                          
-                    bus.stickyBit = |extendedMantissaA;                                      
-                else                                                                  
-                    bus.stickyBit = |(extendedMantissaA & ((1 << exponentDifferential) - 1));    
-            end
-            //Case Exponent "A" = "B"
-            else                                                                            
-            begin
-                exponentDifferential = 0;                                                   
-                bus.alignedMantissaA = extendedMantissaA[25:2];                             
-                bus.alignedMantissaB = extendedMantissaB[25:2];                             
-                bus.exponentOut = bus.exponentA;                                            
-            end
+            bus.exponentOut = bus.exponentA;
+            exponentDifferential = 0;
         end
+    end
 
+
+    //Mantissa Calculations
+    always_comb
+    begin
+        //Case Exponent "A" > "B"
+        if (Aex)                                              
+        begin
+            bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0};
+            if (bus.Bsub)   bus.alignedMantissaB = {1'b0, bus.mantissaB, 8'b0} >> exponentDifferential;            
+            else            bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0} >> exponentDifferential;
+        end
+        //Case Exponent "B" > "A"
+        else if (Bex)                                         
+        begin                
+            bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0};            
+            if (bus.Asub)   bus.alignedMantissaA = {1'b0, bus.mantissaA, 8'b0} >> exponentDifferential;            
+            else            bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0} >> exponentDifferential;
+        end
+        //Case Exponent "A" = "B"
+        else                                                                            
+        begin         
+            if (bus.Asub)   bus.alignedMantissaA = {1'b0, bus.mantissaA, 8'b0} >> exponentDifferential;            
+            else            bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0} >> exponentDifferential;    
+
+            if (bus.Bsub)   bus.alignedMantissaB = {1'b0, bus.mantissaB, 8'b0} >> exponentDifferential;            
+            else            bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0} >> exponentDifferential;                                                                                       
+        end
+    end
+
+
+    //Rounding Bit Calculations
+    always_comb
+    begin
+        if (Aex)
+        begin
+            bus.guardBit = bus.alignedMantissaB[7];
+            bus.roundBit = bus.alignedMantissaB[6];
+
+            if (exponentDifferential > 26)  bus.stickyBit = |bus.mantissaB;
+            else                            bus.stickyBit = |(bus.mantissaB & ((1 << exponentDifferential) - 1));
+        end
+        else if (Bex)  
+        begin
+            bus.guardBit = bus.alignedMantissaA[7];
+            bus.roundBit = bus.alignedMantissaA[6];
+
+            if (exponentDifferential > 26)  bus.stickyBit = |bus.mantissaA;
+            else                            bus.stickyBit = |(bus.mantissaA & ((1 << exponentDifferential) - 1));
+        end
+        else    {bus.guardBit, bus.roundBit, bus.stickyBit} = '0;
+    end
+
+
+    //DEBUG Statements
+    always_comb
+    begin
         `ifdef FULLDEBUG
             `define DEBUGALIGN
         `endif
@@ -141,7 +97,7 @@ module Alignment (fpbus.align bus);
         $display("exponentDifferential: %0d, exponentOut: %h (%0d)", exponentDifferential, bus.exponentOut, bus.exponentOut);
         $display("alignedMantissaA: %h (%b), alignedMantissaB: %h (%b)", bus.alignedMantissaA, bus.alignedMantissaA, bus.alignedMantissaB, bus.alignedMantissaB);
         $display("Guard Bit: %0b, Round Bit: %0b, Sticky Bit: %0b\n", bus.guardBit, bus.roundBit, bus.stickyBit);
+        $display("Bypass ALU: %b", bus.BypassALU);
         `endif
     end
-
 endmodule
