@@ -11,11 +11,12 @@ module top;
     begin
         repeat (2 << 20)
         begin
-            bus.A = $urandom;
-            bus.B = $urandom;
+            // Ignore NaN and Inf
+            do bus.A = $urandom; while (bus.A[30:23] == 8'hFF);
+            do bus.B = $urandom; while (bus.B[30:23] == 8'hFF);
             #10;
-            // Special Cases: NaN, Inf, Zero
-            if (bus.ANaN  || bus.BNaN || bus.Ainf || bus.Binf || bus.Azero || bus.Bzero )
+            // Special Cases:  Zero
+            if (bus.Azero || bus.Bzero )
             begin
                 continue;
             end
