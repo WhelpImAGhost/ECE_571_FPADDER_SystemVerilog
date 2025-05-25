@@ -7,7 +7,7 @@ module Alignment (fpbus.align bus);
     //Control Signals
     assign bus.Aex = (bus.exponentA > bus.exponentB);
     assign bus.Bex = (bus.exponentA < bus.exponentB);
-    assign bus.bypassALU = (bus.ANaN | bus.BNaN | bus.Ainf | bus.Binf | bus.Azero | bus.Bzero | (exponentDifferential > 32));  
+    assign bus.bypassALU = (bus.ANaN | bus.BNaN | bus.Ainf | bus.Binf | bus.Azero | bus.Bzero | (exponentDifferential >= 32));  
 
     //Exponent Calculations
     always_comb
