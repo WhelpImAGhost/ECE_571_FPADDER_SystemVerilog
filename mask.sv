@@ -23,10 +23,10 @@ module Mask(fpbus.mask bus);
     
         //Input A Control Signals
         case (bus.exponentA)
-            8'h00:
+            0:
                 if (bus.mantissaA == 0) bus.Azero   = 1;
                 else                    bus.Asub    = 1;
-            8'hFF:
+            255:
                 if (bus.mantissaA == 0) bus.Ainf    = 1;
                 else                    bus.ANaN    = 1;
             default:                    bus.Anormal = 1;
@@ -34,10 +34,10 @@ module Mask(fpbus.mask bus);
 
         //Input B Control Signals
         case (bus.exponentB)
-            8'h00:
+            0:
                 if (bus.mantissaB == 0) bus.Bzero   = 1;
                 else                    bus.Bsub    = 1;
-            8'hFF:
+            255:
                 if (bus.mantissaB == 0) bus.Binf    = 1;
                 else                    bus.BNaN    = 1;
             default:                    bus.Bnormal = 1;

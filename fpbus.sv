@@ -15,7 +15,7 @@ interface fpbus;
     logic [23:0] alignedResult;
     //Control Signals
     logic Ainf, Binf, ANaN, BNaN, Asub, Bsub, Azero, Bzero, Anormal, Bnormal;
-    logic bypassALU;
+    logic bypassALU, Aex, Bex;
 
     modport mask (  input A, B,
                     output signA, signB,
@@ -32,7 +32,7 @@ interface fpbus;
                     output stickyBit, guardBit, roundBit,
                     output alignedMantissaA, alignedMantissaB,
                     output exponentOut,
-                    output bypassALU);
+                    output bypassALU, Aex, Bex);
 
     modport alu (   input signA, signB, exponentA, exponentB,
                     input alignedMantissaA, alignedMantissaB,
