@@ -18,6 +18,9 @@ module Alignment (fpbus.align bus);
 
     always_comb
     begin
+	bus.exponentOut = '0;
+	bus.alignedMantissaA = '0;
+	bus.alignedMantissaB = '0;
         bus.BypassALU = 1'b0;
         //Initialize Tracked Rounding Bits
         {bus.guardBit, bus.roundBit, bus.stickyBit} = '0;   
@@ -35,8 +38,8 @@ module Alignment (fpbus.align bus);
                 {bus.exponentOut, exponentDifferential} = '0;                                                                                                                
                 bus.alignedMantissaA = {1'b0, bus.mantissaA};
                 bus.alignedMantissaB = {1'b0, bus.mantissaB};
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), "Subnormal"));
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), "Subnormal"));                                                                                                    
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), "Subnormal");
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), "Subnormal");                                                                                                    
             end
             //Only A is  Subnormal
             else if (bus.Asub)                                                       
@@ -49,7 +52,7 @@ module Alignment (fpbus.align bus);
                     bus.stickyBit = |{1'b0, bus.mantissaA, 2'b0};
                 else
                     bus.stickyBit = |({1'b0, bus.mantissaA, 2'b0} & ((1 << exponentDifferential) - 1));  
-                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), "Subnormal"));
+                $display("Addend A is %s%s", (bus.signA ? "-" : "+"), "Subnormal");
             end
             //Only B is Subnormal
             else                                                      
@@ -62,7 +65,7 @@ module Alignment (fpbus.align bus);
                     bus.stickyBit = |{1'b0, bus.mantissaB, 2'b0};                                      
                 else                                                                  
                     bus.stickyBit = |({1'b0, bus.mantissaB, 2'b0} & ((1 << exponentDifferential) - 1));       
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), "Subnormal"));                                                                                                    $display("Addend B is %s%s", (bus.signB ? "-" : "+"), "Subnormal"));                                                                                                    $display("Addend B is %s%s", (bus.signB ? "-" : "+"), "Subnormal"));
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), "Subnormal");
             end
         end
         // Valid Floating Point Numbers                                
