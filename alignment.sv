@@ -9,7 +9,6 @@ module Alignment (fpbus.align bus);
     assign bus.Bex = (bus.exponentA < bus.exponentB);
     assign bus.bypassALU = (bus.ANaN | bus.BNaN | bus.Ainf | bus.Binf | bus.Azero | bus.Bzero);  
 
-
     //Exponent Calculations
     always_comb
     begin
@@ -31,7 +30,6 @@ module Alignment (fpbus.align bus);
             exponentDifferential = 0;
         end
     end
-
 
     //Mantissa Calculations
     always_comb
