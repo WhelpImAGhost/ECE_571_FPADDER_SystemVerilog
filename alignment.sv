@@ -51,21 +51,21 @@ module Alignment (fpbus.align bus);
             if (bus.exponentA == 0 && bus.exponentB == 0)                                       
             begin
                 {bus.exponentOut, exponentDifferential} = '0;                                                                                                                
-                bus.alignedMantissaA = {1'b0, bus.mantissaA};                                                       
-                bus.alignedMantissaB = {1'b0, bus.mantissaB};  
+                bus.alignedMantissaA = {1'b0, bus.mantissaA};
+                bus.alignedMantissaB = {1'b0, bus.mantissaB};
                 $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
-                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                                           
+                $display("Addend B is %s%s", (bus.signB ? "-" : "+"), (bus.mantissaB ? "Subnormal" : "Zero"));                                                                                                    
             end
             //A is +/- Zero or Subnormal
             else if (bus.exponentA == 0)                                                       
             begin
                 bus.exponentOut = bus.exponentB;
                 exponentDifferential = bus.exponentB - 1;
-                bus.alignedMantissaB = {1'b1, bus.mantissaB};                                                                                          
-                {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaA, 2'b0} >> exponentDifferential;                                                         
-                if (exponentDifferential > 26)                                          
-                    bus.stickyBit = |{1'b0, bus.mantissaA, 2'b0};                                      
-                else                                                                  
+                bus.alignedMantissaB = {1'b1, bus.mantissaB};                                                                                
+                {bus.alignedMantissaA, bus.guardBit, bus.roundBit} = {1'b0, bus.mantissaA, 2'b0} >> exponentDifferential;                                             
+                if (exponentDifferential > 26)         
+                    bus.stickyBit = |{1'b0, bus.mantissaA, 2'b0};
+                else
                     bus.stickyBit = |({1'b0, bus.mantissaA, 2'b0} & ((1 << exponentDifferential) - 1));  
                 $display("Addend A is %s%s", (bus.signA ? "-" : "+"), (bus.mantissaA ? "Subnormal" : "Zero"));
             end

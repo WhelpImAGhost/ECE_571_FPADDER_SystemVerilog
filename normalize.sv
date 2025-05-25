@@ -44,7 +44,7 @@ module Normalize(fpbus.normal bus);
             end
             else if ((bus.exponentA == 8'hFF && bus.mantissaA == 23'b0)) //A inf, B anything, Result is inf (A)
                  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
-            else    //A anything, B inf, Result is inf (B)
+            else                            //A anything, B inf, Result is inf (B)
                  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
         end
         
@@ -122,6 +122,7 @@ module Normalize(fpbus.normal bus);
         `ifdef DEBUGNORM
         $display("\nMODULE NORMALIZE---------------------------");
 	    $display("shiftedMantissa: %h (%b), shiftAmount: %h", shiftedMantissa,shiftedMantissa, shiftAmount);
+        $display("Post Shift- Guard: %b, Round: %b, Sticky: %b", guard, round, sticky);
         $display("normalizedExponent: %h (d:%0d),   normalizedSign: %b", bus.normalizedExponent, bus.normalizedExponent, bus.normalizedSign);
         $display("normalizedMantissa %h (%b)\n", bus.normalizedMantissa,bus.normalizedMantissa);
         `endif
