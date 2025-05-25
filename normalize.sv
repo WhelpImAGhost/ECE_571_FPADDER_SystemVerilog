@@ -52,6 +52,13 @@ module Normalize(fpbus.normal bus);
             bus.normalizedMantissa = bus.alignedResult[30:8];
         end
 
+        //Insignificant Addend
+        else if (bus.bypassALU)
+        begin
+            if (bus.Aex)        {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
+            else if (bus.Bex)   {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
+        end
+        
         //Normal Cases
         else
         begin      

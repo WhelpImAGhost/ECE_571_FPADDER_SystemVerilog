@@ -39,7 +39,7 @@ interface fpbus;
                     input A, B, exponentA, exponentB, mantissaA, mantissaB, signA, signB,
                     input Ainf, ANaN, Asub, Azero, Anormal,
                     input Binf, BNaN, Bsub, Bzero, Bnormal,
-                    input sticky, 
+                    input sticky, bypassALU, Aex, Bex, 
                     output normalizedSign, normalizedExponent, normalizedMantissa);
 
     modport pack(   input normalizedSign, normalizedExponent, normalizedMantissa,
