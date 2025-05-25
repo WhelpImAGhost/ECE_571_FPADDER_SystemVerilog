@@ -21,7 +21,7 @@ module top;
             bus.B = $urandom;
             #10;
 
-            if (bus.exponentA == 8'hFF || bus.exponentB == 8'hFF || bus.exponentA == 0 || bus.exponentB == 0) begin
+            if (bus.Azero || bus.Ainf || bus.ANaN || bus.Bzero || bus.Binf || bus.BNaN) begin
                 continue; // Skip NaN, Inf, Zero, Subnormal
             end
 
