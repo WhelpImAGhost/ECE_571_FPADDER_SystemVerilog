@@ -64,8 +64,8 @@ module Alignment (fpbus.align bus);
             bus.shiftOverflow = 0;
             if (bus.Aex)
             begin
-                for(int i = 8; i < 32; i++)                                    
-                    if (bus.alignedMantissaB[i] && (i < exponentDifferential))
+                for(int i = 0; i < exponentDifferential; i++)                                    
+                    if (bus.alignedMantissaB[i])
                     begin
                     bus.shiftOverflow = 1;
                     disable shiftOverflowCheck;
@@ -73,8 +73,8 @@ module Alignment (fpbus.align bus);
             end
             else if (bus.Bex)
             begin
-                for(int i = 8; i < 32; i++)                                    
-                    if (bus.alignedMantissaA[i] && (i < exponentDifferential))
+                for(int i = 0; i < exponentDifferential; i++)                                    
+                    if (bus.alignedMantissaA[i])
                     begin
                     bus.shiftOverflow = 1;
                     disable shiftOverflowCheck;
