@@ -18,7 +18,7 @@ module ALU(fpbus.alu bus);
             begin
                 if (bus.alignedMantissaB > bus.alignedMantissaA)
                 begin
-                    bus.alignedResult = bus.alignedMantissaA - bus.alignedMantissaB;
+                    bus.alignedResult = bus.alignedMantissaB - bus.alignedMantissaA;
                     bus.alignedSign = bus.signB;
                 end
                 else
