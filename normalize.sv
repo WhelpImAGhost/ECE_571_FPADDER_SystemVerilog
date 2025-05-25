@@ -48,7 +48,7 @@ module Normalize(fpbus.normal bus);
         else if (bus.Asub && bus.Bsub )
         begin 
             bus.normalizedSign = bus.alignedSign;
-            bus.normalizedExponent = (bus.carryOut) ? (8'b1) : (8'b0);
+            bus.normalizedExponent = (bus.carryOut | bus.alignedResult[31]) ? (8'b1) : (8'b0);
             bus.normalizedMantissa = bus.alignedResult[30:8];
         end
 
