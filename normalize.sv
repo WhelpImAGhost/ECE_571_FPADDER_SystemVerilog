@@ -1,6 +1,6 @@
 //Module to Renormalize the Result
 module Normalize(fpbus.normal bus);
-    logic [31:0] shiftedMantissa, roundingSample;
+    logic [31:0] shiftedMantissa;
     logic [5:0]  shiftAmount;
     logic roundCarry, guard, round, sticky;                                      
 
@@ -20,9 +20,9 @@ module Normalize(fpbus.normal bus);
     endfunction    
 
     //Rounding Bits
-    assign guard  =  bus.carryOut ? roundingSample[8] : roundingSample[7];
-    assign round  =  bus.carryOut ? roundingSample[7] : roundingSample[6];
-    assign sticky =  bus.carryOut ? |roundingSample[6:0] : |roundingSample[5:0];
+    assign guard  =  bus.carryOut ? (bus.alignedResult << shiftAmount)[8] : (bus.alignedResult << shiftAmount)[7];
+    assign round  =  bus.carryOut ? (bus.alignedResult << shiftAmount)[7] : (bus.alignedResult << shiftAmount)[6];
+    assign sticky =  bus.carryOut ? |(bus.alignedResult << shiftAmount)[6:0] : |(bus.alignedResult << shiftAmount)[5:0];
 
     always_comb
     begin 
@@ -58,7 +58,6 @@ module Normalize(fpbus.normal bus);
             bus.normalizedSign = bus.alignedSign;
             if (bus.carryOut)   shiftAmount = 0;
             else                shiftAmount = countZeros(bus.alignedResult);
-            roundingSample = (bus.alignedResult << shiftAmount);
             {roundCarry, shiftedMantissa} = rounding(guard, round, sticky, (bus.alignedResult << shiftAmount));
             
             //Handle Carry-Out
