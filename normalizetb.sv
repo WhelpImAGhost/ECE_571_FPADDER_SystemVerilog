@@ -49,9 +49,13 @@ end
 	    $stop;
 `endif
         end
-        if (bus.normalizedMantissa !== iEx[22:0] &&
+        if (bus.normalizedMantissa !== iEx[22:0]
+`ifdef DEBUGTB3	       
+		&&
 		bus.normalizedMantissa !== iEx[22:0] + 1 &&
-		bus.normalizedMantissa !== iEx[22:0] - 1)
+		bus.normalizedMantissa !== iEx[22:0] - 1
+`endif
+	)
         begin
             error++;
             $display("Expected Normalized Mantissa: %h, but Received: %h",
@@ -70,6 +74,7 @@ end
 `endif
         end
         do begin
+`ifdef DEBUGTB2		$display("Test number: %d", tests); `endif
 		tests++;
 		rawA = $urandom;
 		rawB = $urandom;
@@ -86,9 +91,13 @@ end
            // $stop;
 `endif
             end
-            if (bus.normalizedMantissa !== iEx[22:0] &&
+            if (bus.normalizedMantissa !== iEx[22:0]
+`ifdef DEBUGTB3		   
+		    &&
             bus.normalizedMantissa !== iEx[22:0] + 1 &&
-            bus.normalizedMantissa !== iEx[22:0] - 1)
+            bus.normalizedMantissa !== iEx[22:0] - 1
+`endif
+    )
             begin
                 error++;
                 $display("Expected Normalized Mantissa: %h, but Received: %h",
