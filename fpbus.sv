@@ -13,7 +13,7 @@ interface fpbus;
     logic carryOut;
     //Control Signals
     logic Ainf, Binf, ANaN, BNaN, Asub, Bsub, Azero, Bzero, Anormal, Bnormal;
-    logic bypassALU, Aex, Bex;
+    logic shiftOverflow, bypassALU, Aex, Bex;
 
     modport mask(   input A, B,
                     output signA, signB,
@@ -28,11 +28,11 @@ interface fpbus;
                     input Binf, BNaN, Bsub, Bzero, Bnormal,
                     output alignedMantissaA, alignedMantissaB,
                     output exponentOut,
-                    output bypassALU, Aex, Bex);
+                    output shiftOverflow, bypassALU, Aex, Bex);
 
     modport alu(    input signA, signB,
                     input alignedMantissaA, alignedMantissaB,
-                    input bypassALU,
+                    input shiftOverflow, bypassALU,
                     output alignedResult, alignedSign, carryOut);
 
     modport normal( input alignedResult, exponentOut, alignedSign, carryOut,

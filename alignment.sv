@@ -56,7 +56,32 @@ module Alignment (fpbus.align bus);
             else            bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0} >> exponentDifferential;                                                                                       
         end
     end
-    
+
+    //shiftOverflow Bit for Long Subtractions
+    always_comb 
+    begin
+        begin: shiftOverflowCheck
+            bus.shiftOverflow = 0;
+            if (bus.Aex)
+            begin
+                for(int i = 0; i < 32; i++)                                    
+                    if (alignedMantissaB[i] && (i < exponentDifferential))
+                    begin
+                    bus.shiftOverflow = 1;
+                    disable shiftOverflowCheck;
+                    end
+            end
+            else if (bus.Bex)
+            begin
+                for(int i = 0; i < 32; i++)                                    
+                    if (alignedMantissaA[i] && (i < exponentDifferential))
+                    begin
+                    bus.shiftOverflow = 1;
+                    disable shiftOverflowCheck;
+                    end
+            end
+        end
+    end    
 
     //DEBUG Statements
     always_comb
