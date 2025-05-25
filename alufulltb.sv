@@ -21,7 +21,7 @@ module top;
             bus.B = $urandom;
             #10;
 
-            if (bus.Azero || bus.Ainf || bus.ANaN || bus.Bzero || bus.Binf || bus.Bsub) begin
+            if (bus.Azero || bus.Ainf || bus.ANaN || bus.Bzero || bus.Binf || bus.BNaN) begin
                 continue; // Skip NaN, Inf, Zero, Subnormal
             end
 
