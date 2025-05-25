@@ -1,8 +1,8 @@
 //Module to Compare Exponents for Aligning Mantissa Bits for Addition
 module Alignment (fpbus.align bus);
+
     logic [7:0] exponentDifferential;                                                                                         
-    logic Aex, Bex;
-    int i;                                                                                  
+    logic Aex, Bex;                                                                              
 
     //Control Signals
     assign Aex = (bus.exponentA > bus.exponentB);
