@@ -35,21 +35,18 @@ module Alignment (fpbus.align bus);
     //Mantissa Calculations
     always_comb
     begin
-        //Case Exponent "A" > "B"
         if (bus.Aex)                                              
         begin
             bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0};
             if (bus.Bsub)   bus.alignedMantissaB = {1'b0, bus.mantissaB, 8'b0} >> exponentDifferential;            
             else            bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0} >> exponentDifferential;
         end
-        //Case Exponent "B" > "A"
         else if (bus.Bex)                                         
         begin                
             bus.alignedMantissaB = {1'b1, bus.mantissaB, 8'b0};            
             if (bus.Asub)   bus.alignedMantissaA = {1'b0, bus.mantissaA, 8'b0} >> exponentDifferential;            
             else            bus.alignedMantissaA = {1'b1, bus.mantissaA, 8'b0} >> exponentDifferential;
         end
-        //Case Exponent "A" = "B"
         else                                                                            
         begin         
             if (bus.Asub)   bus.alignedMantissaA = {1'b0, bus.mantissaA, 8'b0} >> exponentDifferential;            
