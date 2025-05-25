@@ -20,9 +20,9 @@ module Normalize(fpbus.normal bus);
     endfunction    
 
     //Rounding Bits
-    assign guard  =  shiftedMantissa[7];
-    assign round  =  shiftedMantissa[6];
-    assign sticky = |shiftedMantissa[5:0];
+    assign guard  =  bus.alignedResult[7];
+    assign round  =  bus.alignedResult[6];
+    assign sticky = |bus.alignedResult[5:0];
 
     always_comb
     begin 
