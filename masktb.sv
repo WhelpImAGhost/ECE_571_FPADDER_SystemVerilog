@@ -24,10 +24,8 @@ module top;
                 $display("Improper Extraction of Mantissa for test A = %h B=%h\nExpected Mantissa A = %h, Calculated Mantissa A = %h\nExpected Mantissa B = %h, Calculated Mantissa B = %h",
                 bus.A, bus.B, bus.A [22:0], bus.mantissaA, bus.B[22:0], bus.mantissaB);
         end
-
-        $display("Simulation Finished");
-        $finish;
         
+        $display("Simulation Finished");
+        $finish; 
     end
-
 endmodule

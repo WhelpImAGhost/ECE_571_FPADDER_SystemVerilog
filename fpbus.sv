@@ -9,8 +9,7 @@ interface fpbus;
     //Mantissas
     logic [22:0] mantissaA, mantissaB, normalizedMantissa;
     //Intermediate Results
-    logic [31:0] alignedMantissaA, alignedMantissaB;
-    logic [23:0] alignedResult;
+    logic [31:0] alignedMantissaA, alignedMantissaB, alignedResult;
     logic carryOut;
     //Control Signals
     logic Ainf, Binf, ANaN, BNaN, Asub, Bsub, Azero, Bzero, Anormal, Bnormal;

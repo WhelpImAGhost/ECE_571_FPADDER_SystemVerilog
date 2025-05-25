@@ -12,7 +12,7 @@ module Normalize(fpbus.normal bus);
 
     always_comb
     begin 
-        //NaN or Infinity
+        //NaN or Infinity Cases
         if (bus.ANaN || bus.BNaN || bus.Ainf || bus.Binf)
         begin
             if (bus.ANaN)       {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
@@ -27,7 +27,7 @@ module Normalize(fpbus.normal bus);
             else if (bus.Binf)  {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
         end
 
-        //Zero
+        //Zero Case
         else if (bus.Azero || bus.Bzero)
         begin
             if (bus.Azero && bus.Bzero)
@@ -38,10 +38,9 @@ module Normalize(fpbus.normal bus);
                 {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
         end
 
-        //Non-Zero Case
+        //Normal or Subnormal Cases
         else
         begin      
-            //Normalization
             bus.normalizedSign = bus.alignedSign;
             //Handle Carry-Out
             if (bus.carryOut == 1)
