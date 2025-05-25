@@ -53,12 +53,12 @@ module top;
                 //Subtraction
                 if (bus.alignedMantissaA > bus.alignedMantissaB)
                 begin
-                    expectedResult = bus.alignedMantissaA - bus.alignedMantissaB
+                    expectedResult = bus.alignedMantissaA - bus.alignedMantissaB;
                     expectedSign = bus.signA;
                 end
                 else
                 begin
-                    expectedResult = bus.alignedMantissaB - bus.alignedMantissaA
+                    expectedResult = bus.alignedMantissaB - bus.alignedMantissaA;
                     expectedSign = bus.signB;
                 end
             end
@@ -69,6 +69,7 @@ module top;
                 $display("Case A = %h, B = %h | Incorrect Result: Expected %h, Got %h", 
                          bus.A, bus.B, expectedResult, {bus.carryOut, bus.alignedResult});
                 Error++;
+		$stop;
             end
 
             //Check Sign
@@ -77,6 +78,7 @@ module top;
                 $display("Case A = %h, B = %h | Incorrect Sign: Expected %b, Got %b", 
                          bus.A, bus.B, expectedSign, bus.alignedSign);
                 Error++;
+		$stop;
             end
         end
 
