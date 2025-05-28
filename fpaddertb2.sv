@@ -1,10 +1,10 @@
 module top;
-parameter Tests = 1 << 22;
+parameter T = 32;
 
 shortreal fA, fB, fX;
 bit [31:0] rawA, rawB, iA, iB, iX, iEx;
 
-int error, tests;
+longint error, tests, Tests;
 
 fpbus bus();
 
@@ -33,6 +33,7 @@ end
 initial
 begin
 
+    Tests = 1 << T;
     fA = -1.245;
     fB = 2.753;
     #10;
@@ -61,20 +62,24 @@ begin
         do  rawB = $urandom;  while (rawB[30:23] == 8'hFF);
         fA = $bitstoshortreal(rawA);
         fB = $bitstoshortreal(rawB);
-            
-        #10
-        `ifdef DEBUGTB
-            $display("Adding %e and %e resulted in %e, expected is %e ", fA, fB, fX, fA + fB);
-            
 
-        `endif
-        //  Check results and report errors
-        if ( iX !== iEx)
-        begin
-            error++;
-            $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
-            
-        end
+        fork
+            #10
+
+            `ifdef DEBUGTB
+                $display("Adding %e and %e resulted in %e, expected is %e ", fA, fB, fX, fA + fB);
+                
+
+            `endif
+            //  Check results and report errors
+            if ( iX !== iEx)
+            begin
+                error++;
+                $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
+                
+            end
+        join_none
+
     end
     while (tests <= (1 << 20) );  
 
@@ -88,7 +93,8 @@ begin
         rawB = $urandom;
         fA = $bitstoshortreal(rawA);
         fB = $bitstoshortreal(rawB);
-            
+
+        fork    
         #10
         `ifdef DEBUGTB
             $display("Adding %e and %e resulted in %e, expected is %e ", fA, fB, fX, fA + fB);
@@ -101,6 +107,7 @@ begin
             $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
             
         end
+        join_none
     end
     while (tests <= Tests );  
 
