@@ -57,8 +57,9 @@ module Normalize(fpbus.normal bus);
         begin
             if (bus.Aex)        {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.A;
             else if (bus.Bex)   {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = bus.B;
+	    else {bus.normalizedSign, bus.normalizedExponent, bus.normalizedMantissa} = {bus.alignedSign, 31'b0};
         end
-        
+       
         //Normal Cases
         else
         begin      

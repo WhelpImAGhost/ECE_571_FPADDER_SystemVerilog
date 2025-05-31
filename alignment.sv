@@ -4,10 +4,12 @@ module Alignment (fpbus.align bus);
     logic [7:0] exponentDifferential;                                                                                                                                                                  
     logic [31:0] extendedMantissa;
 
+
+
     //Control Signals
     assign bus.Aex = (bus.exponentA > bus.exponentB);
     assign bus.Bex = (bus.exponentA < bus.exponentB);
-    assign bus.bypassALU = (bus.ANaN | bus.BNaN | bus.Ainf | bus.Binf | bus.Azero | bus.Bzero | (exponentDifferential >= 32));  
+    assign bus.bypassALU = (bus.ANaN | bus.BNaN | bus.Ainf | bus.Binf | bus.Azero | bus.Bzero | (exponentDifferential >= 32) | ( (bus.A[30:0] == bus.B[30:0]) & (bus.A[31] != bus.B[31]) ) );  
 
     //Exponent Calculations
     always_comb
