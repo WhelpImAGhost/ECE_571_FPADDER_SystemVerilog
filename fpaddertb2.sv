@@ -1,5 +1,5 @@
 module top;
-parameter T = 32;
+parameter T = 25;
 
 shortreal fA, fB, fX;
 bit [31:0] rawA, rawB, iA, iB, iX, iEx;
@@ -154,15 +154,7 @@ begin
             `ifdef DEBUGTB
                 $display("Adding %e and %e resulted in %e, expected is %e ", fA, fB, fX, fA + fB);
             `endif
-            //  Check results and report errors
             checkResult();
-            // if ( iX !== iEx)
-            // begin
-            //     error++;
-            //     $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
-                
-            // end
-
 
     end
     while (tests <= (1 << 20) );  
@@ -183,14 +175,8 @@ begin
         `ifdef DEBUGTB
             $display("Adding %e and %e resulted in %e, expected is %e ", fA, fB, fX, fA + fB);
         `endif
-        //  Check results and report errors
 
         checkResult();
-        if ( iX !== iEx)
-        begin
-            error++;
-            $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
-        end
 
     end
     while (tests <= Tests );  
@@ -210,9 +196,15 @@ end
 task automatic checkResult;
 begin
     #10;
-    if (isNaN(iX) && isNaN(iEx) )
-        continue;
-    else if ( iX !== iEx)
+    
+    `ifdef DEBUGTB
+        $display("Adding %e and %e resulted in %e, expected is %e ",
+        fA, fB, fX, fA + fB);
+	$display("A: %b		B: %b		Act: %b		Ex: %b", iA, iB, iX, iEx );	
+    `endif
+    
+    
+    if ( iX !== iEx && !(isNaN(iX) && isNaN(iEx) ))
     begin
         error++;
         $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
