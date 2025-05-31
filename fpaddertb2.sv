@@ -210,7 +210,9 @@ end
 task automatic checkResult;
 begin
     #10;
-    if ( iX !== iEx)
+    if (isNaN(iX) && isNaN(iEx) )
+        continue;
+    else if ( iX !== iEx)
     begin
         error++;
         $display("FP adder failed. Adding %e and %e resulted in %e instead of %e ", fA, fB, fX, fA + fB);
@@ -218,6 +220,9 @@ begin
 end
 endtask
 
+function automatic bit isNaN(input logic [31:0] val);
+    return (val[30:23] == 8'hFF) && (val[22:0] != 0);
+endfunction
 
 
 endmodule
