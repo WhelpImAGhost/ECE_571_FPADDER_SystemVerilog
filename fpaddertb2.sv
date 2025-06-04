@@ -87,24 +87,14 @@ bit [31:0] static_pair[25][2] = '{
 
 
 
-`ifdef MOD
 
-    fpadder Adder();
+    fpadder Adder(iA, iB, iX);
 
-`endif
-
-`ifndef MOD
-fpbus bus();
-FPAdder f1(bus);
-`endif
 
 always_comb begin
 	iA = $shortrealtobits(fA);
 	iB = $shortrealtobits(fB);
-	iX = bus.Result;
 	iEx = $shortrealtobits(fA + fB);
-    bus.A = iA;
-    bus.B = iB;
     fX = $bitstoshortreal(iX);
 end
 
@@ -130,7 +120,7 @@ begin
         $display("FP Adder failed static case. Test Failed");
         $finish;
     end
-
+	$display("Passed single case");
     // Test bulk static cases
     foreach (static_pair[x]) begin
 
@@ -140,6 +130,7 @@ begin
         if (error > 0) $finish;
 
     end
+	$display("Passed static cases");
 
     do begin
         tests++;
@@ -157,6 +148,7 @@ begin
 
     end
     while (tests <= (1 << 20) );  
+	$display("Finished random normals and subnormals tests");
 
     tests = 0;
 
@@ -179,7 +171,7 @@ begin
 
     end
     while (tests <= Tests );  
-
+	$display("Finished full random test");
     $finish;
 end
 
