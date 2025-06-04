@@ -30,13 +30,13 @@ interface fpbus;
                     output exponentOut, sticky,
                     output shiftOverflow, bypassALU, Aex, Bex);
 
-    modport alu(    input signA, signB, A, B,
+    modport alu(    input signA, signB,
                     input alignedMantissaA, alignedMantissaB,
                     input shiftOverflow, bypassALU,
                     output alignedResult, alignedSign, carryOut);
 
     modport normal( input alignedResult, exponentOut, alignedSign, carryOut,
-                    input A, B, exponentA, exponentB, mantissaA, mantissaB, signA, signB,
+                    input A, B, signA, signB,
                     input Ainf, ANaN, Asub, Azero, Anormal,
                     input Binf, BNaN, Bsub, Bzero, Bnormal,
                     input sticky, bypassALU, Aex, Bex, 
