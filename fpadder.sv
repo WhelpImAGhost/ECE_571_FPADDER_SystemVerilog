@@ -1,4 +1,9 @@
-module fpadder(fpbus bus);
+module fpadder;
+
+    // Initialize adder interface
+    fpbus bus();
+
+    // Initialize submodules
     Mask mask(bus.mask);
     Alignment align(bus.align);
     ALU alu(bus.alu);

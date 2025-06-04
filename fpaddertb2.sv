@@ -85,17 +85,16 @@ bit [31:0] static_pair[25][2] = '{
 
 
 
-fpbus bus();
+
 
 `ifdef MOD
-    Mask mask(bus.mask);
-    Alignment align(bus.align);
-    ALU alu(bus.alu);
-    Normalize N1(bus.normal);
-    Pack p1 (bus.pack);
+
+    fpadder Adder();
+
 `endif
 
 `ifndef MOD
+fpbus bus();
 FPAdder f1(bus);
 `endif
 
