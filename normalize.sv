@@ -1,5 +1,8 @@
 //Module to Renormalize the Result
 module Normalize(fpbus.normal bus);
+
+    import roundingUtil::*;
+
     logic [31:0] shiftedMantissa, mantissaOut;
     logic [5:0]  shiftAmount;
     logic roundCarry, guard, round, stickyShift;                                      
@@ -11,10 +14,7 @@ module Normalize(fpbus.normal bus);
         return 32;               
     endfunction
 
-    function automatic [32:0] rounding(input logic cO ,gB, rB, sB, [32:0] mantissa);
-        if (gB && (rB || sB || (cO ? mantissa[9] : mantissa[8]))) return mantissa + (1 << 8);
-        return mantissa;
-    endfunction
+
 
     always_comb
     begin 
