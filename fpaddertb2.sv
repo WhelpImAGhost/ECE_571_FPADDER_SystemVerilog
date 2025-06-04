@@ -1,6 +1,6 @@
 module top;
 parameter T = 25;
-parameter FILENAME = "test-vals"
+parameter FILENAME = "test-vals";
 
 shortreal fA, fB, fX;
 bit [31:0] rawA, rawB, iA, iB, iX, iEx;
